@@ -93,6 +93,8 @@ WantedBy=multi-user.target
 &lt;p&gt;WantedBy：上例中使用的是 “WantedBy=multi-user.target”， 表明当系统以多用户方式（默认的运行级别）启动时，这个服务需要被自动运行。当然还需要 systemctl enable 激活这个服务以后自动运行才会生效。&lt;/p&gt;
 &lt;/blockquote&gt;
 
+&lt;h2 id=&#34;操作service:1f81d4506716a68c23227f65602dc467&#34;&gt;操作Service:&lt;/h2&gt;
+
 &lt;pre&gt;&lt;code&gt;#修改权限
 $ sudo chmod +x /usr/lib/systemd/system/nginx.service
 
@@ -100,8 +102,6 @@ $ sudo systemctl enable nginx.service
 &lt;/code&gt;&lt;/pre&gt;
 
 &lt;p&gt;就会在/etc/systemd/system/multi-user.target.wants/目录下新建一个/usr/lib/systemd/system/nginx.service 文件的链接。&lt;/p&gt;
-
-&lt;h2 id=&#34;操作service:1f81d4506716a68c23227f65602dc467&#34;&gt;操作Service:&lt;/h2&gt;
 
 &lt;pre&gt;&lt;code&gt;#启动服务
 $ sudo systemctl start nginx.service
