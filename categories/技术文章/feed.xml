@@ -62,7 +62,7 @@ WantedBy=multi-user.target
 
 &lt;p&gt;Documentation ： 服务文档&lt;/p&gt;
 
-&lt;p&gt;After= : 依赖，仅当依赖的服务启动之后再启动自定义的服务单元&lt;/p&gt;
+&lt;p&gt;After : 依赖，仅当依赖的服务启动之后再启动自定义的服务单元&lt;/p&gt;
 &lt;/blockquote&gt;
 
 &lt;h2 id=&#34;service:1f81d4506716a68c23227f65602dc467&#34;&gt;[Service]&lt;/h2&gt;
