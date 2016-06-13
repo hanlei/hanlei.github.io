@@ -3,8 +3,13 @@
   
   <url>
     <loc>http://blog.hanmq.com/</loc>
-    <lastmod>2016-06-13T09:40:05+08:00</lastmod>
+    <lastmod>2016-06-13T10:16:09+08:00</lastmod>
     <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>http://blog.hanmq.com/post/centos7-systemd-nginx/</loc>
+    <lastmod>2016-06-13T10:16:09+08:00</lastmod>
   </url>
   
   <url>

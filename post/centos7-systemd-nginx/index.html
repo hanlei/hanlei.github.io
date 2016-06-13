@@ -2,18 +2,18 @@
 <html lang="zh-CN">
 <head>
   <meta charset="UTF-8">
-  <title>404 Page not found - 牧青日志</title>
+  <title>CentOS 7 systemd 添加系统服务 nginx - 牧青日志</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=3, minimum-scale=1">
   
-  <meta name="description" content="404 Page not found">
+  <meta name="description" content="CentOS 7继承了RHEL 7的新的特性，例如强大的systemd，而systemd的使用也使得以往系统服务的/etc/init.d的启动脚本的方式就">
   <meta name="author" content="amao">
-  <meta itemprop="name" content="404 Page not found - 牧青日志">
-  <meta itemprop="description" content="404 Page not found">
+  <meta itemprop="name" content="CentOS 7 systemd 添加系统服务 nginx - 牧青日志">
+  <meta itemprop="description" content="CentOS 7继承了RHEL 7的新的特性，例如强大的systemd，而systemd的使用也使得以往系统服务的/etc/init.d的启动脚本的方式就">
   <meta itemprop="image" content="http://blog.hanmq.com/img/author.jpg">
   
   
   <meta name="twitter:description" content="">
-  <link rel="alternate" href="http://blog.hanmq.com/feed.xml" title="牧青日志" type="application/rss+xml"/>
+  
   <link rel="shortcut icon" href="http://blog.hanmq.com/img/favicon.ico"/>
   <link rel="apple-touch-icon" href="http://blog.hanmq.com/apple-touch-icon.png" />
   <link rel="apple-touch-icon-precomposed" href="http://blog.hanmq.com/apple-touch-icon.png" />
@@ -55,11 +55,180 @@
 
   </header>
   <div id="container">
-    <div id="main">
-      
-      你访问的页面不存在
-      
+    <div id="main" class="post" itemscope itemprop="blogPost">
+	<article itemprop="articleBody">
+    <header class="article-info clearfix">
+  <h1 itemprop="name">
+      <a href="http://blog.hanmq.com/post/centos7-systemd-nginx/" title="CentOS 7 systemd 添加系统服务 nginx" itemprop="url">CentOS 7 systemd 添加系统服务 nginx</a>
+  </h1>
+  <p class="article-author">By
+    
+      <a href="http://blog.hanmq.com" title="amao">amao</a>
+    
+  </p>
+  <p class="article-time">
+    <time datetime="2016-06-13 10:16:09 &#43;0800 CST" itemprop="datePublished">2016年06月06日</time>
+  </p>
+</header>
+
+	<div class="article-content">
+    
+		<div class="toc-article">
+			<strong class="toc-title">文章目录</strong>
+      <nav id="TableOfContents">
+<ul>
+<li>
+<ul>
+<li><a href="#systemd:1f81d4506716a68c23227f65602dc467">systemd:</a></li>
+<li><a href="#创建service:1f81d4506716a68c23227f65602dc467">创建service:</a></li>
+<li><a href="#unit:1f81d4506716a68c23227f65602dc467">[Unit]</a></li>
+<li><a href="#service:1f81d4506716a68c23227f65602dc467">[Service]</a></li>
+<li><a href="#install:1f81d4506716a68c23227f65602dc467">[Install]</a></li>
+<li><a href="#操作service:1f81d4506716a68c23227f65602dc467">操作Service:</a></li>
+</ul></li>
+</ul>
+</nav>
+		</div>
+    
+    
+
+<p>CentOS 7继承了RHEL 7的新的特性，例如强大的systemd，而systemd的使用也使得以往系统服务的/etc/init.d的启动脚本的方式就此改变，大幅提高了系统服务的运行效率。</p>
+
+<h2 id="systemd:1f81d4506716a68c23227f65602dc467">systemd:</h2>
+
+<p>CentOS 7的服务systemctl脚本存放在：/usr/lib/systemd/。
+有系统（system）和用户（user）之分，
+即：</p>
+
+<blockquote>
+<p>/usr/lib/systemd/system</p>
+
+<p>/usr/lib/systemd/user</p>
+</blockquote>
+
+<p>每一个服务以.service结尾，一般会分为3部分：[Unit]、[Service]和[Install]，就以nginx为例吧，具体内容如下：</p>
+
+<h2 id="创建service:1f81d4506716a68c23227f65602dc467">创建service:</h2>
+
+<p>在 /usr/lib/systemd/system 下创建nginx.service文件内容如下（看应用需求也可以在 /usr/lib/systemd/usr 下创建）：</p>
+
+<pre><code>[Unit]
+Description=nginx - high performance web server
+Documentation=http://nginx.org/en/docs/
+After=network.target remote-fs.target nss-lookup.target
+ 
+[Service]
+Type=forking
+PIDFile=/run/nginx.pid
+ExecStartPre=/usr/sbin/nginx -t -c /etc/nginx/nginx.conf
+ExecStart=/usr/sbin/nginx -c /etc/nginx/nginx.conf
+ExecReload=/bin/kill -s HUP $MAINPID
+ExecStop=/bin/kill -s QUIT $MAINPID
+PrivateTmp=true
+ 
+[Install]
+WantedBy=multi-user.target
+</code></pre>
+
+<h2 id="unit:1f81d4506716a68c23227f65602dc467">[Unit]</h2>
+
+<blockquote>
+<p>Description : 服务的简单描述</p>
+
+<p>Documentation ： 服务文档</p>
+
+<p>After= : 依赖，仅当依赖的服务启动之后再启动自定义的服务单元</p>
+</blockquote>
+
+<h2 id="service:1f81d4506716a68c23227f65602dc467">[Service]</h2>
+
+<blockquote>
+<p>Type : 启动类型simple、forking、oneshot、notify、dbus</p>
+
+<p>PIDFile ： pid文件路径</p>
+
+<p>ExecStartPre ：启动前要做什么，上文中是测试配置文件 －t</p>
+
+<p>ExecStart：启动</p>
+
+<p>ExecReload：重载</p>
+
+<p>ExecStop：停止</p>
+
+<p>PrivateTmp：True表示给服务分配独立的临时空间</p>
+</blockquote>
+
+<h2 id="install:1f81d4506716a68c23227f65602dc467">[Install]</h2>
+
+<pre><code>$ sudo systemctl enable nginx.service
+</code></pre>
+
+<p>就会在/etc/systemd/system/multi-user.target.wants/目录下新建一个/usr/lib/systemd/system/nginx.service 文件的链接。</p>
+
+<h2 id="操作service:1f81d4506716a68c23227f65602dc467">操作Service:</h2>
+
+<pre><code>#启动服务
+$ sudo systemctl start nginx.service
+
+#查看日志
+$ sudo journalctl -f -u nginx.service
+-- Logs begin at 四 2015-06-25 17:32:20 CST. --
+6月 25 10:28:24 Leco.lan systemd[1]: Starting nginx - high performance web server...
+6月 25 10:28:24 Leco.lan nginx[7976]: nginx: the configuration file /etc/nginx/nginx.conf syntax is ok
+6月 25 10:28:24 Leco.lan nginx[7976]: nginx: configuration file /etc/nginx/nginx.conf test is successful
+6月 25 10:28:24 Leco.lan systemd[1]: Started nginx - high performance web server.
+
+#重启
+$ sudo systemctl restart nginx.service
+
+#重载
+$ sudo systemctl reload nginx.service
+
+#停止
+$ sudo systemctl stop nginx.service
+</code></pre>
+
+	</div>
+  <footer class="article-footer clearfix">
+  
+
+<div class="article-tags">
+  <span></span>
+  
+  <a href="http://blog.hanmq.com/tags/linux">linux</a>
+  
+  <a href="http://blog.hanmq.com/tags/nginx">nginx</a>
+  
+  <a href="http://blog.hanmq.com/tags/systemd">systemd</a>
+  
+</div>
+
+
+
+
+
+<div class="article-categories">
+  <span></span>
+  
+  <a class="article-category-link" href="http://blog.hanmq.com/categories/%E6%8A%80%E6%9C%AF%E6%96%87%E7%AB%A0">技术文章</a>
+  
+</div>
+
+
+
+  <div class="article-share" id="share">
+    <div data-url="http://blog.hanmq.com/post/centos7-systemd-nginx/" data-title="CentOS 7 systemd 添加系统服务 nginx" data-tsina="" class="share clearfix">
     </div>
+  </div>
+</footer>
+
+	</article>
+  
+
+
+
+</div>
+
     <div class="openaside"><a class="navbutton" href="#" title="显示侧边栏"></a></div>
 <div id="asidepart">
 <div class="closeaside"><a class="closebutton" href="#" title="隐藏侧边栏"></a></div>
@@ -127,10 +296,6 @@
 
 
   
-<div class="rsspart">
-  <a rel="nofollow" href="http://blog.hanmq.com/feed.xml" type="application/rss+xml" target="_blank">RSS 订阅</a>
-</div>
-
 
 </aside>
 </div>
@@ -219,6 +384,38 @@ $(document).ready(function(){
 
 <script type="text/javascript">
 $(document).ready(function(){
+  var ai = $('.article-content>iframe'),
+      ae = $('.article-content>embed'),
+      t  = $('#toc'),
+      h  = $('article h2')
+      ah = $('article h2'),
+      ta = $('#toc.toc-aside'),
+      o  = $('.openaside'),
+      c  = $('.closeaside');
+  if(ai.length>0){
+    ai.wrap('<div class="video-container" />');
+  };
+  if(ae.length>0){
+   ae.wrap('<div class="video-container" />');
+  };
+  if(ah.length==0){
+    t.css('display','none');
+  }else{
+    c.click(function(){
+      ta.css('display', 'block').addClass('fadeIn');
+    });
+    o.click(function(){
+      ta.css('display', 'none');
+    });
+    $(window).scroll(function(){
+      ta.css("top",Math.max(140,320-$(this).scrollTop()));
+    });
+  };
+});
+</script>
+
+<script type="text/javascript">
+$(document).ready(function(){
   var $this = $('.share'),
       url = $this.attr('data-url'),
       encodedUrl = encodeURIComponent(url),
@@ -245,6 +442,27 @@ $(document).ready(function(){
 });
 </script>
 
+
+<link rel="stylesheet" href="http://blog.hanmq.com/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="http://blog.hanmq.com/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){
+  $('.article-content').each(function(i){
+    $(this).find('img').each(function(){
+      if ($(this).parent().hasClass('fancybox')) return;
+      var alt = this.alt;
+      if (alt) $(this).after('<span class="caption">' + alt + '</span>');
+      $(this).wrap('<a href="' + this.src + '" title="' + alt + '" class="fancybox"></a>');
+    });
+    $(this).find('.fancybox').each(function(){
+      $(this).attr('rel', 'article' + i);
+    });
+  });
+  if($.fancybox){
+    $('.fancybox').fancybox();
+  }
+});
+</script>
 
 
 
