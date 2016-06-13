@@ -2,18 +2,18 @@
 <html lang="zh-CN">
 <head>
   <meta charset="UTF-8">
-  <title>404 Page not found - 牧青日志</title>
+  <title>hello hugo - 牧青日志</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=3, minimum-scale=1">
   
-  <meta name="description" content="404 Page not found">
+  <meta name="description" content="开张 基于 hugo https://gohugo.io/ 主题 hugo-pacman-theme https://github.com/coderzh/hugo-pacman-theme">
   <meta name="author" content="amao">
-  <meta itemprop="name" content="404 Page not found - 牧青日志">
-  <meta itemprop="description" content="404 Page not found">
+  <meta itemprop="name" content="hello hugo - 牧青日志">
+  <meta itemprop="description" content="开张 基于 hugo https://gohugo.io/ 主题 hugo-pacman-theme https://github.com/coderzh/hugo-pacman-theme">
   <meta itemprop="image" content="http://blog.hanmq.com/img/author.jpg">
   
   
   <meta name="twitter:description" content="">
-  <link rel="alternate" href="http://blog.hanmq.com/feed.xml" title="牧青日志" type="application/rss+xml"/>
+  
   <link rel="shortcut icon" href="http://blog.hanmq.com/img/favicon.ico"/>
   <link rel="apple-touch-icon" href="http://blog.hanmq.com/apple-touch-icon.png" />
   <link rel="apple-touch-icon-precomposed" href="http://blog.hanmq.com/apple-touch-icon.png" />
@@ -55,11 +55,62 @@
 
   </header>
   <div id="container">
-    <div id="main">
+    <div id="main" class="post" itemscope itemprop="blogPost">
+	<article itemprop="articleBody">
+    <header class="article-info clearfix">
+  <h1 itemprop="name">
+      <a href="http://blog.hanmq.com/post/hello-hugo/" title="hello hugo" itemprop="url">hello hugo</a>
+  </h1>
+  <p class="article-author">By
+    
+      <a href="http://blog.hanmq.com" title="amao">amao</a>
+    
+  </p>
+  <p class="article-time">
+    <time datetime="2016-06-13 09:40:05 &#43;0800 CST" itemprop="datePublished">2016年06月06日</time>
+  </p>
+</header>
+
+	<div class="article-content">
+    
+		<div class="toc-article">
+			<strong class="toc-title">文章目录</strong>
       
-      你访问的页面不存在
-      
+		</div>
+    
+    <p>开张</p>
+
+<p>基于 hugo</p>
+
+<p><a href="https://gohugo.io/">https://gohugo.io/</a></p>
+
+<p>主题 hugo-pacman-theme</p>
+
+<p><a href="https://github.com/coderzh/hugo-pacman-theme">https://github.com/coderzh/hugo-pacman-theme</a></p>
+
+	</div>
+  <footer class="article-footer clearfix">
+  
+
+
+
+
+
+
+
+  <div class="article-share" id="share">
+    <div data-url="http://blog.hanmq.com/post/hello-hugo/" data-title="hello hugo" data-tsina="" class="share clearfix">
     </div>
+  </div>
+</footer>
+
+	</article>
+  
+
+
+
+</div>
+
     <div class="openaside"><a class="navbutton" href="#" title="显示侧边栏"></a></div>
 <div id="asidepart">
 <div class="closeaside"><a class="closebutton" href="#" title="隐藏侧边栏"></a></div>
@@ -92,10 +143,6 @@
 
 
   
-<div class="rsspart">
-  <a rel="nofollow" href="http://blog.hanmq.com/feed.xml" type="application/rss+xml" target="_blank">RSS 订阅</a>
-</div>
-
 
 </aside>
 </div>
@@ -184,6 +231,38 @@ $(document).ready(function(){
 
 <script type="text/javascript">
 $(document).ready(function(){
+  var ai = $('.article-content>iframe'),
+      ae = $('.article-content>embed'),
+      t  = $('#toc'),
+      h  = $('article h2')
+      ah = $('article h2'),
+      ta = $('#toc.toc-aside'),
+      o  = $('.openaside'),
+      c  = $('.closeaside');
+  if(ai.length>0){
+    ai.wrap('<div class="video-container" />');
+  };
+  if(ae.length>0){
+   ae.wrap('<div class="video-container" />');
+  };
+  if(ah.length==0){
+    t.css('display','none');
+  }else{
+    c.click(function(){
+      ta.css('display', 'block').addClass('fadeIn');
+    });
+    o.click(function(){
+      ta.css('display', 'none');
+    });
+    $(window).scroll(function(){
+      ta.css("top",Math.max(140,320-$(this).scrollTop()));
+    });
+  };
+});
+</script>
+
+<script type="text/javascript">
+$(document).ready(function(){
   var $this = $('.share'),
       url = $this.attr('data-url'),
       encodedUrl = encodeURIComponent(url),
@@ -210,6 +289,27 @@ $(document).ready(function(){
 });
 </script>
 
+
+<link rel="stylesheet" href="http://blog.hanmq.com/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="http://blog.hanmq.com/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){
+  $('.article-content').each(function(i){
+    $(this).find('img').each(function(){
+      if ($(this).parent().hasClass('fancybox')) return;
+      var alt = this.alt;
+      if (alt) $(this).after('<span class="caption">' + alt + '</span>');
+      $(this).wrap('<a href="' + this.src + '" title="' + alt + '" class="fancybox"></a>');
+    });
+    $(this).find('.fancybox').each(function(){
+      $(this).attr('rel', 'article' + i);
+    });
+  });
+  if($.fancybox){
+    $('.fancybox').fancybox();
+  }
+});
+</script>
 
 
 

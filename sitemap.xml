@@ -2,14 +2,14 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
-    <loc>http://localhost:1313/</loc>
-    <lastmod>2015-12-15T19:19:16+08:00</lastmod>
+    <loc>http://blog.hanmq.com/</loc>
+    <lastmod>2016-06-13T09:40:05+08:00</lastmod>
     <priority>0</priority>
   </url>
   
   <url>
-    <loc>http://localhost:1313/about/</loc>
-    <lastmod>2015-12-15T19:19:16+08:00</lastmod>
+    <loc>http://blog.hanmq.com/post/hello-hugo/</loc>
+    <lastmod>2016-06-13T09:40:05+08:00</lastmod>
   </url>
   
 </urlset>
