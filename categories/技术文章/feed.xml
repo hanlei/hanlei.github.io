@@ -39,6 +39,13 @@ function size2mb($size, $digits = 2) {
     return round($size / pow($base,$i), $digits).&#39; &#39;.$unit[$i] . &#39;B&#39;;
 }
 
+/*
+echo size2mb(3245345);
+输出 : 3.1 MB
+
+echo size2mb(2343453245345);
+输出 : 2.13 TB
+*/
 
 
 &lt;/code&gt;&lt;/pre&gt;
