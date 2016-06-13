@@ -5,10 +5,10 @@
   <title>字节转换 - 牧青日志</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=3, minimum-scale=1">
   
-  <meta name="description" content="一个简单的字节转换 PHP 方法 &lt;?php /** * 字节转换 * * @param $size int 转换字节大小 * @param $digits int 要保留几位小数 * @return string */ function size2mb($size, $digits = 2) { $unit = array(&#39;&#39;,&#39;K&#39;,&#39;M&#39;,">
+  <meta name="description" content="一个简单的字节转换 PHP 方法 &lt;?php /** * 字节转换 * * @param $size int 转换字节大小 * @param $digits int 要保留几位小数 * @return string */ function size2mb($size, $digits = 2) { //单位数组，是必须1024进制依次的">
   <meta name="author" content="amao">
   <meta itemprop="name" content="字节转换 - 牧青日志">
-  <meta itemprop="description" content="一个简单的字节转换 PHP 方法 &lt;?php /** * 字节转换 * * @param $size int 转换字节大小 * @param $digits int 要保留几位小数 * @return string */ function size2mb($size, $digits = 2) { $unit = array(&#39;&#39;,&#39;K&#39;,&#39;M&#39;,">
+  <meta itemprop="description" content="一个简单的字节转换 PHP 方法 &lt;?php /** * 字节转换 * * @param $size int 转换字节大小 * @param $digits int 要保留几位小数 * @return string */ function size2mb($size, $digits = 2) { //单位数组，是必须1024进制依次的">
   <meta itemprop="image" content="http://blog.hanmq.com/img/author.jpg">
   
   
@@ -90,11 +90,20 @@
  * @return string
  */
 function size2mb($size, $digits = 2) {
-    $unit = array('','K','M','G','T','P');//单位数组，是必须1024进制依次的哦。
-    $base = 1024;//对数的基数
-    $i = floor(log($size,$base));//字节数对1024取对数，值向下取整。
-    return round($size/pow($base,$i),$digits).' '.$unit[$i] . 'B';
+    //单位数组，是必须1024进制依次的哦
+    $unit = array('','K','M','G','T','P');
+
+    //对数的基数
+    $base = 1024;
+
+    //字节数对1024取对数，值向下取整
+    $i = floor(log($size,$base));
+
+    return round($size / pow($base,$i), $digits).' '.$unit[$i] . 'B';
 }
+
+
+
 </code></pre>
 
 	</div>
