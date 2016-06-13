@@ -6,8 +6,35 @@
     <description>Recent content in 技术文章 on 牧青日志</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-CN</language>
-    <lastBuildDate>Mon, 13 Jun 2016 10:16:09 +0800</lastBuildDate>
+    <lastBuildDate>Mon, 13 Jun 2016 11:42:29 +0800</lastBuildDate>
     <atom:link href="http://blog.hanmq.com/categories/%E6%8A%80%E6%9C%AF%E6%96%87%E7%AB%A0/feed/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>字节转换</title>
+      <link>http://blog.hanmq.com/post/b-convert/</link>
+      <pubDate>Mon, 13 Jun 2016 11:42:29 +0800</pubDate>
+      
+      <guid>http://blog.hanmq.com/post/b-convert/</guid>
+      <description>&lt;p&gt;一个简单的字节转换 PHP 方法&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;&amp;lt;?php
+
+/**
+ * 字节转换
+ *
+ * @param $size int 转换字节大小
+ * @param $digits int 要保留几位小数
+ * @return string
+ */
+function size2mb($size, $digits = 2) {
+    $unit = array(&#39;&#39;,&#39;K&#39;,&#39;M&#39;,&#39;G&#39;,&#39;T&#39;,&#39;P&#39;);//单位数组，是必须1024进制依次的哦。
+    $base = 1024;//对数的基数
+    $i = floor(log($size,$base));//字节数对1024取对数，值向下取整。
+    return round($size/pow($base,$i),$digits).&#39; &#39;.$unit[$i] . &#39;B&#39;;
+}
+&lt;/code&gt;&lt;/pre&gt;
+</description>
+    </item>
     
     <item>
       <title>CentOS 7 systemd 添加系统服务 nginx</title>

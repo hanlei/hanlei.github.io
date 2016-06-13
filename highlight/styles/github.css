@@ -8,14 +8,16 @@ github.com style (c) Vasily Polovnyov <vast@whiteants.net>
   display: block;
   overflow-x: auto;
   padding: 0.5em;
-  color: #333;
-  background: #f8f8f8;
+  /*color: #333;*/
+  color: #93a1a1;
+  /*background: rgba(225, 227, 230, 0.4);*/
+  background: #002b36;
   -webkit-text-size-adjust: none;
 }
 
 .hljs-comment,
 .diff .hljs-header {
-  color: #998;
+  color: #586e75;
 }
 
 .hljs-keyword,
@@ -25,7 +27,7 @@ github.com style (c) Vasily Polovnyov <vast@whiteants.net>
 .hljs-subst,
 .hljs-request,
 .hljs-status {
-  color: #333;
+  color: #cb4b16;
   font-weight: bold;
 }
 
@@ -39,13 +41,13 @@ github.com style (c) Vasily Polovnyov <vast@whiteants.net>
 .hljs-tag .hljs-value,
 .hljs-doctag,
 .tex .hljs-formula {
-  color: #d14;
+  color: #dc322f;
 }
 
 .hljs-title,
 .hljs-id,
 .scss .hljs-preprocessor {
-  color: #900;
+  color: #859900;
   font-weight: bold;
 }
 
@@ -58,7 +60,7 @@ github.com style (c) Vasily Polovnyov <vast@whiteants.net>
 .hljs-type,
 .vhdl .hljs-literal,
 .tex .hljs-command {
-  color: #458;
+  color: #839496;
   font-weight: bold;
 }
 
@@ -101,7 +103,7 @@ github.com style (c) Vasily Polovnyov <vast@whiteants.net>
 .hljs-doctype,
 .hljs-shebang,
 .hljs-cdata {
-  color: #999;
+  color: #dc322f;
   font-weight: bold;
 }
 
