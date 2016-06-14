@@ -2,13 +2,13 @@
 <html lang="zh-CN">
 <head>
   <meta charset="UTF-8">
-  <title>CentOS 7 systemd 添加系统服务 nginx - 牧青日志</title>
+  <title>first - 牧青日志</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=3, minimum-scale=1">
   
-  <meta name="description" content="CentOS 7继承了RHEL 7的新的特性，例如强大的systemd，而systemd的使用也使得以往系统服务的/etc/init.d的启动脚本的方式就">
+  <meta name="description" content="主题概况 Balalalalala&hellip; Balalalalala&hellip; 安装指南 aaaaaaa bbbbbbb ccccccc 安装 bold 启用 print(&#39;hello world!&#39;) 更新 Blockquotes are very handy in email to emulate reply text. This line is part of the same quote. 配置指南 Tables Are Cool col 3 is right-aligned $1600 col 2 is centered $12 zebra stripes are neat $1 属性 说明 First ordered list item">
   <meta name="author" content="amao">
-  <meta itemprop="name" content="CentOS 7 systemd 添加系统服务 nginx - 牧青日志">
-  <meta itemprop="description" content="CentOS 7继承了RHEL 7的新的特性，例如强大的systemd，而systemd的使用也使得以往系统服务的/etc/init.d的启动脚本的方式就">
+  <meta itemprop="name" content="first - 牧青日志">
+  <meta itemprop="description" content="主题概况 Balalalalala&hellip; Balalalalala&hellip; 安装指南 aaaaaaa bbbbbbb ccccccc 安装 bold 启用 print(&#39;hello world!&#39;) 更新 Blockquotes are very handy in email to emulate reply text. This line is part of the same quote. 配置指南 Tables Are Cool col 3 is right-aligned $1600 col 2 is centered $12 zebra stripes are neat $1 属性 说明 First ordered list item">
   <meta itemprop="image" content="http://blog.hanmq.com/img/author.jpg">
   
   
@@ -53,7 +53,7 @@
 	<article itemprop="articleBody">
     <header class="article-info clearfix">
   <h1 itemprop="name">
-      <a href="http://blog.hanmq.com/post/centos7-systemd-nginx/" title="CentOS 7 systemd 添加系统服务 nginx" itemprop="url">CentOS 7 systemd 添加系统服务 nginx</a>
+      <a href="http://blog.hanmq.com/post/first/" title="first" itemprop="url">first</a>
   </h1>
   <p class="article-author">By
     
@@ -61,7 +61,7 @@
     
   </p>
   <p class="article-time">
-    <time datetime="2016-06-13 10:16:09 &#43;0800 CST" itemprop="datePublished">2016年06月13日</time>
+    <time datetime="2016-03-20 12:13:19 &#43;0800 CST" itemprop="datePublished">2016年03月20日</time>
   </p>
 </header>
 
@@ -73,12 +73,19 @@
 <ul>
 <li>
 <ul>
-<li><a href="#systemd:1f81d4506716a68c23227f65602dc467">systemd:</a></li>
-<li><a href="#创建service:1f81d4506716a68c23227f65602dc467">创建service:</a></li>
-<li><a href="#unit:1f81d4506716a68c23227f65602dc467">[Unit]</a></li>
-<li><a href="#service:1f81d4506716a68c23227f65602dc467">[Service]</a></li>
-<li><a href="#install:1f81d4506716a68c23227f65602dc467">[Install]</a></li>
-<li><a href="#操作service:1f81d4506716a68c23227f65602dc467">操作Service:</a></li>
+<li><a href="#主题概况:e8fb9c67eba912c72729806db31eaa1b">主题概况</a></li>
+<li><a href="#安装指南:e8fb9c67eba912c72729806db31eaa1b">安装指南</a>
+<ul>
+<li><a href="#安装:e8fb9c67eba912c72729806db31eaa1b">安装</a></li>
+<li><a href="#启用:e8fb9c67eba912c72729806db31eaa1b">启用</a></li>
+<li><a href="#更新:e8fb9c67eba912c72729806db31eaa1b">更新</a></li>
+</ul></li>
+<li><a href="#配置指南:e8fb9c67eba912c72729806db31eaa1b">配置指南</a>
+<ul>
+<li><a href="#属性:e8fb9c67eba912c72729806db31eaa1b">属性</a></li>
+<li><a href="#说明:e8fb9c67eba912c72729806db31eaa1b">说明</a></li>
+</ul></li>
+<li><a href="#q-a:e8fb9c67eba912c72729806db31eaa1b">Q&amp;A</a></li>
 </ul></li>
 </ul>
 </nav>
@@ -86,112 +93,92 @@
     
     
 
-<p>CentOS 7继承了RHEL 7的新的特性，例如强大的systemd，而systemd的使用也使得以往系统服务的/etc/init.d的启动脚本的方式就此改变，大幅提高了系统服务的运行效率。</p>
+<h2 id="主题概况:e8fb9c67eba912c72729806db31eaa1b">主题概况</h2>
 
-<h2 id="systemd:1f81d4506716a68c23227f65602dc467">systemd:</h2>
+<p>Balalalalala&hellip;</p>
 
-<p>CentOS 7的服务systemctl脚本存放在：/usr/lib/systemd/。
-有系统（system）和用户（user）之分，
-即：</p>
+<p>Balalalalala&hellip;</p>
 
-<blockquote>
-<p>/usr/lib/systemd/system</p>
+<h2 id="安装指南:e8fb9c67eba912c72729806db31eaa1b">安装指南</h2>
 
-<p>/usr/lib/systemd/user</p>
-</blockquote>
+<ol>
+<li>aaaaaaa</li>
+<li>bbbbbbb</li>
+<li>ccccccc</li>
+</ol>
 
-<p>每一个服务以.service结尾，一般会分为3部分：[Unit]、[Service]和[Install]，就以nginx为例吧，具体内容如下：</p>
+<h3 id="安装:e8fb9c67eba912c72729806db31eaa1b">安装</h3>
 
-<h2 id="创建service:1f81d4506716a68c23227f65602dc467">创建service:</h2>
+<p><strong>bold</strong></p>
 
-<p>在 /usr/lib/systemd/system 下创建nginx.service文件内容如下（看应用需求也可以在 /usr/lib/systemd/usr 下创建）：</p>
+<h3 id="启用:e8fb9c67eba912c72729806db31eaa1b">启用</h3>
 
-<pre><code>[Unit]
-Description=nginx - high performance web server
-Documentation=http://nginx.org/en/docs/
-After=network.target remote-fs.target nss-lookup.target
- 
-[Service]
-Type=forking
-PIDFile=/run/nginx.pid
-ExecStartPre=/usr/sbin/nginx -t -c /etc/nginx/nginx.conf
-ExecStart=/usr/sbin/nginx -c /etc/nginx/nginx.conf
-ExecReload=/bin/kill -s HUP $MAINPID
-ExecStop=/bin/kill -s QUIT $MAINPID
-PrivateTmp=true
- 
-[Install]
-WantedBy=multi-user.target
+<pre><code>print('hello world!')
 </code></pre>
 
-<h2 id="unit:1f81d4506716a68c23227f65602dc467">[Unit]</h2>
+<h3 id="更新:e8fb9c67eba912c72729806db31eaa1b">更新</h3>
 
 <blockquote>
-<p>Description : 服务的简单描述</p>
-
-<p>Documentation ： 服务文档</p>
-
-<p>After : 依赖，仅当依赖的服务启动之后再启动自定义的服务单元</p>
+<p>Blockquotes are very handy in email to emulate reply text.
+This line is part of the same quote.</p>
 </blockquote>
 
-<h2 id="service:1f81d4506716a68c23227f65602dc467">[Service]</h2>
+<h2 id="配置指南:e8fb9c67eba912c72729806db31eaa1b">配置指南</h2>
 
-<p>这个段是 .service 文件独有的，也是对于服务配置最重要的部分。这部分的配置选项非常多，主要分为服务生命周期控制和服务上下文配置两个方面</p>
+<table>
+<thead>
+<tr>
+<th>Tables</th>
+<th align="center">Are</th>
+<th align="right">Cool</th>
+</tr>
+</thead>
 
-<blockquote>
-<p>Type : 启动类型simple、forking、oneshot、notify、dbus</p>
+<tbody>
+<tr>
+<td>col 3 is</td>
+<td align="center">right-aligned</td>
+<td align="right">$1600</td>
+</tr>
 
-<p>PIDFile ： pid文件路径</p>
+<tr>
+<td>col 2 is</td>
+<td align="center">centered</td>
+<td align="right">$12</td>
+</tr>
 
-<p>ExecStartPre ：指定在启动执行 ExecStart 的命令前的准备工作，可以有多个，所有命令会按照文件中书写的顺序依次被执行</p>
+<tr>
+<td>zebra stripes</td>
+<td align="center">are neat</td>
+<td align="right">$1</td>
+</tr>
+</tbody>
+</table>
 
-<p>ExecStart：这个参数是几乎每个 .service 文件都会有的，指定服务启动的主要命令，在每个配置文件中只能使用一次</p>
+<h3 id="属性:e8fb9c67eba912c72729806db31eaa1b">属性</h3>
 
-<p>ExecReload：重新加载服务所需执行的主要命令</p>
+<p><img src="http://blog.coderzh.com/public/qrcode.jpg" alt="qrcode" /></p>
 
-<p>ExecStop：指定在 ExecStop 命令执行后的收尾工作，也可以有多个</p>
+<h3 id="说明:e8fb9c67eba912c72729806db31eaa1b">说明</h3>
 
-<p>PrivateTmp：True表示给服务分配独立的临时空间≈</p>
-</blockquote>
+<ol>
+<li>First ordered list item</li>
+<li>Another item
 
-<h2 id="install:1f81d4506716a68c23227f65602dc467">[Install]</h2>
+<ul>
+<li>Unordered sub-list.</li>
+</ul></li>
+<li>Actual numbers don&rsquo;t matter, just that it&rsquo;s a number
 
-<p>这个段中的配置与 Unit 有几分相似，但是这部分配置需要通过 systemctl enable 命令来激活，并且可以通过 systemctl disable 命令禁用。另外这部分配置的目标模块通常是特定启动级别的 .target 文件，用来使得服务在系统启动时自动运行。</p>
+<ol>
+<li>Ordered sub-list</li>
+</ol></li>
+<li>And another item.</li>
+</ol>
 
-<blockquote>
-<p>WantedBy：上例中使用的是 “WantedBy=multi-user.target”， 表明当系统以多用户方式（默认的运行级别）启动时，这个服务需要被自动运行。当然还需要 systemctl enable 激活这个服务以后自动运行才会生效。</p>
-</blockquote>
+<h2 id="q-a:e8fb9c67eba912c72729806db31eaa1b">Q&amp;A</h2>
 
-<h2 id="操作service:1f81d4506716a68c23227f65602dc467">操作Service:</h2>
-
-<pre><code>#修改权限
-$ sudo chmod +x /usr/lib/systemd/system/nginx.service
-
-$ sudo systemctl enable nginx.service
-</code></pre>
-
-<p>就会在/etc/systemd/system/multi-user.target.wants/目录下新建一个/usr/lib/systemd/system/nginx.service 文件的链接。</p>
-
-<pre><code>#启动服务
-$ sudo systemctl start nginx.service
-
-#查看日志
-$ sudo journalctl -f -u nginx.service
--- Logs begin at 四 2015-06-25 17:32:20 CST. --
-6月 25 10:28:24 Leco.lan systemd[1]: Starting nginx - high performance web server...
-6月 25 10:28:24 Leco.lan nginx[7976]: nginx: the configuration file /etc/nginx/nginx.conf syntax is ok
-6月 25 10:28:24 Leco.lan nginx[7976]: nginx: configuration file /etc/nginx/nginx.conf test is successful
-6月 25 10:28:24 Leco.lan systemd[1]: Started nginx - high performance web server.
-
-#重启
-$ sudo systemctl restart nginx.service
-
-#重载
-$ sudo systemctl reload nginx.service
-
-#停止
-$ sudo systemctl stop nginx.service
-</code></pre>
+<p>Balabalabalabala&hellip;</p>
 
 	</div>
   <footer class="article-footer clearfix">
@@ -200,11 +187,9 @@ $ sudo systemctl stop nginx.service
 <div class="article-tags">
   <span></span>
   
-  <a href="http://blog.hanmq.com/tags/linux">linux</a>
+  <a href="http://blog.hanmq.com/tags/foo">Foo</a>
   
-  <a href="http://blog.hanmq.com/tags/nginx">nginx</a>
-  
-  <a href="http://blog.hanmq.com/tags/systemd">systemd</a>
+  <a href="http://blog.hanmq.com/tags/bar">Bar</a>
   
 </div>
 
@@ -222,7 +207,7 @@ $ sudo systemctl stop nginx.service
 
 
   <div class="article-share" id="share">
-    <div data-url="http://blog.hanmq.com/post/centos7-systemd-nginx/" data-title="CentOS 7 systemd 添加系统服务 nginx" data-tsina="" class="share clearfix">
+    <div data-url="http://blog.hanmq.com/post/first/" data-title="first" data-tsina="" class="share clearfix">
     </div>
   </div>
 </footer>
@@ -238,8 +223,8 @@ $ sudo systemctl stop nginx.service
 
 
 var disqus_config = function () {
-this.page.url = "http://blog.hanmq.com/post/centos7-systemd-nginx/";
-this.page.identifier = "http://blog.hanmq.com/post/centos7-systemd-nginx/";
+this.page.url = "http://blog.hanmq.com/post/first/";
+this.page.identifier = "http://blog.hanmq.com/post/first/";
 };
 (function() { 
 var d = document, s = d.createElement('script');
@@ -265,7 +250,7 @@ s.setAttribute('data-timestamp', +new Date());
   <p class="asidetitle">分类</p>
   <ul>
     
-    <li><a href="http://blog.hanmq.com/categories/%e6%8a%80%e6%9c%af%e6%96%87%e7%ab%a0" title="技术文章">技术文章<sup>2</sup></a></li>
+    <li><a href="http://blog.hanmq.com/categories/%e6%8a%80%e6%9c%af%e6%96%87%e7%ab%a0" title="技术文章">技术文章<sup>3</sup></a></li>
     
     <li><a href="http://blog.hanmq.com/categories/%e7%b3%bb%e7%bb%9f%e9%85%8d%e7%bd%ae" title="系统配置">系统配置<sup>1</sup></a></li>
     
@@ -279,6 +264,10 @@ s.setAttribute('data-timestamp', +new Date());
 <div class="tagslist">
 	<p class="asidetitle">标签</p>
 		<ul class="clearfix">
+      
+			<li><a href="http://blog.hanmq.com/tags/bar" title="bar">bar<sup>1</sup></a></li>
+      
+			<li><a href="http://blog.hanmq.com/tags/foo" title="foo">foo<sup>1</sup></a></li>
       
 			<li><a href="http://blog.hanmq.com/tags/linux" title="linux">linux<sup>1</sup></a></li>
       
@@ -307,6 +296,11 @@ s.setAttribute('data-timestamp', +new Date());
         <a class="archive-list-link" href="http://blog.hanmq.com/post/#2016-06">2016年06月</a><span class="archive-list-count">4</span>
       </li>
       
+      
+      <li class="archive-list-item">
+        <a class="archive-list-link" href="http://blog.hanmq.com/post/#2016-03">2016年03月</a><span class="archive-list-count">1</span>
+      </li>
+      
     </ul>
 
   </div>
@@ -317,6 +311,10 @@ s.setAttribute('data-timestamp', +new Date());
 <div class="tagcloudlist">
   <p class="asidetitle">标签云</p>
   <div class="tagcloudlist clearfix">
+    
+    <a href="http://blog.hanmq.com/tags/bar" style="font-size: 12px;">bar</a>
+    
+    <a href="http://blog.hanmq.com/tags/foo" style="font-size: 12px;">foo</a>
     
     <a href="http://blog.hanmq.com/tags/linux" style="font-size: 12px;">linux</a>
     

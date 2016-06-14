@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Vim on 牧青日志</title>
+    <link>http://blog.hanmq.com/tags/vim/</link>
+    <description>Recent content in Vim on 牧青日志</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh-CN</language>
+    <lastBuildDate>Tue, 14 Jun 2016 10:51:00 +0800</lastBuildDate>
+    <atom:link href="http://blog.hanmq.com/tags/vim/feed/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>vim添加solarized配色方案及vimrc基础设置</title>
+      <link>http://blog.hanmq.com/post/vimrc-solarized/</link>
+      <pubDate>Tue, 14 Jun 2016 10:51:00 +0800</pubDate>
+      
+      <guid>http://blog.hanmq.com/post/vimrc-solarized/</guid>
+      <description>
+
+&lt;p&gt;为vim添加漂亮的 Solarized 配色方案,效果如下图。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://blog.hanmq.com/img/solarized-vim.png&#34; alt=&#34;Solarized 效果图&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Solarized 支持大部分编辑器及IDE,&lt;a href=&#34;http://ethanschoonover.com/solarized&#34; target=&#34;_blank&#34;&gt;官方网站&lt;/a&gt;在这里。&lt;/p&gt;
+
+&lt;h2 id=&#34;vim-配置-solarized:ea903bc52c5adaba264c2d005a5fef95&#34;&gt;vim 配置 Solarized&lt;/h2&gt;
+
+&lt;h3 id=&#34;download:ea903bc52c5adaba264c2d005a5fef95&#34;&gt;download&lt;/h3&gt;
+
+&lt;p&gt;从github &lt;a href=&#34;https://github.com/altercation/vim-colors-solarized&#34;&gt;https://github.com/altercation/vim-colors-solarized&lt;/a&gt; 下载Vim-only 的仓库,即可完成vim的配置。&lt;/p&gt;
+
+&lt;p&gt;主仓库在 &lt;a href=&#34;https://github.com/altercation/solarized&#34;&gt;https://github.com/altercation/solarized&lt;/a&gt; ,只配置vim的话可以忽略。&lt;/p&gt;
+
+&lt;h3 id=&#34;install:ea903bc52c5adaba264c2d005a5fef95&#34;&gt;install&lt;/h3&gt;
+
+&lt;pre&gt;&lt;code&gt;$ cd vim-colors-solarized/colors
+$ mv solarized.vim ~/.vim/colors/
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;修改.vimrc文件&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;syntax enable
+set background=dark
+colorscheme solarized
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;background 支持 dark 和 light 两种配色方案&lt;/p&gt;
+
+&lt;h3 id=&#34;mac-terminal-支持:ea903bc52c5adaba264c2d005a5fef95&#34;&gt;mac terminal 支持&lt;/h3&gt;
+
+&lt;p&gt;mac terminal 需要在 colorschem solarized 前添加一行配置&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;let g:solarized_termcolors=256
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;官方的描述是&lt;/p&gt;
+
+&lt;blockquote&gt;
+&lt;p&gt;If you do use the custom terminal colors, solarized.vim should work out of the box for you. If you are using a terminal emulator that supports 256 colors and don&amp;rsquo;t want to use the custom Solarized terminal colors, you will need to use the degraded 256 colorscheme.&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;h2 id=&#34;vimrc-基础设置:ea903bc52c5adaba264c2d005a5fef95&#34;&gt;vimrc 基础设置&lt;/h2&gt;
+
+&lt;p&gt;分享一下vimrc的基础设置&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;syntax enable               &amp;quot;语法高亮&amp;quot;
+set background=dark
+let g:solarized_termcolors=256
+colorscheme solarized
+
+set nocompatible            &amp;quot;不兼容vi&amp;quot;
+set nu                      &amp;quot;显示行数&amp;quot;
+set expandtab               &amp;quot;用空格代替tab&amp;quot;
+set shiftwidth=4            &amp;quot;缩进的字符个数&amp;quot; 
+set tabstop=4               &amp;quot;一个tab是4个字符&amp;quot;
+set cursorline              &amp;quot;为光标所在行加下划线&amp;quot;
+set autoread                &amp;quot;文件在Vim之外修改过，自动重新读入&amp;quot;
+set ignorecase              &amp;quot;检索时忽略大小&amp;quot;
+set fileencodings=utf-8,gbk &amp;quot;使用utf-8或gbk打开文件&amp;quot;
+set hls                     &amp;quot;检索时高亮显示匹配项&amp;quot;
+set ruler                   &amp;quot;显示光标当前位置&amp;quot;
+set laststatus=2            &amp;quot;总是显示状态栏&amp;quot;
+set backspace=indent,eol,start
+set nowrap                  &amp;quot;禁止折行&amp;quot;
+
+&amp;quot;恢复文件关闭之前光标的位置&amp;quot;
+if has(&amp;quot;autocmd&amp;quot;)
+au BufReadPost * if line(&amp;quot;&#39;\&amp;quot;&amp;quot;) &amp;gt; 1 &amp;amp;&amp;amp; line(&amp;quot;&#39;\&amp;quot;&amp;quot;) &amp;lt;= line(&amp;quot;$&amp;quot;) | exe &amp;quot;normal! g&#39;\&amp;quot;&amp;quot; | endif
+endif
+
+&lt;/code&gt;&lt;/pre&gt;
+</description>
+    </item>
+    
+  </channel>
+</rss>

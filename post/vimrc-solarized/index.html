@@ -2,13 +2,13 @@
 <html lang="zh-CN">
 <head>
   <meta charset="UTF-8">
-  <title>CentOS 7 systemd 添加系统服务 nginx - 牧青日志</title>
+  <title>vim添加solarized配色方案及vimrc基础设置 - 牧青日志</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=3, minimum-scale=1">
   
-  <meta name="description" content="CentOS 7继承了RHEL 7的新的特性，例如强大的systemd，而systemd的使用也使得以往系统服务的/etc/init.d的启动脚本的方式就">
+  <meta name="description" content="为vim添加漂亮的 Solarized 配色方案,效果如下图。 Solarized 支持大部分编辑器及IDE,官方网站在这里。 vim 配置 Solarized download 从github https://github.com/altercation/vim-colors-solarized 下载Vim-only 的仓库,">
   <meta name="author" content="amao">
-  <meta itemprop="name" content="CentOS 7 systemd 添加系统服务 nginx - 牧青日志">
-  <meta itemprop="description" content="CentOS 7继承了RHEL 7的新的特性，例如强大的systemd，而systemd的使用也使得以往系统服务的/etc/init.d的启动脚本的方式就">
+  <meta itemprop="name" content="vim添加solarized配色方案及vimrc基础设置 - 牧青日志">
+  <meta itemprop="description" content="为vim添加漂亮的 Solarized 配色方案,效果如下图。 Solarized 支持大部分编辑器及IDE,官方网站在这里。 vim 配置 Solarized download 从github https://github.com/altercation/vim-colors-solarized 下载Vim-only 的仓库,">
   <meta itemprop="image" content="http://blog.hanmq.com/img/author.jpg">
   
   
@@ -53,7 +53,7 @@
 	<article itemprop="articleBody">
     <header class="article-info clearfix">
   <h1 itemprop="name">
-      <a href="http://blog.hanmq.com/post/centos7-systemd-nginx/" title="CentOS 7 systemd 添加系统服务 nginx" itemprop="url">CentOS 7 systemd 添加系统服务 nginx</a>
+      <a href="http://blog.hanmq.com/post/vimrc-solarized/" title="vim添加solarized配色方案及vimrc基础设置" itemprop="url">vim添加solarized配色方案及vimrc基础设置</a>
   </h1>
   <p class="article-author">By
     
@@ -61,7 +61,7 @@
     
   </p>
   <p class="article-time">
-    <time datetime="2016-06-13 10:16:09 &#43;0800 CST" itemprop="datePublished">2016年06月13日</time>
+    <time datetime="2016-06-14 10:51:00 &#43;0800 CST" itemprop="datePublished">2016年06月14日</time>
   </p>
 </header>
 
@@ -73,12 +73,13 @@
 <ul>
 <li>
 <ul>
-<li><a href="#systemd:1f81d4506716a68c23227f65602dc467">systemd:</a></li>
-<li><a href="#创建service:1f81d4506716a68c23227f65602dc467">创建service:</a></li>
-<li><a href="#unit:1f81d4506716a68c23227f65602dc467">[Unit]</a></li>
-<li><a href="#service:1f81d4506716a68c23227f65602dc467">[Service]</a></li>
-<li><a href="#install:1f81d4506716a68c23227f65602dc467">[Install]</a></li>
-<li><a href="#操作service:1f81d4506716a68c23227f65602dc467">操作Service:</a></li>
+<li><a href="#vim-配置-solarized:ea903bc52c5adaba264c2d005a5fef95">vim 配置 Solarized</a>
+<ul>
+<li><a href="#download:ea903bc52c5adaba264c2d005a5fef95">download</a></li>
+<li><a href="#install:ea903bc52c5adaba264c2d005a5fef95">install</a></li>
+<li><a href="#mac-terminal-支持:ea903bc52c5adaba264c2d005a5fef95">mac terminal 支持</a></li>
+</ul></li>
+<li><a href="#vimrc-基础设置:ea903bc52c5adaba264c2d005a5fef95">vimrc 基础设置</a></li>
 </ul></li>
 </ul>
 </nav>
@@ -86,111 +87,77 @@
     
     
 
-<p>CentOS 7继承了RHEL 7的新的特性，例如强大的systemd，而systemd的使用也使得以往系统服务的/etc/init.d的启动脚本的方式就此改变，大幅提高了系统服务的运行效率。</p>
+<p>为vim添加漂亮的 Solarized 配色方案,效果如下图。</p>
 
-<h2 id="systemd:1f81d4506716a68c23227f65602dc467">systemd:</h2>
+<p><img src="/img/solarized-vim.png" alt="Solarized 效果图" /></p>
 
-<p>CentOS 7的服务systemctl脚本存放在：/usr/lib/systemd/。
-有系统（system）和用户（user）之分，
-即：</p>
+<p>Solarized 支持大部分编辑器及IDE,<a href="http://ethanschoonover.com/solarized" target="_blank">官方网站</a>在这里。</p>
 
-<blockquote>
-<p>/usr/lib/systemd/system</p>
+<h2 id="vim-配置-solarized:ea903bc52c5adaba264c2d005a5fef95">vim 配置 Solarized</h2>
 
-<p>/usr/lib/systemd/user</p>
-</blockquote>
+<h3 id="download:ea903bc52c5adaba264c2d005a5fef95">download</h3>
 
-<p>每一个服务以.service结尾，一般会分为3部分：[Unit]、[Service]和[Install]，就以nginx为例吧，具体内容如下：</p>
+<p>从github <a href="https://github.com/altercation/vim-colors-solarized">https://github.com/altercation/vim-colors-solarized</a> 下载Vim-only 的仓库,即可完成vim的配置。</p>
 
-<h2 id="创建service:1f81d4506716a68c23227f65602dc467">创建service:</h2>
+<p>主仓库在 <a href="https://github.com/altercation/solarized">https://github.com/altercation/solarized</a> ,只配置vim的话可以忽略。</p>
 
-<p>在 /usr/lib/systemd/system 下创建nginx.service文件内容如下（看应用需求也可以在 /usr/lib/systemd/usr 下创建）：</p>
+<h3 id="install:ea903bc52c5adaba264c2d005a5fef95">install</h3>
 
-<pre><code>[Unit]
-Description=nginx - high performance web server
-Documentation=http://nginx.org/en/docs/
-After=network.target remote-fs.target nss-lookup.target
- 
-[Service]
-Type=forking
-PIDFile=/run/nginx.pid
-ExecStartPre=/usr/sbin/nginx -t -c /etc/nginx/nginx.conf
-ExecStart=/usr/sbin/nginx -c /etc/nginx/nginx.conf
-ExecReload=/bin/kill -s HUP $MAINPID
-ExecStop=/bin/kill -s QUIT $MAINPID
-PrivateTmp=true
- 
-[Install]
-WantedBy=multi-user.target
+<pre><code>$ cd vim-colors-solarized/colors
+$ mv solarized.vim ~/.vim/colors/
 </code></pre>
 
-<h2 id="unit:1f81d4506716a68c23227f65602dc467">[Unit]</h2>
+<p>修改.vimrc文件</p>
 
-<blockquote>
-<p>Description : 服务的简单描述</p>
-
-<p>Documentation ： 服务文档</p>
-
-<p>After : 依赖，仅当依赖的服务启动之后再启动自定义的服务单元</p>
-</blockquote>
-
-<h2 id="service:1f81d4506716a68c23227f65602dc467">[Service]</h2>
-
-<p>这个段是 .service 文件独有的，也是对于服务配置最重要的部分。这部分的配置选项非常多，主要分为服务生命周期控制和服务上下文配置两个方面</p>
-
-<blockquote>
-<p>Type : 启动类型simple、forking、oneshot、notify、dbus</p>
-
-<p>PIDFile ： pid文件路径</p>
-
-<p>ExecStartPre ：指定在启动执行 ExecStart 的命令前的准备工作，可以有多个，所有命令会按照文件中书写的顺序依次被执行</p>
-
-<p>ExecStart：这个参数是几乎每个 .service 文件都会有的，指定服务启动的主要命令，在每个配置文件中只能使用一次</p>
-
-<p>ExecReload：重新加载服务所需执行的主要命令</p>
-
-<p>ExecStop：指定在 ExecStop 命令执行后的收尾工作，也可以有多个</p>
-
-<p>PrivateTmp：True表示给服务分配独立的临时空间≈</p>
-</blockquote>
-
-<h2 id="install:1f81d4506716a68c23227f65602dc467">[Install]</h2>
-
-<p>这个段中的配置与 Unit 有几分相似，但是这部分配置需要通过 systemctl enable 命令来激活，并且可以通过 systemctl disable 命令禁用。另外这部分配置的目标模块通常是特定启动级别的 .target 文件，用来使得服务在系统启动时自动运行。</p>
-
-<blockquote>
-<p>WantedBy：上例中使用的是 “WantedBy=multi-user.target”， 表明当系统以多用户方式（默认的运行级别）启动时，这个服务需要被自动运行。当然还需要 systemctl enable 激活这个服务以后自动运行才会生效。</p>
-</blockquote>
-
-<h2 id="操作service:1f81d4506716a68c23227f65602dc467">操作Service:</h2>
-
-<pre><code>#修改权限
-$ sudo chmod +x /usr/lib/systemd/system/nginx.service
-
-$ sudo systemctl enable nginx.service
+<pre><code>syntax enable
+set background=dark
+colorscheme solarized
 </code></pre>
 
-<p>就会在/etc/systemd/system/multi-user.target.wants/目录下新建一个/usr/lib/systemd/system/nginx.service 文件的链接。</p>
+<p>background 支持 dark 和 light 两种配色方案</p>
 
-<pre><code>#启动服务
-$ sudo systemctl start nginx.service
+<h3 id="mac-terminal-支持:ea903bc52c5adaba264c2d005a5fef95">mac terminal 支持</h3>
 
-#查看日志
-$ sudo journalctl -f -u nginx.service
--- Logs begin at 四 2015-06-25 17:32:20 CST. --
-6月 25 10:28:24 Leco.lan systemd[1]: Starting nginx - high performance web server...
-6月 25 10:28:24 Leco.lan nginx[7976]: nginx: the configuration file /etc/nginx/nginx.conf syntax is ok
-6月 25 10:28:24 Leco.lan nginx[7976]: nginx: configuration file /etc/nginx/nginx.conf test is successful
-6月 25 10:28:24 Leco.lan systemd[1]: Started nginx - high performance web server.
+<p>mac terminal 需要在 colorschem solarized 前添加一行配置</p>
 
-#重启
-$ sudo systemctl restart nginx.service
+<pre><code>let g:solarized_termcolors=256
+</code></pre>
 
-#重载
-$ sudo systemctl reload nginx.service
+<p>官方的描述是</p>
 
-#停止
-$ sudo systemctl stop nginx.service
+<blockquote>
+<p>If you do use the custom terminal colors, solarized.vim should work out of the box for you. If you are using a terminal emulator that supports 256 colors and don&rsquo;t want to use the custom Solarized terminal colors, you will need to use the degraded 256 colorscheme.</p>
+</blockquote>
+
+<h2 id="vimrc-基础设置:ea903bc52c5adaba264c2d005a5fef95">vimrc 基础设置</h2>
+
+<p>分享一下vimrc的基础设置</p>
+
+<pre><code>syntax enable               &quot;语法高亮&quot;
+set background=dark
+let g:solarized_termcolors=256
+colorscheme solarized
+
+set nocompatible            &quot;不兼容vi&quot;
+set nu                      &quot;显示行数&quot;
+set expandtab               &quot;用空格代替tab&quot;
+set shiftwidth=4            &quot;缩进的字符个数&quot; 
+set tabstop=4               &quot;一个tab是4个字符&quot;
+set cursorline              &quot;为光标所在行加下划线&quot;
+set autoread                &quot;文件在Vim之外修改过，自动重新读入&quot;
+set ignorecase              &quot;检索时忽略大小&quot;
+set fileencodings=utf-8,gbk &quot;使用utf-8或gbk打开文件&quot;
+set hls                     &quot;检索时高亮显示匹配项&quot;
+set ruler                   &quot;显示光标当前位置&quot;
+set laststatus=2            &quot;总是显示状态栏&quot;
+set backspace=indent,eol,start
+set nowrap                  &quot;禁止折行&quot;
+
+&quot;恢复文件关闭之前光标的位置&quot;
+if has(&quot;autocmd&quot;)
+au BufReadPost * if line(&quot;'\&quot;&quot;) &gt; 1 &amp;&amp; line(&quot;'\&quot;&quot;) &lt;= line(&quot;$&quot;) | exe &quot;normal! g'\&quot;&quot; | endif
+endif
+
 </code></pre>
 
 	</div>
@@ -200,11 +167,9 @@ $ sudo systemctl stop nginx.service
 <div class="article-tags">
   <span></span>
   
-  <a href="http://blog.hanmq.com/tags/linux">linux</a>
+  <a href="http://blog.hanmq.com/tags/vim">vim</a>
   
-  <a href="http://blog.hanmq.com/tags/nginx">nginx</a>
-  
-  <a href="http://blog.hanmq.com/tags/systemd">systemd</a>
+  <a href="http://blog.hanmq.com/tags/solarized">solarized</a>
   
 </div>
 
@@ -215,14 +180,14 @@ $ sudo systemctl stop nginx.service
 <div class="article-categories">
   <span></span>
   
-  <a class="article-category-link" href="http://blog.hanmq.com/categories/%E6%8A%80%E6%9C%AF%E6%96%87%E7%AB%A0">技术文章</a>
+  <a class="article-category-link" href="http://blog.hanmq.com/categories/%E7%B3%BB%E7%BB%9F%E9%85%8D%E7%BD%AE">系统配置</a>
   
 </div>
 
 
 
   <div class="article-share" id="share">
-    <div data-url="http://blog.hanmq.com/post/centos7-systemd-nginx/" data-title="CentOS 7 systemd 添加系统服务 nginx" data-tsina="" class="share clearfix">
+    <div data-url="http://blog.hanmq.com/post/vimrc-solarized/" data-title="vim添加solarized配色方案及vimrc基础设置" data-tsina="" class="share clearfix">
     </div>
   </div>
 </footer>
@@ -238,8 +203,8 @@ $ sudo systemctl stop nginx.service
 
 
 var disqus_config = function () {
-this.page.url = "http://blog.hanmq.com/post/centos7-systemd-nginx/";
-this.page.identifier = "http://blog.hanmq.com/post/centos7-systemd-nginx/";
+this.page.url = "http://blog.hanmq.com/post/vimrc-solarized/";
+this.page.identifier = "http://blog.hanmq.com/post/vimrc-solarized/";
 };
 (function() { 
 var d = document, s = d.createElement('script');
