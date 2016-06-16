@@ -6,8 +6,22 @@
     <description>Recent content in Posts on 牧青日志</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-CN</language>
-    <lastBuildDate>Tue, 14 Jun 2016 10:51:00 +0800</lastBuildDate>
+    <lastBuildDate>Wed, 15 Jun 2016 13:43:24 +0800</lastBuildDate>
     <atom:link href="http://blog.hanmq.com/post/feed/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>家常面</title>
+      <link>http://blog.hanmq.com/post/noodles/</link>
+      <pubDate>Wed, 15 Jun 2016 13:43:24 +0800</pubDate>
+      
+      <guid>http://blog.hanmq.com/post/noodles/</guid>
+      <description>&lt;p&gt;川味素面&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://blog.hanmq.com/img/noodles.jpg&#34; width = &#34;300&#34; alt=&#34;家常面&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;希望你的人生如这碗面，朴素简单，却令人回味无穷。&lt;/p&gt;
+</description>
+    </item>
     
     <item>
       <title>vim添加solarized配色方案及vimrc基础设置</title>
