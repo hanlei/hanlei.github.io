@@ -2,13 +2,13 @@
 <html lang="zh-CN">
 <head>
   <meta charset="UTF-8">
-  <title>vim添加solarized配色方案及vimrc基础设置 - 牧青日志</title>
+  <title>vagrant挂载本地folder出错的解决方案 - 牧青日志</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=3, minimum-scale=1">
   
-  <meta name="description" content="为vim添加漂亮的 Solarized 配色方案,效果如下图。 Solarized 支持大部分编辑器及IDE,官方网站在这里。 vim 配置 Solarized download 从github https://github.com/altercation/vim-colors-solarized 下载Vim-only 的仓库,">
+  <meta name="description" content="问题 vagrant CentOS7 基础镜像，Vagrantfile 配置文件通过config.vm.synced_folder挂载本地目录报错 #Vagrantfile config.vm.synced_folder &quot;./Download&quot;, &quot;/Download&quot; vagrant up 启动时报错 Failed to">
   <meta name="author" content="amao">
-  <meta itemprop="name" content="vim添加solarized配色方案及vimrc基础设置 - 牧青日志">
-  <meta itemprop="description" content="为vim添加漂亮的 Solarized 配色方案,效果如下图。 Solarized 支持大部分编辑器及IDE,官方网站在这里。 vim 配置 Solarized download 从github https://github.com/altercation/vim-colors-solarized 下载Vim-only 的仓库,">
+  <meta itemprop="name" content="vagrant挂载本地folder出错的解决方案 - 牧青日志">
+  <meta itemprop="description" content="问题 vagrant CentOS7 基础镜像，Vagrantfile 配置文件通过config.vm.synced_folder挂载本地目录报错 #Vagrantfile config.vm.synced_folder &quot;./Download&quot;, &quot;/Download&quot; vagrant up 启动时报错 Failed to">
   <meta itemprop="image" content="http://blog.hanmq.com/img/author.jpg">
   
   
@@ -53,7 +53,7 @@
 	<article itemprop="articleBody">
     <header class="article-info clearfix">
   <h1 itemprop="name">
-      <a href="http://blog.hanmq.com/post/vimrc-solarized/" title="vim添加solarized配色方案及vimrc基础设置" itemprop="url">vim添加solarized配色方案及vimrc基础设置</a>
+      <a href="http://blog.hanmq.com/post/vagrant-sync-folder/" title="vagrant挂载本地folder出错的解决方案" itemprop="url">vagrant挂载本地folder出错的解决方案</a>
   </h1>
   <p class="article-author">By
     
@@ -61,7 +61,7 @@
     
   </p>
   <p class="article-time">
-    <time datetime="2016-06-14 10:51:00 &#43;0800 CST" itemprop="datePublished">2016年06月14日</time>
+    <time datetime="2016-06-16 17:31:08 &#43;0800 CST" itemprop="datePublished">2016年06月16日</time>
   </p>
 </header>
 
@@ -73,13 +73,9 @@
 <ul>
 <li>
 <ul>
-<li><a href="#vim-配置-solarized:ea903bc52c5adaba264c2d005a5fef95">vim 配置 Solarized</a>
-<ul>
-<li><a href="#download:ea903bc52c5adaba264c2d005a5fef95">download</a></li>
-<li><a href="#install:ea903bc52c5adaba264c2d005a5fef95">install</a></li>
-<li><a href="#mac-terminal-支持:ea903bc52c5adaba264c2d005a5fef95">mac terminal 支持</a></li>
-</ul></li>
-<li><a href="#vimrc-基础设置:ea903bc52c5adaba264c2d005a5fef95">vimrc 基础设置</a></li>
+<li><a href="#问题:06d0f8b601a0ceba53174af4565e1f4a">问题</a></li>
+<li><a href="#原因:06d0f8b601a0ceba53174af4565e1f4a">原因</a></li>
+<li><a href="#解决方案:06d0f8b601a0ceba53174af4565e1f4a">解决方案</a></li>
 </ul></li>
 </ul>
 </nav>
@@ -87,77 +83,42 @@
     
     
 
-<p>为vim添加漂亮的 Solarized 配色方案,效果如下图。</p>
+<h2 id="问题:06d0f8b601a0ceba53174af4565e1f4a">问题</h2>
 
-<p><img src="/img/solarized-vim.png" alt="Solarized 效果图" /></p>
+<p>vagrant CentOS7 基础镜像，Vagrantfile 配置文件通过config.vm.synced_folder挂载本地目录报错</p>
 
-<p>Solarized 支持大部分编辑器及IDE,<a href="http://ethanschoonover.com/solarized" target="_blank">官方网站</a>在这里。</p>
+<pre><code>#Vagrantfile
 
-<h2 id="vim-配置-solarized:ea903bc52c5adaba264c2d005a5fef95">vim 配置 Solarized</h2>
-
-<h3 id="download:ea903bc52c5adaba264c2d005a5fef95">download</h3>
-
-<p>从github <a href="https://github.com/altercation/vim-colors-solarized">https://github.com/altercation/vim-colors-solarized</a> 下载Vim-only 的仓库,即可完成vim的配置。</p>
-
-<p>主仓库在 <a href="https://github.com/altercation/solarized">https://github.com/altercation/solarized</a> ,只配置vim的话可以忽略。</p>
-
-<h3 id="install:ea903bc52c5adaba264c2d005a5fef95">install</h3>
-
-<pre><code>$ cd vim-colors-solarized/colors
-$ mv solarized.vim ~/.vim/colors/
+config.vm.synced_folder &quot;./Download&quot;, &quot;/Download&quot;
 </code></pre>
 
-<p>修改.vimrc文件</p>
+<p>vagrant up 启动时报错</p>
 
-<pre><code>syntax enable
-set background=dark
-colorscheme solarized
+<pre><code>Failed to mount folders in Linux guest. This is usually because
+the &quot;vboxsf&quot; file system is not available. Please verify that
+the guest additions are properly installed in the guest and
+can work properly. The command attempted was:
+
+mount -t vboxsf -o uid=`id -u vagrant`,gid=`getent group vagrant | cut -d: -f3` vagrant /vagrant
+mount -t vboxsf -o uid=`id -u vagrant`,gid=`id -g vagrant` vagrant /vagrant
+
+The error output from the last command was:
+
+/sbin/mount.vboxsf: mounting failed with the error: No such device
 </code></pre>
 
-<p>background 支持 dark 和 light 两种配色方案</p>
+<h2 id="原因:06d0f8b601a0ceba53174af4565e1f4a">原因</h2>
 
-<h3 id="mac-terminal-支持:ea903bc52c5adaba264c2d005a5fef95">mac terminal 支持</h3>
+<p>查了一些网上的文章，最终查到，是因为执行了 yum update 导致 kernel-devel 的版本和系统当前版本不一样导致。</p>
 
-<p>mac terminal 需要在 colorschem solarized 前添加一行配置</p>
+<h2 id="解决方案:06d0f8b601a0ceba53174af4565e1f4a">解决方案</h2>
 
-<pre><code>let g:solarized_termcolors=256
-</code></pre>
+<pre><code>yum install kernel-devel-$(uname -r)
+yum install kernel-headers-$(uname -r)
+yum install dkms
 
-<p>官方的描述是</p>
-
-<blockquote>
-<p>If you do use the custom terminal colors, solarized.vim should work out of the box for you. If you are using a terminal emulator that supports 256 colors and don&rsquo;t want to use the custom Solarized terminal colors, you will need to use the degraded 256 colorscheme.</p>
-</blockquote>
-
-<h2 id="vimrc-基础设置:ea903bc52c5adaba264c2d005a5fef95">vimrc 基础设置</h2>
-
-<p>分享一下vimrc的基础设置</p>
-
-<pre><code>syntax enable               &quot;语法高亮&quot;
-set background=dark
-let g:solarized_termcolors=256
-colorscheme solarized
-
-set nocompatible            &quot;不兼容vi&quot;
-set nu                      &quot;显示行数&quot;
-set expandtab               &quot;用空格代替tab&quot;
-set shiftwidth=4            &quot;缩进的字符个数&quot; 
-set tabstop=4               &quot;一个tab是4个字符&quot;
-set cursorline              &quot;为光标所在行加下划线&quot;
-set autoread                &quot;文件在Vim之外修改过，自动重新读入&quot;
-set ignorecase              &quot;检索时忽略大小&quot;
-set fileencodings=utf-8,gbk &quot;使用utf-8或gbk打开文件&quot;
-set hls                     &quot;检索时高亮显示匹配项&quot;
-set ruler                   &quot;显示光标当前位置&quot;
-set laststatus=2            &quot;总是显示状态栏&quot;
-set backspace=indent,eol,start
-set nowrap                  &quot;禁止折行&quot;
-
-&quot;恢复文件关闭之前光标的位置&quot;
-if has(&quot;autocmd&quot;)
-au BufReadPost * if line(&quot;'\&quot;&quot;) &gt; 1 &amp;&amp; line(&quot;'\&quot;&quot;) &lt;= line(&quot;$&quot;) | exe &quot;normal! g'\&quot;&quot; | endif
-endif
-
+cd /opt/VBoxGuestAdditions-*/init  
+sudo ./vboxadd setup
 </code></pre>
 
 	</div>
@@ -167,9 +128,11 @@ endif
 <div class="article-tags">
   <span></span>
   
-  <a href="http://blog.hanmq.com/tags/vim">vim</a>
+  <a href="http://blog.hanmq.com/tags/linux">linux</a>
   
-  <a href="http://blog.hanmq.com/tags/solarized">solarized</a>
+  <a href="http://blog.hanmq.com/tags/centos">centos</a>
+  
+  <a href="http://blog.hanmq.com/tags/vagrant">vagrant</a>
   
 </div>
 
@@ -187,7 +150,7 @@ endif
 
 
   <div class="article-share" id="share">
-    <div data-url="http://blog.hanmq.com/post/vimrc-solarized/" data-title="vim添加solarized配色方案及vimrc基础设置" data-tsina="" class="share clearfix">
+    <div data-url="http://blog.hanmq.com/post/vagrant-sync-folder/" data-title="vagrant挂载本地folder出错的解决方案" data-tsina="" class="share clearfix">
     </div>
   </div>
 </footer>
@@ -203,8 +166,8 @@ endif
 
 
 var disqus_config = function () {
-this.page.url = "http://blog.hanmq.com/post/vimrc-solarized/";
-this.page.identifier = "http://blog.hanmq.com/post/vimrc-solarized/";
+this.page.url = "http://blog.hanmq.com/post/vagrant-sync-folder/";
+this.page.identifier = "http://blog.hanmq.com/post/vagrant-sync-folder/";
 };
 (function() { 
 var d = document, s = d.createElement('script');

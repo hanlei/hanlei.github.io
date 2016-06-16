@@ -3,8 +3,13 @@
   
   <url>
     <loc>http://blog.hanmq.com/</loc>
-    <lastmod>2016-06-15T13:43:24+08:00</lastmod>
+    <lastmod>2016-06-16T17:31:08+08:00</lastmod>
     <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>http://blog.hanmq.com/post/vagrant-sync-folder/</loc>
+    <lastmod>2016-06-16T17:31:08+08:00</lastmod>
   </url>
   
   <url>

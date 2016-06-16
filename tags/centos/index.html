@@ -2,18 +2,18 @@
 <html lang="zh-CN">
 <head>
   <meta charset="UTF-8">
-  <title>vim添加solarized配色方案及vimrc基础设置 - 牧青日志</title>
+  <title>Centos - 牧青日志</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=3, minimum-scale=1">
   
-  <meta name="description" content="为vim添加漂亮的 Solarized 配色方案,效果如下图。 Solarized 支持大部分编辑器及IDE,官方网站在这里。 vim 配置 Solarized download 从github https://github.com/altercation/vim-colors-solarized 下载Vim-only 的仓库,">
+  <meta name="description" content="Centos">
   <meta name="author" content="amao">
-  <meta itemprop="name" content="vim添加solarized配色方案及vimrc基础设置 - 牧青日志">
-  <meta itemprop="description" content="为vim添加漂亮的 Solarized 配色方案,效果如下图。 Solarized 支持大部分编辑器及IDE,官方网站在这里。 vim 配置 Solarized download 从github https://github.com/altercation/vim-colors-solarized 下载Vim-only 的仓库,">
+  <meta itemprop="name" content="Centos - 牧青日志">
+  <meta itemprop="description" content="Centos">
   <meta itemprop="image" content="http://blog.hanmq.com/img/author.jpg">
   
   
   <meta name="twitter:description" content="">
-  
+  <link rel="alternate" href="http://blog.hanmq.com/feed.xml" title="牧青日志" type="application/rss+xml"/>
   <link rel="shortcut icon" href="http://blog.hanmq.com/img/favicon.ico"/>
   <link rel="apple-touch-icon" href="http://blog.hanmq.com/apple-touch-icon.png" />
   <link rel="apple-touch-icon-precomposed" href="http://blog.hanmq.com/apple-touch-icon.png" />
@@ -49,177 +49,21 @@
 
   </header>
   <div id="container">
-    <div id="main" class="post" itemscope itemprop="blogPost">
-	<article itemprop="articleBody">
-    <header class="article-info clearfix">
-  <h1 itemprop="name">
-      <a href="http://blog.hanmq.com/post/vimrc-solarized/" title="vim添加solarized配色方案及vimrc基础设置" itemprop="url">vim添加solarized配色方案及vimrc基础设置</a>
-  </h1>
-  <p class="article-author">By
-    
-      <a href="http://blog.hanmq.com" title="amao">amao</a>
-    
-  </p>
-  <p class="article-time">
-    <time datetime="2016-06-14 10:51:00 &#43;0800 CST" itemprop="datePublished">2016年06月14日</time>
-  </p>
-</header>
-
-	<div class="article-content">
-    
-		<div class="toc-article">
-			<strong class="toc-title">文章目录</strong>
-      <nav id="TableOfContents">
-<ul>
-<li>
-<ul>
-<li><a href="#vim-配置-solarized:ea903bc52c5adaba264c2d005a5fef95">vim 配置 Solarized</a>
-<ul>
-<li><a href="#download:ea903bc52c5adaba264c2d005a5fef95">download</a></li>
-<li><a href="#install:ea903bc52c5adaba264c2d005a5fef95">install</a></li>
-<li><a href="#mac-terminal-支持:ea903bc52c5adaba264c2d005a5fef95">mac terminal 支持</a></li>
-</ul></li>
-<li><a href="#vimrc-基础设置:ea903bc52c5adaba264c2d005a5fef95">vimrc 基础设置</a></li>
-</ul></li>
-</ul>
-</nav>
-		</div>
-    
-    
-
-<p>为vim添加漂亮的 Solarized 配色方案,效果如下图。</p>
-
-<p><img src="/img/solarized-vim.png" alt="Solarized 效果图" /></p>
-
-<p>Solarized 支持大部分编辑器及IDE,<a href="http://ethanschoonover.com/solarized" target="_blank">官方网站</a>在这里。</p>
-
-<h2 id="vim-配置-solarized:ea903bc52c5adaba264c2d005a5fef95">vim 配置 Solarized</h2>
-
-<h3 id="download:ea903bc52c5adaba264c2d005a5fef95">download</h3>
-
-<p>从github <a href="https://github.com/altercation/vim-colors-solarized">https://github.com/altercation/vim-colors-solarized</a> 下载Vim-only 的仓库,即可完成vim的配置。</p>
-
-<p>主仓库在 <a href="https://github.com/altercation/solarized">https://github.com/altercation/solarized</a> ,只配置vim的话可以忽略。</p>
-
-<h3 id="install:ea903bc52c5adaba264c2d005a5fef95">install</h3>
-
-<pre><code>$ cd vim-colors-solarized/colors
-$ mv solarized.vim ~/.vim/colors/
-</code></pre>
-
-<p>修改.vimrc文件</p>
-
-<pre><code>syntax enable
-set background=dark
-colorscheme solarized
-</code></pre>
-
-<p>background 支持 dark 和 light 两种配色方案</p>
-
-<h3 id="mac-terminal-支持:ea903bc52c5adaba264c2d005a5fef95">mac terminal 支持</h3>
-
-<p>mac terminal 需要在 colorschem solarized 前添加一行配置</p>
-
-<pre><code>let g:solarized_termcolors=256
-</code></pre>
-
-<p>官方的描述是</p>
-
-<blockquote>
-<p>If you do use the custom terminal colors, solarized.vim should work out of the box for you. If you are using a terminal emulator that supports 256 colors and don&rsquo;t want to use the custom Solarized terminal colors, you will need to use the degraded 256 colorscheme.</p>
-</blockquote>
-
-<h2 id="vimrc-基础设置:ea903bc52c5adaba264c2d005a5fef95">vimrc 基础设置</h2>
-
-<p>分享一下vimrc的基础设置</p>
-
-<pre><code>syntax enable               &quot;语法高亮&quot;
-set background=dark
-let g:solarized_termcolors=256
-colorscheme solarized
-
-set nocompatible            &quot;不兼容vi&quot;
-set nu                      &quot;显示行数&quot;
-set expandtab               &quot;用空格代替tab&quot;
-set shiftwidth=4            &quot;缩进的字符个数&quot; 
-set tabstop=4               &quot;一个tab是4个字符&quot;
-set cursorline              &quot;为光标所在行加下划线&quot;
-set autoread                &quot;文件在Vim之外修改过，自动重新读入&quot;
-set ignorecase              &quot;检索时忽略大小&quot;
-set fileencodings=utf-8,gbk &quot;使用utf-8或gbk打开文件&quot;
-set hls                     &quot;检索时高亮显示匹配项&quot;
-set ruler                   &quot;显示光标当前位置&quot;
-set laststatus=2            &quot;总是显示状态栏&quot;
-set backspace=indent,eol,start
-set nowrap                  &quot;禁止折行&quot;
-
-&quot;恢复文件关闭之前光标的位置&quot;
-if has(&quot;autocmd&quot;)
-au BufReadPost * if line(&quot;'\&quot;&quot;) &gt; 1 &amp;&amp; line(&quot;'\&quot;&quot;) &lt;= line(&quot;$&quot;) | exe &quot;normal! g'\&quot;&quot; | endif
-endif
-
-</code></pre>
-
-	</div>
-  <footer class="article-footer clearfix">
-  
-
-<div class="article-tags">
-  <span></span>
-  
-  <a href="http://blog.hanmq.com/tags/vim">vim</a>
-  
-  <a href="http://blog.hanmq.com/tags/solarized">solarized</a>
-  
-</div>
-
-
-
-
-
-<div class="article-categories">
-  <span></span>
-  
-  <a class="article-category-link" href="http://blog.hanmq.com/categories/%E7%B3%BB%E7%BB%9F%E9%85%8D%E7%BD%AE">系统配置</a>
-  
-</div>
-
-
-
-  <div class="article-share" id="share">
-    <div data-url="http://blog.hanmq.com/post/vimrc-solarized/" data-title="vim添加solarized配色方案及vimrc基础设置" data-tsina="" class="share clearfix">
-    </div>
-  </div>
-</footer>
-
-	</article>
-  
-
-
-<section class="comment">
-<div id="disqus_thread"></div>
+    <div id="main">
+      
+      <h2 id="2016-06">2016-06</h2>
+      
+      <section class="post" itemscope itemprop="blogPost">
+    <a href="http://blog.hanmq.com/post/vagrant-sync-folder/" title="vagrant挂载本地folder出错的解决方案" itemprop="url">
+    <h1 itemprop="name">vagrant挂载本地folder出错的解决方案</h1>
+    <p itemprop="description">问题 vagrant CentOS7 基础镜像，Vagrantfile 配置文件通过config.vm.synced_folder挂载本地目录报错 #Vagrantfile config.vm.synced_folder &quot;./Download&quot;, &quot;/Download&quot; vagrant up 启动时报错 Failed to</p>
+    <time datetime="2016-06-16 17:31:08 &#43;0800 CST" itemprop="datePublished">2016年06月16日</time>
+  </a>
 </section>
-<script>
 
-
-var disqus_config = function () {
-this.page.url = "http://blog.hanmq.com/post/vimrc-solarized/";
-this.page.identifier = "http://blog.hanmq.com/post/vimrc-solarized/";
-};
-(function() { 
-var d = document, s = d.createElement('script');
-
-s.src = '//bloghanmq.disqus.com/embed.js';
-
-s.setAttribute('data-timestamp', +new Date());
-(d.head || d.body).appendChild(s);
-})();
-</script>
-<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a></noscript>
-
-
-</div>
-
+      
+      
+    </div>
     <div class="openaside"><a class="navbutton" href="#" title="显示侧边栏"></a></div>
 <div id="asidepart">
 <div class="closeaside"><a class="closebutton" href="#" title="隐藏侧边栏"></a></div>
@@ -315,6 +159,10 @@ s.setAttribute('data-timestamp', +new Date());
 
 
   
+<div class="rsspart">
+  <a rel="nofollow" href="http://blog.hanmq.com/feed.xml" type="application/rss+xml" target="_blank">RSS 订阅</a>
+</div>
+
 
 </aside>
 </div>
@@ -403,38 +251,6 @@ $(document).ready(function(){
 
 <script type="text/javascript">
 $(document).ready(function(){
-  var ai = $('.article-content>iframe'),
-      ae = $('.article-content>embed'),
-      t  = $('#toc'),
-      h  = $('article h2')
-      ah = $('article h2'),
-      ta = $('#toc.toc-aside'),
-      o  = $('.openaside'),
-      c  = $('.closeaside');
-  if(ai.length>0){
-    ai.wrap('<div class="video-container" />');
-  };
-  if(ae.length>0){
-   ae.wrap('<div class="video-container" />');
-  };
-  if(ah.length==0){
-    t.css('display','none');
-  }else{
-    c.click(function(){
-      ta.css('display', 'block').addClass('fadeIn');
-    });
-    o.click(function(){
-      ta.css('display', 'none');
-    });
-    $(window).scroll(function(){
-      ta.css("top",Math.max(140,320-$(this).scrollTop()));
-    });
-  };
-});
-</script>
-
-<script type="text/javascript">
-$(document).ready(function(){
   var $this = $('.share'),
       url = $this.attr('data-url'),
       encodedUrl = encodeURIComponent(url),
@@ -461,27 +277,6 @@ $(document).ready(function(){
 });
 </script>
 
-
-<link rel="stylesheet" href="http://blog.hanmq.com/fancybox/jquery.fancybox.css" media="screen" type="text/css">
-<script src="http://blog.hanmq.com/fancybox/jquery.fancybox.pack.js"></script>
-<script type="text/javascript">
-$(document).ready(function(){
-  $('.article-content').each(function(i){
-    $(this).find('img').each(function(){
-      if ($(this).parent().hasClass('fancybox')) return;
-      var alt = this.alt;
-      if (alt) $(this).after('<span class="caption">' + alt + '</span>');
-      $(this).wrap('<a href="' + this.src + '" title="' + alt + '" class="fancybox"></a>');
-    });
-    $(this).find('.fancybox').each(function(){
-      $(this).attr('rel', 'article' + i);
-    });
-  });
-  if($.fancybox){
-    $('.fancybox').fancybox();
-  }
-});
-</script>
 
 
 
