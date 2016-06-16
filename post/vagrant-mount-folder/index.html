@@ -2,18 +2,18 @@
 <html lang="zh-CN">
 <head>
   <meta charset="UTF-8">
-  <title>Vagrant - 牧青日志</title>
+  <title>vagrant挂载本地folder出错的解决方案 - 牧青日志</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=3, minimum-scale=1">
   
-  <meta name="description" content="Vagrant">
+  <meta name="description" content="问题 vagrant CentOS7 基础镜像，Vagrantfile 配置文件通过config.vm.synced_folder挂载本地目录报错 #Vagrantfile config.vm.synced_folder &quot;./Download&quot;, &quot;/Download&quot; vagrant up 启动时报错 Failed to">
   <meta name="author" content="amao">
-  <meta itemprop="name" content="Vagrant - 牧青日志">
-  <meta itemprop="description" content="Vagrant">
+  <meta itemprop="name" content="vagrant挂载本地folder出错的解决方案 - 牧青日志">
+  <meta itemprop="description" content="问题 vagrant CentOS7 基础镜像，Vagrantfile 配置文件通过config.vm.synced_folder挂载本地目录报错 #Vagrantfile config.vm.synced_folder &quot;./Download&quot;, &quot;/Download&quot; vagrant up 启动时报错 Failed to">
   <meta itemprop="image" content="http://blog.hanmq.com/img/author.jpg">
   
   
   <meta name="twitter:description" content="">
-  <link rel="alternate" href="http://blog.hanmq.com/feed.xml" title="牧青日志" type="application/rss+xml"/>
+  
   <link rel="shortcut icon" href="http://blog.hanmq.com/img/favicon.ico"/>
   <link rel="apple-touch-icon" href="http://blog.hanmq.com/apple-touch-icon.png" />
   <link rel="apple-touch-icon-precomposed" href="http://blog.hanmq.com/apple-touch-icon.png" />
@@ -49,21 +49,140 @@
 
   </header>
   <div id="container">
-    <div id="main">
-      
-      <h2 id="2016-06">2016-06</h2>
-      
-      <section class="post" itemscope itemprop="blogPost">
-    <a href="http://blog.hanmq.com/post/vagrant-mount-folder/" title="vagrant挂载本地folder出错的解决方案" itemprop="url">
-    <h1 itemprop="name">vagrant挂载本地folder出错的解决方案</h1>
-    <p itemprop="description">问题 vagrant CentOS7 基础镜像，Vagrantfile 配置文件通过config.vm.synced_folder挂载本地目录报错 #Vagrantfile config.vm.synced_folder &quot;./Download&quot;, &quot;/Download&quot; vagrant up 启动时报错 Failed to</p>
+    <div id="main" class="post" itemscope itemprop="blogPost">
+	<article itemprop="articleBody">
+    <header class="article-info clearfix">
+  <h1 itemprop="name">
+      <a href="http://blog.hanmq.com/post/vagrant-mount-folder/" title="vagrant挂载本地folder出错的解决方案" itemprop="url">vagrant挂载本地folder出错的解决方案</a>
+  </h1>
+  <p class="article-author">By
+    
+      <a href="http://blog.hanmq.com" title="amao">amao</a>
+    
+  </p>
+  <p class="article-time">
     <time datetime="2016-06-16 17:31:08 &#43;0800 CST" itemprop="datePublished">2016年06月16日</time>
-  </a>
-</section>
+  </p>
+</header>
 
-      
-      
+	<div class="article-content">
+    
+		<div class="toc-article">
+			<strong class="toc-title">文章目录</strong>
+      <nav id="TableOfContents">
+<ul>
+<li>
+<ul>
+<li><a href="#问题:d10914a0617ca272838ce1ef356d7052">问题</a></li>
+<li><a href="#原因:d10914a0617ca272838ce1ef356d7052">原因</a></li>
+<li><a href="#解决方案:d10914a0617ca272838ce1ef356d7052">解决方案</a></li>
+</ul></li>
+</ul>
+</nav>
+		</div>
+    
+    
+
+<h2 id="问题:d10914a0617ca272838ce1ef356d7052">问题</h2>
+
+<p>vagrant CentOS7 基础镜像，Vagrantfile 配置文件通过config.vm.synced_folder挂载本地目录报错</p>
+
+<pre><code>#Vagrantfile
+
+config.vm.synced_folder &quot;./Download&quot;, &quot;/Download&quot;
+</code></pre>
+
+<p>vagrant up 启动时报错</p>
+
+<pre><code>Failed to mount folders in Linux guest. This is usually because
+the &quot;vboxsf&quot; file system is not available. Please verify that
+the guest additions are properly installed in the guest and
+can work properly. The command attempted was:
+
+mount -t vboxsf -o uid=`id -u vagrant`,gid=`getent group vagrant | cut -d: -f3` vagrant /vagrant
+mount -t vboxsf -o uid=`id -u vagrant`,gid=`id -g vagrant` vagrant /vagrant
+
+The error output from the last command was:
+
+/sbin/mount.vboxsf: mounting failed with the error: No such device
+</code></pre>
+
+<h2 id="原因:d10914a0617ca272838ce1ef356d7052">原因</h2>
+
+<p>查了一些网上的文章，最终查到，是因为执行了 yum update 导致 kernel-devel 的版本和系统当前版本不一样导致。</p>
+
+<h2 id="解决方案:d10914a0617ca272838ce1ef356d7052">解决方案</h2>
+
+<pre><code>yum install kernel-devel-$(uname -r)
+yum install kernel-headers-$(uname -r)
+yum install dkms
+
+cd /opt/VBoxGuestAdditions-*/init  
+sudo ./vboxadd setup
+</code></pre>
+
+	</div>
+  <footer class="article-footer clearfix">
+  
+
+<div class="article-tags">
+  <span></span>
+  
+  <a href="http://blog.hanmq.com/tags/linux">linux</a>
+  
+  <a href="http://blog.hanmq.com/tags/centos">centos</a>
+  
+  <a href="http://blog.hanmq.com/tags/vagrant">vagrant</a>
+  
+</div>
+
+
+
+
+
+<div class="article-categories">
+  <span></span>
+  
+  <a class="article-category-link" href="http://blog.hanmq.com/categories/%E7%B3%BB%E7%BB%9F%E9%85%8D%E7%BD%AE">系统配置</a>
+  
+</div>
+
+
+
+  <div class="article-share" id="share">
+    <div data-url="http://blog.hanmq.com/post/vagrant-mount-folder/" data-title="vagrant挂载本地folder出错的解决方案" data-tsina="" class="share clearfix">
     </div>
+  </div>
+</footer>
+
+	</article>
+  
+
+
+<section class="comment">
+<div id="disqus_thread"></div>
+</section>
+<script>
+
+
+var disqus_config = function () {
+this.page.url = "http://blog.hanmq.com/post/vagrant-mount-folder/";
+this.page.identifier = "http://blog.hanmq.com/post/vagrant-mount-folder/";
+};
+(function() { 
+var d = document, s = d.createElement('script');
+
+s.src = '//bloghanmq.disqus.com/embed.js';
+
+s.setAttribute('data-timestamp', +new Date());
+(d.head || d.body).appendChild(s);
+})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a></noscript>
+
+
+</div>
+
     <div class="openaside"><a class="navbutton" href="#" title="显示侧边栏"></a></div>
 <div id="asidepart">
 <div class="closeaside"><a class="closebutton" href="#" title="隐藏侧边栏"></a></div>
@@ -159,10 +278,6 @@
 
 
   
-<div class="rsspart">
-  <a rel="nofollow" href="http://blog.hanmq.com/feed.xml" type="application/rss+xml" target="_blank">RSS 订阅</a>
-</div>
-
 
 </aside>
 </div>
@@ -251,6 +366,38 @@ $(document).ready(function(){
 
 <script type="text/javascript">
 $(document).ready(function(){
+  var ai = $('.article-content>iframe'),
+      ae = $('.article-content>embed'),
+      t  = $('#toc'),
+      h  = $('article h2')
+      ah = $('article h2'),
+      ta = $('#toc.toc-aside'),
+      o  = $('.openaside'),
+      c  = $('.closeaside');
+  if(ai.length>0){
+    ai.wrap('<div class="video-container" />');
+  };
+  if(ae.length>0){
+   ae.wrap('<div class="video-container" />');
+  };
+  if(ah.length==0){
+    t.css('display','none');
+  }else{
+    c.click(function(){
+      ta.css('display', 'block').addClass('fadeIn');
+    });
+    o.click(function(){
+      ta.css('display', 'none');
+    });
+    $(window).scroll(function(){
+      ta.css("top",Math.max(140,320-$(this).scrollTop()));
+    });
+  };
+});
+</script>
+
+<script type="text/javascript">
+$(document).ready(function(){
   var $this = $('.share'),
       url = $this.attr('data-url'),
       encodedUrl = encodeURIComponent(url),
@@ -277,6 +424,27 @@ $(document).ready(function(){
 });
 </script>
 
+
+<link rel="stylesheet" href="http://blog.hanmq.com/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="http://blog.hanmq.com/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){
+  $('.article-content').each(function(i){
+    $(this).find('img').each(function(){
+      if ($(this).parent().hasClass('fancybox')) return;
+      var alt = this.alt;
+      if (alt) $(this).after('<span class="caption">' + alt + '</span>');
+      $(this).wrap('<a href="' + this.src + '" title="' + alt + '" class="fancybox"></a>');
+    });
+    $(this).find('.fancybox').each(function(){
+      $(this).attr('rel', 'article' + i);
+    });
+  });
+  if($.fancybox){
+    $('.fancybox').fancybox();
+  }
+});
+</script>
 
 
 
