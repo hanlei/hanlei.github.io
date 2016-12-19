@@ -2,13 +2,13 @@
 <html lang="zh-CN">
 <head>
   <meta charset="UTF-8">
-  <title>家常面 - 牧青日志</title>
+  <title>oauth2 简介 - 牧青日志</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=3, minimum-scale=1">
   
-  <meta name="description" content="川味素面 希望你的人生如这碗面，朴素简单，却令人回味无穷。">
+  <meta name="description" content="简介 在传统的服务器-客户端认证模型中，客户端通过服务器资源拥有者的认证，向服务器请求访问受限的资源（私有资源）。第三方应用程序访问受限资源，">
   <meta name="author" content="amao">
-  <meta itemprop="name" content="家常面 - 牧青日志">
-  <meta itemprop="description" content="川味素面 希望你的人生如这碗面，朴素简单，却令人回味无穷。">
+  <meta itemprop="name" content="oauth2 简介 - 牧青日志">
+  <meta itemprop="description" content="简介 在传统的服务器-客户端认证模型中，客户端通过服务器资源拥有者的认证，向服务器请求访问受限的资源（私有资源）。第三方应用程序访问受限资源，">
   <meta itemprop="image" content="http://blog.hanmq.com/img/author.jpg">
   
   
@@ -53,7 +53,7 @@
 	<article itemprop="articleBody">
     <header class="article-info clearfix">
   <h1 itemprop="name">
-      <a href="http://blog.hanmq.com/post/noodles/" title="家常面" itemprop="url">家常面</a>
+      <a href="http://blog.hanmq.com/post/oauth2-introduction/" title="oauth2 简介" itemprop="url">oauth2 简介</a>
   </h1>
   <p class="article-author">By
     
@@ -61,49 +61,38 @@
     
   </p>
   <p class="article-time">
-    <time datetime="2016-06-15 13:43:24 &#43;0800 CST" itemprop="datePublished">2016年06月15日</time>
+    <time datetime="2016-06-17 16:11:49 &#43;0800 CST" itemprop="datePublished">2016年06月17日</time>
   </p>
 </header>
 
 	<div class="article-content">
     
-		<div class="toc-article">
-			<strong class="toc-title">文章目录</strong>
-      
-		</div>
     
-    <p>川味素面</p>
 
-<p><img src="/img/noodles.jpg" width = "300" alt="家常面" /></p>
+<h1 id="简介:d4ca46e8668838d4afbf263145f86af7">简介</h1>
 
-<p>希望你的人生如这碗面，朴素简单，却令人回味无穷。</p>
+<p>在传统的服务器-客户端认证模型中，客户端通过服务器资源拥有者的认证，向服务器请求访问受限的资源（私有资源）。第三方应用程序访问受限资源，资源拥有者要向第三方应用分享他的证书。这就产生了一系列的问题和限制：</p>
+
+<h2 id="在使用中-第三方应用程序需要存储资源拥有者的证书-典型的例子就是明文的密码:d4ca46e8668838d4afbf263145f86af7">在使用中，第三方应用程序需要存储资源拥有者的证书，典型的例子就是明文的密码。</h2>
+
+<h2 id="服务端需要支持密码认证-尽管密码认证方式有它固有的安全隐患:d4ca46e8668838d4afbf263145f86af7">服务端需要支持密码认证，尽管密码认证方式有它固有的安全隐患。</h2>
+
+<h2 id="第三方应用程序获得访问资源拥有者受限资源的权限-资源拥有者没有任何能力限制第三方应用的访问时效-duration-和被访问资源范围-subset:d4ca46e8668838d4afbf263145f86af7">第三方应用程序获得访问资源拥有者受限资源的权限，资源拥有者没有任何能力限制第三方应用的访问时效(duration)和被访问资源范围(subset)。</h2>
+
+<h2 id="资源拥有者不能撤销某个第三方应用的访问权限-只能通过修改第三方密码-撤销整个第三方应用的访问权限:d4ca46e8668838d4afbf263145f86af7">资源拥有者不能撤销某个第三方应用的访问权限，只能通过修改第三方密码，撤销整个第三方应用的访问权限。</h2>
+
+<h2 id="第三方应用程序被破解-导致所有使用该密码的数据被破解:d4ca46e8668838d4afbf263145f86af7">第三方应用程序被破解，导致所有使用该密码的数据被破解。</h2>
+
+<p>OAuth 通过引入认证层和拆分资源拥有者角色，解决了上述问题。在 Oauth 中，客户端访问资源由资源拥有者和资源服务器所控制，</p>
 
 	</div>
   <footer class="article-footer clearfix">
   
 
-<div class="article-tags">
-  <span></span>
-  
-  <a href="http://blog.hanmq.com/tags/noodles">noodles</a>
-  
-</div>
-
-
-
-
-
-<div class="article-categories">
-  <span></span>
-  
-  <a class="article-category-link" href="http://blog.hanmq.com/categories/%E7%94%9F%E6%B4%BB">生活</a>
-  
-</div>
-
 
 
   <div class="article-share" id="share">
-    <div data-url="http://blog.hanmq.com/post/noodles/" data-title="家常面" data-tsina="" class="share clearfix">
+    <div data-url="http://blog.hanmq.com/post/oauth2-introduction/" data-title="oauth2 简介" data-tsina="" class="share clearfix">
     </div>
   </div>
 </footer>
@@ -119,8 +108,8 @@
 
 
 var disqus_config = function () {
-this.page.url = "http://blog.hanmq.com/post/noodles/";
-this.page.identifier = "http://blog.hanmq.com/post/noodles/";
+this.page.url = "http://blog.hanmq.com/post/oauth2-introduction/";
+this.page.identifier = "http://blog.hanmq.com/post/oauth2-introduction/";
 };
 (function() { 
 var d = document, s = d.createElement('script');

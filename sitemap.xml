@@ -3,8 +3,18 @@
   
   <url>
     <loc>http://blog.hanmq.com/</loc>
-    <lastmod>2016-06-16T17:31:08+08:00</lastmod>
+    <lastmod>2016-08-25T10:42:19+08:00</lastmod>
     <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>http://blog.hanmq.com/post/rediscli/</loc>
+    <lastmod>2016-08-25T10:42:19+08:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://blog.hanmq.com/post/oauth2-introduction/</loc>
+    <lastmod>2016-06-17T16:11:49+08:00</lastmod>
   </url>
   
   <url>
@@ -35,6 +45,10 @@
   <url>
     <loc>http://blog.hanmq.com/post/hello-hugo/</loc>
     <lastmod>2016-06-13T09:40:05+08:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://blog.hanmq.com/post/mou/</loc>
   </url>
   
 </urlset>

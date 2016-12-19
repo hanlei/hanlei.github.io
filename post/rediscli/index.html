@@ -1,0 +1,1112 @@
+<!DOCTYPE HTML>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <title>redis-cli, redis 命令行 - 牧青日志</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=3, minimum-scale=1">
+  
+  <meta name="description" content="redis-cli, the Redis command line interface redis-cli是redis命令行接口，直接通过终端向Redis发送命令并获取服务端的结果。 两种模式：用户输入命令并获取结果的">
+  <meta name="author" content="amao">
+  <meta itemprop="name" content="redis-cli, redis 命令行 - 牧青日志">
+  <meta itemprop="description" content="redis-cli, the Redis command line interface redis-cli是redis命令行接口，直接通过终端向Redis发送命令并获取服务端的结果。 两种模式：用户输入命令并获取结果的">
+  <meta itemprop="image" content="http://blog.hanmq.com/img/author.jpg">
+  
+  
+  <meta name="twitter:description" content="">
+  
+  <link rel="shortcut icon" href="http://blog.hanmq.com/img/favicon.ico"/>
+  <link rel="apple-touch-icon" href="http://blog.hanmq.com/apple-touch-icon.png" />
+  <link rel="apple-touch-icon-precomposed" href="http://blog.hanmq.com/apple-touch-icon.png" />
+  <link rel="stylesheet" href="http://blog.hanmq.com/highlight/styles/github.css">
+  <script src="http://blog.hanmq.com/highlight/highlight.pack.js"></script>
+  <script>hljs.initHighlightingOnLoad();</script>
+  <link rel="stylesheet" href="http://blog.hanmq.com/font/hack/css/hack.min.css">
+  <link rel="stylesheet" href="http://blog.hanmq.com/css/style.css">
+</head>
+
+<body>
+  <header>
+    <div>
+  
+  <div id="imglogo">
+    <a href="http://blog.hanmq.com/"><img src="http://blog.hanmq.com/img/logo.svg" alt="牧青日志" title="牧青日志"/></a>
+  </div>
+  
+  <div id="textlogo">
+    <h1 class="site-name"><a href="http://blog.hanmq.com/" title="牧青日志">牧青日志</a></h1>
+    <h2 class="blog-motto">码农日报</h2>
+  </div>
+  <div class="navbar"><a class="navbutton navmobile" href="#" title="menu"></a></div>
+  <nav class="animated">
+    <ul>
+      
+      <li><a href="/">首页</a></li>
+      
+      
+    </ul>
+  </nav>
+</div>
+
+  </header>
+  <div id="container">
+    <div id="main" class="post" itemscope itemprop="blogPost">
+	<article itemprop="articleBody">
+    <header class="article-info clearfix">
+  <h1 itemprop="name">
+      <a href="http://blog.hanmq.com/post/rediscli/" title="redis-cli, redis 命令行" itemprop="url">redis-cli, redis 命令行</a>
+  </h1>
+  <p class="article-author">By
+    
+      <a href="http://blog.hanmq.com" title="amao">amao</a>
+    
+  </p>
+  <p class="article-time">
+    <time datetime="2016-08-25 10:42:19 &#43;0800 CST" itemprop="datePublished">2016年08月25日</time>
+  </p>
+</header>
+
+	<div class="article-content">
+    
+		<div class="toc-article">
+			<strong class="toc-title">文章目录</strong>
+      <nav id="TableOfContents">
+<ul>
+<li><a href="#redis-cli-the-redis-command-line-interface:e5f208cb46ba33478a6c9775c9129e9a">redis-cli, the Redis command line interface</a></li>
+<li><a href="#command-line-usage:e5f208cb46ba33478a6c9775c9129e9a">Command line usage</a>
+<ul>
+<li><a href="#host-port-password-and-database:e5f208cb46ba33478a6c9775c9129e9a">Host, port, password and database</a></li>
+<li><a href="#getting-input-from-other-programs:e5f208cb46ba33478a6c9775c9129e9a">Getting input from other programs</a></li>
+<li><a href="#continuously-run-the-same-command:e5f208cb46ba33478a6c9775c9129e9a">Continuously run the same command</a></li>
+<li><a href="#mass-insertion-of-data-using-redis-cli:e5f208cb46ba33478a6c9775c9129e9a">Mass insertion of data using redis-cli</a></li>
+<li><a href="#csv-output:e5f208cb46ba33478a6c9775c9129e9a">CSV output</a></li>
+<li><a href="#running-lua-scripts:e5f208cb46ba33478a6c9775c9129e9a">Running Lua scripts</a></li>
+</ul></li>
+<li><a href="#interactive-mode:e5f208cb46ba33478a6c9775c9129e9a">Interactive mode</a>
+<ul>
+<li><a href="#handling-connections-and-reconnections:e5f208cb46ba33478a6c9775c9129e9a">Handling connections and reconnections</a></li>
+<li><a href="#editing-history-and-completion:e5f208cb46ba33478a6c9775c9129e9a">Editing, history and completion</a></li>
+<li><a href="#running-the-same-command-n-times:e5f208cb46ba33478a6c9775c9129e9a">Running the same command N times</a></li>
+<li><a href="#showing-help-about-redis-commands:e5f208cb46ba33478a6c9775c9129e9a">Showing help about Redis commands</a></li>
+<li><a href="#clearing-the-terminal-screen:e5f208cb46ba33478a6c9775c9129e9a">Clearing the terminal screen</a></li>
+</ul></li>
+<li><a href="#special-modes-of-operation:e5f208cb46ba33478a6c9775c9129e9a">Special modes of operation</a>
+<ul>
+<li><a href="#continuous-stats-mode:e5f208cb46ba33478a6c9775c9129e9a">Continuous stats mode</a></li>
+<li><a href="#scanning-for-big-keys:e5f208cb46ba33478a6c9775c9129e9a">Scanning for big keys</a></li>
+<li><a href="#getting-a-list-of-keys:e5f208cb46ba33478a6c9775c9129e9a">Getting a list of keys</a></li>
+<li><a href="#pub-sub-mode:e5f208cb46ba33478a6c9775c9129e9a">Pub/sub mode</a></li>
+<li><a href="#monitoring-commands-executed-in-redis:e5f208cb46ba33478a6c9775c9129e9a">Monitoring commands executed in Redis</a></li>
+<li><a href="#monitoring-the-latency-of-redis-instances:e5f208cb46ba33478a6c9775c9129e9a">Monitoring the latency of Redis instances</a></li>
+<li><a href="#remote-backups-of-rdb-files:e5f208cb46ba33478a6c9775c9129e9a">Remote backups of RDB files</a></li>
+<li><a href="#slave-mode:e5f208cb46ba33478a6c9775c9129e9a">Slave mode</a></li>
+<li><a href="#performing-an-lru-simulation:e5f208cb46ba33478a6c9775c9129e9a">Performing an LRU simulation</a></li>
+</ul></li>
+</ul>
+</nav>
+		</div>
+    
+    
+
+<h1 id="redis-cli-the-redis-command-line-interface:e5f208cb46ba33478a6c9775c9129e9a">redis-cli, the Redis command line interface</h1>
+
+<p><code>redis-cli</code>是redis命令行接口，直接通过终端向Redis发送命令并获取服务端的结果。</p>
+
+<p>两种模式：用户输入命令并获取结果的交互模式（交互式解释器，REPL）；命令以<code>redis-cli</code>参数的形式执行，并以标准输出的形式打印结果。</p>
+
+<p>在交互模式中，<code>redis-cli</code>通过基本的编辑能力提供更好的操作体验。</p>
+
+<p>当然<code>redis-cli</code>远不止这些。用户可以执行通过<code>redis-cli</code>完成更复杂的工作，例如模拟slave打印master返回的数据流，检查Redis服务的延迟，甚至ASCII-art spectrogram of latency samples and frequencies 等等。</p>
+
+<p>这篇向导包含<code>redis-cli</code>几个领域，从一些简单的例子开始后面会有一些高级案例。</p>
+
+<p>如果你将要频繁使用Redis或已经广泛的使用，花些时间熟悉他是一个不错的主意，在你了解全部命令行操作技巧后，你会发现你使用Redis的工作效率更高了。</p>
+
+<h1 id="command-line-usage:e5f208cb46ba33478a6c9775c9129e9a">Command line usage</h1>
+
+<p>运行一条命令并将返回打印在标准输出上，仅仅是在执行<code>redis-cli</code>后加一个参数：</p>
+
+<pre><code>$ redis-cli incr mycounter
+(integer) 7
+</code></pre>
+
+<p>命令的回复是&rdquo;7&rdquo;。Redis的回复是有类型的（可能是字符串，数组，数字，空，错误），你可以在括号中识别他们的类型。有时我们想讲<code>redis-cli</code>的输出作为另一个命令的输入、或将之写入到文件中。</p>
+
+<p>实际上当<code>redis-cli</code>检测到标准输出是tty(终端)，他会展示附加信息是为了让人类更好的阅读，否则他会打开&rdquo;raw output mode&rdquo;，例如下面的例子：</p>
+
+<pre><code>$ redis-cli incr mycounter &gt; /tmp/output.txt
+$ cat /tmp/output.txt
+8
+</code></pre>
+
+<p>当CLI检测到输出不再是终端<code>(integer)</code>被从输出中省略。你可以在终端中通过<code>--raw</code>强制进行行输出：</p>
+
+<pre><code>$ redis-cli --raw incr mycounter
+9
+</code></pre>
+
+<p>同样，你可以通过另一个命令<code>--no-raw</code>在写文件或管道中强制使用便于人类阅读的模式。</p>
+
+<h2 id="host-port-password-and-database:e5f208cb46ba33478a6c9775c9129e9a">Host, port, password and database</h2>
+
+<p><code>redis-cli</code>默认会连接127.0.0.1端口6379的服务。如你所料，我们可以通过命令行选项轻松将之改变。使用<code>-h</code>来指定不通的域名或IP地址。使用其他端口，使用<code>-p</code>。</p>
+
+<pre><code>$ redis-cli -h redis15.localnet.org -p 6390 ping
+PONG
+</code></pre>
+
+<p>如果Redis实例有密码保护，通过<code>-a &lt;password&gt;</code>选项运行<code>AUTH</code>进行密码认证。</p>
+
+<pre><code>$ redis-cli -a myUnguessablePazzzzzword123 ping
+PONG
+</code></pre>
+
+<p>Finally, it&rsquo;s possible to send a command that operates a on a database number
+other than the default number zero by using the <code>-n &lt;dbnum&gt;</code> option:</p>
+
+<pre><code>$ redis-cli flushall
+OK
+$ redis-cli -n 1 incr a
+(integer) 1
+$ redis-cli -n 1 incr a
+(integer) 2
+$ redis-cli -n 2 incr a
+(integer) 1
+</code></pre>
+
+<h2 id="getting-input-from-other-programs:e5f208cb46ba33478a6c9775c9129e9a">Getting input from other programs</h2>
+
+<p><code>redis-cli</code>有两种方法可以从另一个命令的输出作为输入（一般是从标准输入）。其中一种方法是从*stdin*读取最后一个参数。例如，使用<code>-x</code>选项来读取<code>/etc/services</code>文件的内容：</p>
+
+<pre><code>$ redis-cli -x set foo &lt; /etc/services
+OK
+$ redis-cli getrange foo 0 50
+&quot;#\n# Network services, Internet style\n#\n# Note that &quot;
+</code></pre>
+
+<p>你可以看到在上面的会话中，<code>SET</code>命令的最后一个参数并没有明确的指名。参数仅仅<code>SET</code> foo并没有指名实际的值。</p>
+
+<p>相反，<code>-x</code>选项指名一个文件作为CLI的标准输入。因此输入被读取并作为命令的最后一个参数。这是一个很有用的脚本。</p>
+
+<p>另一种方法，是通过写一段包含有序命令的文件注入<code>redis-cli</code></p>
+
+<pre><code>$ cat /tmp/commands.txt
+set foo 100
+incr foo
+append foo xxx
+get foo
+$ cat /tmp/commands.txt | redis-cli
+OK
+(integer) 101
+(integer) 6
+&quot;101xxx&quot;
+</code></pre>
+
+<p><code>redis-cli</code>会一条接一条的执行存储在<code>commands.txt</code>中的所有命令，就像她们被用户输入一样。如果需要，字符串可以在文件中被引用，所以这就使带空格的参数或特殊字符成为可能。</p>
+
+<pre><code>$ cat /tmp/commands.txt
+set foo &quot;This is a single argument&quot;
+strlen foo
+$ cat /tmp/commands.txt | redis-cli
+OK
+(integer) 25
+</code></pre>
+
+<h2 id="continuously-run-the-same-command:e5f208cb46ba33478a6c9775c9129e9a">Continuously run the same command</h2>
+
+<p>在执行中，可以对相同的命令指定执行次数和间隔时间。这在不同的场景中很有用，比如我们要一直监控一些key的内容或<code>INFO</code>字段的输出，或我们想模拟一个频繁的写事件（每个5秒向一个list推一个新条目）。</p>
+
+<p>这个特性由<code>-r &lt;count&gt;</code>和<code>-i &lt;delay&gt;</code>两个选项控制。第一个指明命令运行的册数，第二个指定不同命令之间的时间间隔，以秒为单位（可以通过小数例如0.1来代表100微秒）。</p>
+
+<p>默认间隔间隔（延迟）设为0，即是命令会被立刻执行：</p>
+
+<pre><code>$ redis-cli -r 5 incr foo
+(integer) 1
+(integer) 2
+(integer) 3
+(integer) 4
+(integer) 5
+</code></pre>
+
+<p>使用<code>-1</code>作为计数，命令会被一直运行。</p>
+
+<p>监控RSS内存使用情况，使用下列命令：</p>
+
+<pre><code>$ redis-cli -r -1 -i 1 INFO | grep rss_human
+used_memory_rss_human:1.38M
+used_memory_rss_human:1.38M
+used_memory_rss_human:1.38M
+... a new line will be printed each second ...
+</code></pre>
+
+<h2 id="mass-insertion-of-data-using-redis-cli:e5f208cb46ba33478a6c9775c9129e9a">Mass insertion of data using redis-cli</h2>
+
+<p>使用<code>redis-cli</code>做批量插入作为一个独立话题包含在另一个页面讨论，请访问
+<a href="/topics/mass-insert">大数据插入向导</a>.</p>
+
+<h2 id="csv-output:e5f208cb46ba33478a6c9775c9129e9a">CSV output</h2>
+
+<p>有时你可能需要通过<code>redis-cli</code>来从Redis向另一个外部程序快速的导出数据。这个需求可以通过CSV（Comma Separated Values）输出特性完成：</p>
+
+<pre><code>$ redis-cli lpush mylist a b c d
+(integer) 4
+$ redis-cli --csv lrange mylist 0 -1
+&quot;d&quot;,&quot;c&quot;,&quot;b&quot;,&quot;a&quot;
+</code></pre>
+
+<p>一般不可能像这样导出整个数据库数据，只需要运行一个带有CSV输出的命令。</p>
+
+<h2 id="running-lua-scripts:e5f208cb46ba33478a6c9775c9129e9a">Running Lua scripts</h2>
+
+<p>The <code>redis-cli</code> has extensive support for using the new Lua debugging facility
+of Lua scripting, available starting with Redis 3.2. For this feature, please
+refer to the <a href="/topics/ldb">Redis Lua debugger documentation</a>.</p>
+
+<p>However, even without using the debugger, you can use <code>redis-cli</code> to
+run scripts from a file in a way more comfortable compared to typing
+the script interactively into the shell or as an argument:</p>
+
+<pre><code>$ cat /tmp/script.lua
+return redis.call('set',KEYS[1],ARGV[1])
+$ redis-cli --eval /tmp/script.lua foo , bar
+OK
+</code></pre>
+
+<p>The Redis <code>EVAL</code> command takes the list of keys the script uses, and the
+other non key arguments, as different arrays. When calling <code>EVAL</code> you
+provide the number of keys as a number. However with <code>redis-cli</code> and using
+the <code>--eval</code> option above, there is no need to specify the number of keys
+explicitly. Instead it uses the convention of separating keys and arguments
+with a comma. This is why in the above call you see <code>foo , bar</code> as arguments.</p>
+
+<p>So <code>foo</code> will populate the <code>KEYS</code> array, and <code>bar</code> the <code>ARGV</code> array.</p>
+
+<p>The <code>--eval</code> option is useful when writing simple scripts. For more
+complex work, using the Lua debugger is definitely more comfortable. It&rsquo;s
+possible to mix the two approaches, since the debugger also uses executing
+scripts from an external file.</p>
+
+<h1 id="interactive-mode:e5f208cb46ba33478a6c9775c9129e9a">Interactive mode</h1>
+
+<p>到目前为止，我们讨论了作为命令行程序如何使用Redis CLI。这个对于脚本呢和一些特定的测试是非常有用的，但是大部分人使用<code>redis-cli</code>的大部分时间都是在交互模式。</p>
+
+<p>在交互模式中用户在提示行输入Redis命令。命令被发送到服务器，运行，回复被解析并以简单且便于阅读的形式呈现。</p>
+
+<p>在交互模式运行CLI并不需要任何特殊的需求 - 仅仅是不带任何参与来运行他：</p>
+
+<pre><code>$ redis-cli
+127.0.0.1:6379&gt; ping
+PONG
+</code></pre>
+
+<p>字符串<code>127.0.0.1:6379&gt;</code>就是提示符。他提醒你你所连接的Redis实例。</p>
+
+<p>当你所连接的服务器改变，或是你所操作的数据库和数据库0不一样，提示符也会随之改变：</p>
+
+<pre><code>127.0.0.1:6379&gt; select 2
+OK
+127.0.0.1:6379[2]&gt; dbsize
+(integer) 1
+127.0.0.1:6379[2]&gt; select 0
+OK
+127.0.0.1:6379&gt; dbsize
+(integer) 503
+</code></pre>
+
+<h2 id="handling-connections-and-reconnections:e5f208cb46ba33478a6c9775c9129e9a">Handling connections and reconnections</h2>
+
+<p>在交互模式使用<code>connect</code>命令并指名*hostname*和*port*可以连接到不同的实例：</p>
+
+<pre><code>127.0.0.1:6379&gt; connect metal 6379
+metal:6379&gt; ping
+PONG
+</code></pre>
+
+<p>我们可以看到提示响应的改变。如果用户尝试连接一个不可达的实例，<code>redis-cli</code>会进入离线模式并尝试在每次新命令进行重连：</p>
+
+<pre><code>127.0.0.1:6379&gt; connect 127.0.0.1 9999
+Could not connect to Redis at 127.0.0.1:9999: Connection refused
+not connected&gt; ping
+Could not connect to Redis at 127.0.0.1:9999: Connection refused
+not connected&gt; ping
+Could not connect to Redis at 127.0.0.1:9999: Connection refused
+</code></pre>
+
+<p>在一次断开连接被检测到后，CLI一般会试图进行透明的重连：如果连接失败，会显示凑五信息并进入离线状态。下面就是一个断开连接并重连成功的例子：</p>
+
+<pre><code>127.0.0.1:6379&gt; debug restart
+Could not connect to Redis at 127.0.0.1:6379: Connection refused
+not connected&gt; ping
+PONG
+127.0.0.1:6379&gt; (now we are connected again)
+</code></pre>
+
+<p>当一个重连被执行后，<code>redis-cli</code>会自动选择最后一个数据库序号。但是其他的连接状态都会丢失，比如一个我们正在处理的事务：</p>
+
+<pre><code>$ redis-cli
+127.0.0.1:6379&gt; multi
+OK
+127.0.0.1:6379&gt; ping
+QUEUED
+
+( here the server is manually restarted )
+
+127.0.0.1:6379&gt; exec
+(error) ERR EXEC without MULTI
+</code></pre>
+
+<p>一般来说，类似案例在交互模式中使用CLI并不是一个问题，但是你需要知道这些限制。</p>
+
+<h2 id="editing-history-and-completion:e5f208cb46ba33478a6c9775c9129e9a">Editing, history and completion</h2>
+
+<p>由于<code>redis-cli</code>使用<a href="http://github.com/antirez/linenoise">linenoise line editing library</a>, 他具有行编辑能力，并补依赖于<code>libreadline</code>或其他类库。</p>
+
+<p>通过方向键（上和下）可以回顾命令执行历史，来避免一遍一遍的重复输入。</p>
+
+<p>CLI重启之间的操作历史被罐装在由环境变量定义的用户家目录中的<code>.rediscli_history</code>的文件里。可以通过设置环境变量<code>REDISCLI_HISTFILE</code>来使用其他文件名，并可以通过设置为<code>/dev/null</code>来关掉历史命令。</p>
+
+<p>CLI可以通过按TAB键来补全命令，如下面的例子：</p>
+
+<pre><code>127.0.0.1:6379&gt; Z&lt;TAB&gt;
+127.0.0.1:6379&gt; ZADD&lt;TAB&gt;
+127.0.0.1:6379&gt; ZCARD&lt;TAB&gt;
+</code></pre>
+
+<h2 id="running-the-same-command-n-times:e5f208cb46ba33478a6c9775c9129e9a">Running the same command N times</h2>
+
+<p>可以在命令前预设同一个命令所需要执行的次数：</p>
+
+<pre><code>127.0.0.1:6379&gt; 5 incr mycounter
+(integer) 1
+(integer) 2
+(integer) 3
+(integer) 4
+(integer) 5
+</code></pre>
+
+<h2 id="showing-help-about-redis-commands:e5f208cb46ba33478a6c9775c9129e9a">Showing help about Redis commands</h2>
+
+<p>Redis有不少<a href="/commands">命令</a>，时不时你可能不能想起准确的参数。<code>redis-cli</code>可以通过<code>help</code>命令查找大部分命令提供在线帮助。该命令可以用两种方式使用：</p>
+
+<ul>
+<li><code>help @&lt;category&gt;</code> 显示指定类别下所有的命令。类别包括： <code>@generic</code>, <code>@list</code>, <code>@set</code>, <code>@sorted_set</code>, <code>@hash</code>,
+<code>@pubsub</code>, <code>@transactions</code>, <code>@connection</code>, <code>@server</code>, <code>@scripting</code>,
+<code>@hyperloglog</code>.</li>
+<li><code>help &lt;commandname&gt;</code> 显示以参数指明的命令帮助信息。</li>
+</ul>
+
+<p>例如显示<code>PFADD</code>的帮助信息，使用：</p>
+
+<p>127.0.0.1:6379&gt; help PFADD</p>
+
+<p>PFADD key element [element &hellip;]
+  summary: Adds the specified elements to the specified HyperLogLog.
+  since: 2.8.9</p>
+
+<p>记住，<code>help</code>也支持TAB补全。</p>
+
+<h2 id="clearing-the-terminal-screen:e5f208cb46ba33478a6c9775c9129e9a">Clearing the terminal screen</h2>
+
+<p>在交互模式中使用<code>clear</code>命令来清理终端屏幕。</p>
+
+<h1 id="special-modes-of-operation:e5f208cb46ba33478a6c9775c9129e9a">Special modes of operation</h1>
+
+<p>到目前为止我们看到了<code>redis-cli</code>的两个主要的模式。</p>
+
+<ul>
+<li>命令行执行Redis命令</li>
+<li>&ldquo;REPL-like&rdquo;交互模式</li>
+</ul>
+
+<p>CLI包括其他一些有关于Redis的附加任务，会在下面的部门解释：</p>
+
+<ul>
+<li>持续监控Redis服务状态工具。</li>
+<li>扫描Redis数据库的超大keys。</li>
+<li>正则扫描key space。</li>
+<li>作为<a href="/topics/pubsub">Pub/Sub</a>客户端订阅信道。</li>
+<li>监控命令在Redis实例的执行。</li>
+<li>多重方式检查Redis服务的<a href="/topics/latency">延迟</a>。</li>
+<li>检查本机的调度延迟。</li>
+<li>从远程Redis服务传输RDB备份。</li>
+<li>作为Redis slave展示 slave的接收。</li>
+<li>模拟<a href="/topics/lru-cache">LRU</a>工作负载来展示keys hits。</li>
+<li>Lua debugger客户端。</li>
+</ul>
+
+<h2 id="continuous-stats-mode:e5f208cb46ba33478a6c9775c9129e9a">Continuous stats mode</h2>
+
+<p>这可能是一个<code>redis-cli</code>最补为人所知的一个特性，而又是一个在实际操作中辅助查看Redis实例非常有用的。</p>
+
+<p>开启该模式，需要使用<code>--stat</code>选项。</p>
+
+<p>在这个模式里，输出明确的展示了CLI的表现：</p>
+
+<pre><code>$ redis-cli --stat
+------- data ------ --------------------- load -------------------- - child -
+keys       mem      clients blocked requests            connections          
+809810     982.12M  14656   0       60074309086 (+2130) 36443108    
+809810     983.05M  14657   0       60074311313 (+2227) 36443109    
+809807     984.86M  14656   0       60074313665 (+2352) 36443109    
+809813     984.60M  14657   0       60074315634 (+1969) 36443110    
+809812     985.67M  14656   0       60074318038 (+2404) 36443110    
+809814     983.02M  14657   0       60074320361 (+2323) 36443111    
+809816     984.98M  14657   0       60074322850 (+2489) 36443112 
+</code></pre>
+
+<p>在这个模式中，每秒会打印一行包含了当前服务有用的数据及和前一秒的差量信息。你可以很容易的理解内存使用发生了什么，用户的连接数和其他四个。</p>
+
+<p><code>-i &lt;interval&gt;</code>选项可以改变发出新行的频率。默认是1秒。</p>
+
+<h2 id="scanning-for-big-keys:e5f208cb46ba33478a6c9775c9129e9a">Scanning for big keys</h2>
+
+<p>在这个特别的模式中，<code>redis-cli</code>是key空间分析者。他会扫描数据集的大keys，还会提供关于数据的类型信息。通过<code>--bigkeys</code>命令开启该模式，系统会提供一个比较详细的输出：</p>
+
+<pre><code>$ redis-cli --bigkeys
+
+# Scanning the entire keyspace to find biggest keys as well as
+# average sizes per key type.  You can use -i 0.1 to sleep 0.1 sec
+# per 100 SCAN commands (not usually needed).
+
+[00.00%] Biggest hash   found so far 'SYNC:uhs:1868564' with 7 fields
+[00.00%] Biggest hash   found so far 'SYNC:uhs:1588779' with 12 fields
+[00.00%] Biggest hash   found so far 'SYNC:uhs:2384872' with 20 fields
+[00.00%] Biggest string found so far 'SYNC:REPO:CV:1265088:group' with 7 bytes
+[00.00%] Biggest string found so far 'SYNC:REPO:CV:1104162:address' with 10 bytes
+[00.00%] Biggest string found so far 'CA:TICKET:jSrZGX-OLOaZfEOt1gh7pG0YSTSCD762' with 16 bytes
+[00.01%] Biggest string found so far 'BYS:area_id_341800' with 63 bytes
+[00.01%] Biggest string found so far 'oauth:access_token:HatMrP1fMEUsK9EuvtgFfl2G22aOC64A' with 791 bytes
+[00.04%] Biggest hash   found so far 'SYNC:uhs:1273501' with 21 fields
+[00.78%] Biggest set    found so far 'spring:session:index:org.springframework.session.FindByIndexNameSessionRepository.PRINCIPAL_NAME_INDEX_NAME:1033495' with 1 members
+[00.95%] Biggest hash   found so far 'SYNC:uhs:1395077' with 22 fields
+[01.03%] Biggest string found so far 'SHOP:area_city_list_id_530800' with 1042 bytes
+[02.67%] Biggest set    found so far 'spring:session:index:org.springframework.session.FindByIndexNameSessionRepository.PRINCIPAL_NAME_INDEX_NAME:2570714' with 11 members
+[03.05%] Biggest string found so far 'ESHOP-ALPHA:SESS:6u1t5bobgd6jvq3g872jlljs11' with 5710 bytes
+[03.12%] Biggest set    found so far 'spring:session:index:org.springframework.session.FindByIndexNameSessionRepository.PRINCIPAL_NAME_INDEX_NAME:1439786' with 247 members
+[09.50%] Biggest string found so far 'CLOUD:1355047LISTS' with 73064 bytes
+[09.52%] Biggest hash   found so far 'SYNC:uhs:2604126' with 23 fields
+[18.10%] Biggest hash   found so far 'WQP:151103' with 24 fields
+[46.64%] Biggest hash   found so far 'BYK:150922' with 26 fields
+
+-------- summary -------
+
+Sampled 799395 keys in the keyspace!
+Total key length in bytes is 19897258 (avg len 24.89)
+
+Biggest string found 'CLOUD:1355047LISTS' has 73064 bytes
+Biggest    set found 'spring:session:index:org.springframework.session.FindByIndexNameSessionRepository.PRINCIPAL_NAME_INDEX_NAME:1439786' has 247 members
+Biggest   hash found 'BYK:150922' has 26 fields
+
+464437 strings with 5936000 bytes (58.10% of keys, avg size 12.78)
+0 lists with 0 items (00.00% of keys, avg size 0.00)
+233 sets with 2512 members (00.03% of keys, avg size 10.78)
+334725 hashs with 4638505 fields (41.87% of keys, avg size 13.86)
+0 zsets with 0 members (00.00% of keys, avg size 0.00)
+</code></pre>
+
+<p>在输出的第一部分，每一个比前一个更大的key（类型相同）都会上报。总结部分提供一个Redis实例内部数据的总体概要。</p>
+
+<p>程序使用<code>SCAN</code>命令，所以在面对繁忙服务时不会影响操作，<code>-i</code>选项可以用来指定每100个请求来锁死扫描程序的分数。例如，<code>-i 0.1</code>会降低程序的执行速度，单会降低服务的负载。</p>
+
+<p>总结会报告每次被找到的大keys的清洁器。初始输出会在运行时提供一些有趣信息。</p>
+
+<p>Note that the summary also reports in a cleaner form the biggest keys found
+for each time. The initial output is just to provide some interesting info
+ASAP if running against a very large data set.</p>
+
+<h2 id="getting-a-list-of-keys:e5f208cb46ba33478a6c9775c9129e9a">Getting a list of keys</h2>
+
+<p>有一种扫描key空间的方法，不会去阻塞Redis服务（<code>KEYS *</code>命令就会阻塞服务），并打印所有的键名或通过正则过滤。这个模式，就像<code>--bigkeys</code>选线，使用<code>SCAN</code>命令，在数据集变化时键可能会上报多次，但是不会丢掉任何一个在迭代开始后存在的键。因为使用了了<code>--scan</code>。</p>
+
+<pre><code>$ redis-cli --scan | head -10
+key-419
+key-71
+key-236
+key-50
+key-38
+key-458
+key-453
+key-499
+key-446
+key-371
+</code></pre>
+
+<p><code>head -10</code>用于只打印输出的第一部分。</p>
+
+<p>可以通过<code>--pattern</code>选项进行正则过滤。</p>
+
+<pre><code>$ redis-cli --scan --pattern '*-11*'
+key-114
+key-117
+key-118
+key-113
+key-115
+key-112
+key-119
+key-11
+key-111
+key-110
+key-116
+</code></pre>
+
+<p><code>wc</code>命令可以通过管道来对特殊对象进行计数。</p>
+
+<pre><code>$ redis-cli --scan --pattern 'user:*' | wc -l
+3829433
+</code></pre>
+
+<h2 id="pub-sub-mode:e5f208cb46ba33478a6c9775c9129e9a">Pub/sub mode</h2>
+
+<p>CLI可以通过<code>PUBLISH</code>命令在Redis Pub/Sub通道中发布消息。<code>PUBLISH</code>命令被预期为和其他命令非常类似。订阅通道接受消息是不同的 - 在这种情况我们需要锁住并等待消息，所以这个在<code>redis-cli</code>被实现为一种特殊的模式。不同于其他特殊模式，这个模式并不使用特殊的选项，不论在交互模式中还是非交互模式中，仅仅需要使用<code>SUBSCRIBE</code>和<code>PSUBSCRIBE</code>命令。</p>
+
+<pre><code>$ redis-cli psubscribe '*'
+Reading messages... (press Ctrl-C to quit)
+1) &quot;psubscribe&quot;
+2) &quot;*&quot;
+3) (integer) 1
+</code></pre>
+
+<p>*reading messages*消息表明我们进入Pub/Sub模式。</p>
+
+<p>当另一个客户端在某些通道中发布某些消息，可以使用<code>redis-cli PUBLISH mychannel mymessage</code>，CLI在Pub/Sub模式中会有如下信息：</p>
+
+<pre><code>1) &quot;pmessage&quot;
+2) &quot;*&quot;
+3) &quot;mychannel&quot;
+4) &quot;mymessage&quot;
+</code></pre>
+
+<p>这对于Pub/Sub问题的debug非常有用。</p>
+
+<p>输入<code>CTRL-C</code>退出Pub/Sub模式。</p>
+
+<h2 id="monitoring-commands-executed-in-redis:e5f208cb46ba33478a6c9775c9129e9a">Monitoring commands executed in Redis</h2>
+
+<p>和Pub/Sub模式类似，在输入<code>MONITOR</code>会自动进入监控模式。他会输出所有Redis实例接收到的命令：</p>
+
+<pre><code>$ redis-cli monitor
+OK
+1460100081.165665 [0 127.0.0.1:51706] &quot;set&quot; &quot;foo&quot; &quot;bar&quot;
+1460100083.053365 [0 127.0.0.1:51707] &quot;get&quot; &quot;foo&quot;
+</code></pre>
+
+<p>这里可以对输出使用管到，因此你可以通过例如<code>grep</code>正则监控。</p>
+
+<h2 id="monitoring-the-latency-of-redis-instances:e5f208cb46ba33478a6c9775c9129e9a">Monitoring the latency of Redis instances</h2>
+
+<p>在Redis上下文的延迟是非常紧张的，延迟涉及到多个应用的部分，从客户端的类库到网络堆栈，再到Redis实例自己本身。</p>
+
+<p>CLI有多种设备研究Redis实例的延迟，理解延迟的最大值，平均值和分布。</p>
+
+<p>通过<code>--latency</code>选项进行基本的延迟检查。使用这个命令，CLI会循环向Redis实例发送<code>PING</code>命令，根据消息回复的时间来衡量延时。每秒发送100次，状态会实时更新到console：</p>
+
+<pre><code>$ redis-cli --latency
+min: 0, max: 1, avg: 0.19 (427 samples)
+</code></pre>
+
+<p>状态结果以微秒为单位。一般的，一个高速的实例的平均延迟会被稍稍高估，因为系统的核心调度也在运行<code>redis-cli</code>，所以0.19的平均延迟实际可能是0.01或更少。一般这都不是什么大问题，毕竟只是几微秒。</p>
+
+<p>有时我们要了解最大延迟和平均延迟在一个时间段的演变。可以使用<code>--latency-history</code>：他和<code>--latency</code>的工作原理完全相同，只是每15秒（默认）会启动一个新会话:</p>
+
+<pre><code>$ redis-cli --latency-history
+min: 0, max: 1, avg: 0.14 (1314 samples) -- 15.01 seconds range
+min: 0, max: 1, avg: 0.18 (1299 samples) -- 15.00 seconds range
+min: 0, max: 1, avg: 0.20 (113 samples)^C
+</code></pre>
+
+<p>可以通过<code>-i &lt;interval&gt;</code>选项来改变会话采样时长。</p>
+
+<p>有色彩终端的延迟光谱是更高级的研究延迟工具，但对于没有经验的用户会稍显困难不太容易理解。你可以看到不同ASCII字符表明不同的延迟图。这种模式使用<code>--latency-dist</code>。</p>
+
+<pre><code>$ redis-cli --latency-dist
+(output not displayed, requires a color terminal, try it!)
+</code></pre>
+
+<p>另一个<code>redis-cli</code>内置很漂亮但并不常用的延迟工具。他并不检查redis实例的延迟，但是检测电脑运行<code>redis-cli</code>的延迟。这是哪个延迟？在内核调度的延迟，虚拟化实例管理程序的延迟等等。</p>
+
+<p>由于程序的不透明，我们称之为*固有延迟*，
+We call it <em>intrinsic latency</em> because it&rsquo;s opaque to the programmer, mostly.
+If your Redis instance has bad latency regardless of all the obvious things
+that may be the source cause, it&rsquo;s worth to check what&rsquo;s the best your system
+can do by running <code>redis-cli</code> in this special mode directly in the system you
+are running Redis servers on.</p>
+
+<p>测量固有延迟是底线，Redis不能优于系统。使用<code>--intrinsic-latency &lt;test-time&gt;</code>运行。测试时间以秒为单位，指明<code>redis-cli</code>检查系统延时的时间。</p>
+
+<pre><code>$ ./redis-cli --intrinsic-latency 5
+Max latency so far: 1 microseconds.
+Max latency so far: 7 microseconds.
+Max latency so far: 9 microseconds.
+Max latency so far: 11 microseconds.
+Max latency so far: 13 microseconds.
+Max latency so far: 15 microseconds.
+Max latency so far: 34 microseconds.
+Max latency so far: 82 microseconds.
+Max latency so far: 586 microseconds.
+Max latency so far: 739 microseconds.
+
+65433042 total runs (avg latency: 0.0764 microseconds / 764.14 nanoseconds per run).
+Worst run took 9671x longer than the average latency.
+</code></pre>
+
+<p>IMPORTANT: this command must be executed on the computer you want to run Redis
+server on, not on a different host. It does not even connect to a Redis instance
+and performs the test only locally.</p>
+
+<p>In the above case, my system cannot do better than 739 microseconds of worst
+case latency, so I can expect certain queries to run in a bit less than 1
+millisecond from time to time.</p>
+
+<h2 id="remote-backups-of-rdb-files:e5f208cb46ba33478a6c9775c9129e9a">Remote backups of RDB files</h2>
+
+<p>从Redis复制的第一个同步开始，master和slave就通过RDB格式文件交换整个数据集。这个特性为开发<code>redis-cli</code>提供远程备份的便利，这允从任何一个Redis实例许传输RDB格式文件到运行<code>redis-cli</code>的本地电脑。开启这个模式，使用<code>--rdb &lt;dest-filename&gt;</code>：</p>
+
+<pre><code>$ redis-cli --rdb /tmp/dump.rdb
+SYNC sent to master, writing 13256 bytes to '/tmp/dump.rdb'
+Transfer finished with success.
+</code></pre>
+
+<p>这是一个简单有效的方法来确保你得Redis实例具有容灾的RDB备份。我们可以使用这个命令或<code>cron</code>，确保检查命令的返回值。如果是一个非零，表明遇到了一个错误，如下面的例子：</p>
+
+<pre><code>$ redis-cli --rdb /tmp/dump.rdb
+SYNC with master failed: -ERR Can't SYNC while not connected with my master
+$ echo $?
+1
+</code></pre>
+
+<h2 id="slave-mode:e5f208cb46ba33478a6c9775c9129e9a">Slave mode</h2>
+
+<p>CLI的salve模式作为Redis开发者和debug操作的高级特性。他可以检查由master发送给slaves的复制流，用于传播写操作给副本。使用<code>--slave</code>选项。像下面这样工作：</p>
+
+<pre><code>$ redis-cli --slave
+SYNC with master, discarding 13256 bytes of bulk transfer...
+SYNC done. Logging commands from master.
+&quot;PING&quot;
+&quot;SELECT&quot;,&quot;0&quot;
+&quot;set&quot;,&quot;foo&quot;,&quot;bar&quot;
+&quot;PING&quot;
+&quot;incr&quot;,&quot;myconuter&quot;
+</code></pre>
+
+<p>The command begins by discarding the RDB file of the first synchronization
+and then logs each command received as in CSV format.</p>
+
+<p>If you think some of the commands are not replicated correctly in your slaves
+this is a good way to check what&rsquo;s happening, and also useful information
+in order to improve the bug report.</p>
+
+<h2 id="performing-an-lru-simulation:e5f208cb46ba33478a6c9775c9129e9a">Performing an LRU simulation</h2>
+
+<p>Redis is often used as a cache with <a href="/topics/lru-cache">LRU eviction</a>.
+Depending on the number of keys and the amount of memory allocated for the
+cache (specified via the <code>maxmemory</code> directive), the amount of cache hits
+and misses will change. Sometimes, simulating the rate of hits is very
+useful to correctly provision your cache.</p>
+
+<p>The CLI has a special mode where it performs a simulation of GET and SET
+operations, using an 80-20% power law distribution in the requests pattern.
+This means that 20% of keys will be requested 80% of times, which is a
+common distribution in caching scenarios.</p>
+
+<p>Theoretically, given the distribution of the requests and the Redis memory
+overhead, it should be possible to compute the hit rate analytically with
+with a mathematical formula. However, Redis can be configured with
+different LRU settings (number of samples) and LRU&rsquo;s implementation, which
+is approximated in Redis, changes a lot between different versions. Similarly
+the amount of memory per key may change between versions. That is why this
+tool was built: its main motivation was for testing the quality of Redis&rsquo; LRU
+implementation, but now is also useful in for testing how a given version
+behaves with the settings you had in mind for your deployment.</p>
+
+<p>In order to use this mode, you need to specify the amount of keys
+in the test. You also need to configure a <code>maxmemory</code> setting that
+makes sense as a first try.</p>
+
+<p>IMPORTANT NOTE: Configuring the <code>maxmemory</code> setting in the Redis configuration
+is crucial: if there is no cap to the maximum memory usage, the hit will
+eventually be 100% since all the keys can be stored in memory. Or if you
+specify too many keys and no maximum memory, eventually all the computer
+RAM will be used. It is also needed to configure an appropriate
+<em>maxmemory policy</em>, most of the times what you want is <code>allkeys-lru</code>.</p>
+
+<p>In the following example I configured a memory limit of 100MB, and an LRU
+simulation using 10 million keys.</p>
+
+<p>WARNING: the test uses pipelining and will stress the server, don&rsquo;t use it
+with production instances.</p>
+
+<pre><code>$ ./redis-cli --lru-test 10000000
+156000 Gets/sec | Hits: 4552 (2.92%) | Misses: 151448 (97.08%)
+153750 Gets/sec | Hits: 12906 (8.39%) | Misses: 140844 (91.61%)
+159250 Gets/sec | Hits: 21811 (13.70%) | Misses: 137439 (86.30%)
+151000 Gets/sec | Hits: 27615 (18.29%) | Misses: 123385 (81.71%)
+145000 Gets/sec | Hits: 32791 (22.61%) | Misses: 112209 (77.39%)
+157750 Gets/sec | Hits: 42178 (26.74%) | Misses: 115572 (73.26%)
+154500 Gets/sec | Hits: 47418 (30.69%) | Misses: 107082 (69.31%)
+151250 Gets/sec | Hits: 51636 (34.14%) | Misses: 99614 (65.86%)
+</code></pre>
+
+<p>The program shows stats every second. As you see, in the first seconds
+the cache starts to be populated. The misses rate later stabilizes into
+the actual figure we can expect in the long time:</p>
+
+<pre><code>120750 Gets/sec | Hits: 48774 (40.39%) | Misses: 71976 (59.61%)
+122500 Gets/sec | Hits: 49052 (40.04%) | Misses: 73448 (59.96%)
+127000 Gets/sec | Hits: 50870 (40.06%) | Misses: 76130 (59.94%)
+124250 Gets/sec | Hits: 50147 (40.36%) | Misses: 74103 (59.64%)
+</code></pre>
+
+<p>A miss rage of 59% may not be acceptable for our use case. So we know that
+100MB of memory are no enough. Let&rsquo;s try with half gigabyte. After a few
+minutes we&rsquo;ll see the output to stabilize to the following figures:</p>
+
+<pre><code>140000 Gets/sec | Hits: 135376 (96.70%) | Misses: 4624 (3.30%)
+141250 Gets/sec | Hits: 136523 (96.65%) | Misses: 4727 (3.35%)
+140250 Gets/sec | Hits: 135457 (96.58%) | Misses: 4793 (3.42%)
+140500 Gets/sec | Hits: 135947 (96.76%) | Misses: 4553 (3.24%)
+</code></pre>
+
+<p>So we know that with 500MB we are going well enough for our number of
+keys (10 millions) and distribution (80-20 style).</p>
+
+	</div>
+  <footer class="article-footer clearfix">
+  
+
+<div class="article-tags">
+  <span></span>
+  
+  <a href="http://blog.hanmq.com/tags/redis">redis</a>
+  
+</div>
+
+
+
+
+
+<div class="article-categories">
+  <span></span>
+  
+  <a class="article-category-link" href="http://blog.hanmq.com/categories/redis">redis</a>
+  
+</div>
+
+
+
+  <div class="article-share" id="share">
+    <div data-url="http://blog.hanmq.com/post/rediscli/" data-title="redis-cli, redis 命令行" data-tsina="" class="share clearfix">
+    </div>
+  </div>
+</footer>
+
+	</article>
+  
+
+
+<section class="comment">
+<div id="disqus_thread"></div>
+</section>
+<script>
+
+
+var disqus_config = function () {
+this.page.url = "http://blog.hanmq.com/post/rediscli/";
+this.page.identifier = "http://blog.hanmq.com/post/rediscli/";
+};
+(function() { 
+var d = document, s = d.createElement('script');
+
+s.src = '//bloghanmq.disqus.com/embed.js';
+
+s.setAttribute('data-timestamp', +new Date());
+(d.head || d.body).appendChild(s);
+})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a></noscript>
+
+
+</div>
+
+    <div class="openaside"><a class="navbutton" href="#" title="显示侧边栏"></a></div>
+<div id="asidepart">
+<div class="closeaside"><a class="closebutton" href="#" title="隐藏侧边栏"></a></div>
+<aside class="clearfix">
+  
+
+<div class="categorieslist">
+  <p class="asidetitle">分类</p>
+  <ul>
+    
+    <li><a href="http://blog.hanmq.com/categories/redis" title="redis">redis<sup>1</sup></a></li>
+    
+    <li><a href="http://blog.hanmq.com/categories/%e6%8a%80%e6%9c%af%e6%96%87%e7%ab%a0" title="技术文章">技术文章<sup>2</sup></a></li>
+    
+    <li><a href="http://blog.hanmq.com/categories/%e7%94%9f%e6%b4%bb" title="生活">生活<sup>1</sup></a></li>
+    
+    <li><a href="http://blog.hanmq.com/categories/%e7%b3%bb%e7%bb%9f%e9%85%8d%e7%bd%ae" title="系统配置">系统配置<sup>2</sup></a></li>
+    
+  </ul>
+</div>
+
+
+
+  
+
+<div class="tagslist">
+	<p class="asidetitle">标签</p>
+		<ul class="clearfix">
+      
+			<li><a href="http://blog.hanmq.com/tags/centos" title="centos">centos<sup>1</sup></a></li>
+      
+			<li><a href="http://blog.hanmq.com/tags/linux" title="linux">linux<sup>2</sup></a></li>
+      
+			<li><a href="http://blog.hanmq.com/tags/nginx" title="nginx">nginx<sup>1</sup></a></li>
+      
+			<li><a href="http://blog.hanmq.com/tags/noodles" title="noodles">noodles<sup>1</sup></a></li>
+      
+			<li><a href="http://blog.hanmq.com/tags/php" title="php">php<sup>1</sup></a></li>
+      
+			<li><a href="http://blog.hanmq.com/tags/redis" title="redis">redis<sup>1</sup></a></li>
+      
+			<li><a href="http://blog.hanmq.com/tags/solarized" title="solarized">solarized<sup>1</sup></a></li>
+      
+			<li><a href="http://blog.hanmq.com/tags/systemd" title="systemd">systemd<sup>1</sup></a></li>
+      
+			<li><a href="http://blog.hanmq.com/tags/vagrant" title="vagrant">vagrant<sup>1</sup></a></li>
+      
+			<li><a href="http://blog.hanmq.com/tags/vim" title="vim">vim<sup>1</sup></a></li>
+      
+		</ul>
+</div>
+
+
+
+  
+  <div class="archiveslist">
+    <p class="asidetitle">归档</p>
+    <ul class="archive-list">
+      
+      
+      <li class="archive-list-item">
+        <a class="archive-list-link" href="http://blog.hanmq.com/post/#2016-08">2016年08月</a><span class="archive-list-count">1</span>
+      </li>
+      
+      
+      <li class="archive-list-item">
+        <a class="archive-list-link" href="http://blog.hanmq.com/post/#2016-06">2016年06月</a><span class="archive-list-count">7</span>
+      </li>
+      
+      
+      <li class="archive-list-item">
+        <a class="archive-list-link" href="http://blog.hanmq.com/post/#0001-01">0001年01月</a><span class="archive-list-count">1</span>
+      </li>
+      
+    </ul>
+
+  </div>
+
+
+  
+
+<div class="tagcloudlist">
+  <p class="asidetitle">标签云</p>
+  <div class="tagcloudlist clearfix">
+    
+    <a href="http://blog.hanmq.com/tags/centos" style="font-size: 12px;">centos</a>
+    
+    <a href="http://blog.hanmq.com/tags/linux" style="font-size: 12px;">linux</a>
+    
+    <a href="http://blog.hanmq.com/tags/nginx" style="font-size: 12px;">nginx</a>
+    
+    <a href="http://blog.hanmq.com/tags/noodles" style="font-size: 12px;">noodles</a>
+    
+    <a href="http://blog.hanmq.com/tags/php" style="font-size: 12px;">php</a>
+    
+    <a href="http://blog.hanmq.com/tags/redis" style="font-size: 12px;">redis</a>
+    
+    <a href="http://blog.hanmq.com/tags/solarized" style="font-size: 12px;">solarized</a>
+    
+    <a href="http://blog.hanmq.com/tags/systemd" style="font-size: 12px;">systemd</a>
+    
+    <a href="http://blog.hanmq.com/tags/vagrant" style="font-size: 12px;">vagrant</a>
+    
+    <a href="http://blog.hanmq.com/tags/vim" style="font-size: 12px;">vim</a>
+    
+  </div>
+</div>
+
+
+
+  
+
+</aside>
+</div>
+
+  </div>
+  <footer><div id="footer" >
+  
+  <div class="line">
+    <span></span>
+    <div style='background:no-repeat url("http://blog.hanmq.com/img/author.jpg") left top;-webkit-background-size:6.875em 6.875em;-moz-background-size:6.875em 6.875em;background-size:6.875em 6.875em;' class="author" ></div>
+  </div>
+  
+  
+  <section class="info">
+    <p>hi there</p>
+  </section>
+  
+  <div class="social-font clearfix">
+    
+    
+    
+    
+    
+  </div>
+  <p class="copyright">Powered by <a href="http://gohugo.io" target="_blank" title="hugo">hugo</a> and Theme by <a href="https://github.com/coderzh/hugo-pacman-theme" target="_blank" title="hugo-pacman-theme">hugo-pacman-theme</a> © 2016
+    
+    <a href="http://blog.hanmq.com/" target="_blank" title="amao">amao</a>
+    
+  </p>
+</div>
+</footer>
+  <script src="http://blog.hanmq.com/js/jquery-2.1.0.min.js"></script>
+<script type="text/javascript">
+done = false;
+$(document).ready(function(){
+  $('.navbar').click(function(){
+    $('header nav').toggleClass('shownav');
+  });
+  var myWidth = 0;
+  function getSize(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+  };
+  var m = $('#main'),
+      a = $('#asidepart'),
+      c = $('.closeaside'),
+      o = $('.openaside');
+  $(window).resize(function(){
+    getSize();
+    if (myWidth >= 1024) {
+      $('header nav').removeClass('shownav');
+    }else
+    {
+      m.removeClass('moveMain');
+      a.css('display', 'block').removeClass('fadeOut');
+      o.css('display', 'none');
+    }
+  });
+  c.click(function(){
+    a.addClass('fadeOut').css('display', 'none');
+    o.css('display', 'block').addClass('fadeIn');
+    m.addClass('moveMain');
+  });
+  o.click(function(){
+    o.css('display', 'none').removeClass('beforeFadeIn');
+    a.css('display', 'block').removeClass('fadeOut').addClass('fadeIn');
+    m.removeClass('moveMain');
+  });
+  $(window).scroll(function(){
+    o.css("top",Math.max(80,260-$(this).scrollTop()));
+  });
+  $('form.search').on('submit', function (event) {
+    if (false === done) {
+      event.preventDefault();
+      var orgVal = $(this).find('#search').val();
+      $(this).find('#search').val('site:http:\/\/blog.hanmq.com\/ ' + orgVal);
+      done = true;
+      $(this).submit();
+    }
+  });
+});
+</script>
+
+<script type="text/javascript">
+$(document).ready(function(){
+  var ai = $('.article-content>iframe'),
+      ae = $('.article-content>embed'),
+      t  = $('#toc'),
+      h  = $('article h2')
+      ah = $('article h2'),
+      ta = $('#toc.toc-aside'),
+      o  = $('.openaside'),
+      c  = $('.closeaside');
+  if(ai.length>0){
+    ai.wrap('<div class="video-container" />');
+  };
+  if(ae.length>0){
+   ae.wrap('<div class="video-container" />');
+  };
+  if(ah.length==0){
+    t.css('display','none');
+  }else{
+    c.click(function(){
+      ta.css('display', 'block').addClass('fadeIn');
+    });
+    o.click(function(){
+      ta.css('display', 'none');
+    });
+    $(window).scroll(function(){
+      ta.css("top",Math.max(140,320-$(this).scrollTop()));
+    });
+  };
+});
+</script>
+
+<script type="text/javascript">
+$(document).ready(function(){
+  var $this = $('.share'),
+      url = $this.attr('data-url'),
+      encodedUrl = encodeURIComponent(url),
+      title = $this.attr('data-title'),
+      tsina = $this.attr('data-tsina');
+  var html = [
+  '<a href="#" class="overlay" id="qrcode"></a>',
+  '<div class="qrcode clearfix"><span>扫描二维码分享到微信朋友圈</span><a class="qrclose" href="#share"></a><strong>Loading...Please wait</strong><img id="qrcode-pic" data-src="http://s.jiathis.com/qrcode.php?url=' + encodedUrl + '"/></div>',
+  '<a href="#textlogo" class="article-back-to-top" title="Top"></a>',
+  '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="article-share-facebook" target="_blank" title="Facebook"></a>',
+  '<a href="#qrcode" class="article-share-qrcode" title="QRcode"></a>',
+  '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="article-share-twitter" target="_blank" title="Twitter"></a>',
+  '<a href="http://service.weibo.com/share/share.php?title='+title+'&url='+encodedUrl +'&ralateUid='+ tsina +'&searchPic=true&style=number' +'" class="article-share-weibo" target="_blank" title="Weibo"></a>',
+  '<span title="Share to"></span>'
+  ].join('');
+  $this.append(html);
+  $('.article-share-qrcode').click(function(){
+    var imgSrc = $('#qrcode-pic').attr('data-src');
+    $('#qrcode-pic').attr('src', imgSrc);
+    $('#qrcode-pic').load(function(){
+        $('.qrcode strong').text(' ');
+    });
+  });
+});
+</script>
+
+
+<link rel="stylesheet" href="http://blog.hanmq.com/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="http://blog.hanmq.com/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){
+  $('.article-content').each(function(i){
+    $(this).find('img').each(function(){
+      if ($(this).parent().hasClass('fancybox')) return;
+      var alt = this.alt;
+      if (alt) $(this).after('<span class="caption">' + alt + '</span>');
+      $(this).wrap('<a href="' + this.src + '" title="' + alt + '" class="fancybox"></a>');
+    });
+    $(this).find('.fancybox').each(function(){
+      $(this).attr('rel', 'article' + i);
+    });
+  });
+  if($.fancybox){
+    $('.fancybox').fancybox();
+  }
+});
+</script>
+
+
+
+
+</body>
+</html>
