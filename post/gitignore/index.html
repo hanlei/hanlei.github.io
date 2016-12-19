@@ -2,13 +2,13 @@
 <html lang="zh-CN">
 <head>
   <meta charset="UTF-8">
-  <title>CentOS 7 systemd 添加系统服务 nginx - 牧青日志</title>
+  <title>git忽略文件.gitignore - 牧青日志</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=3, minimum-scale=1">
   
-  <meta name="description" content="CentOS 7继承了RHEL 7的新的特性，例如强大的systemd，而systemd的使用也使得以往系统服务的/etc/init.d的启动脚本的方式就">
+  <meta name="description" content="有时候代码中会有一些不能提交的文件，我们可以通过.gitignore文件使git将之忽略 模板 github为我们准备了各种配置文件gitign">
   <meta name="author" content="amao">
-  <meta itemprop="name" content="CentOS 7 systemd 添加系统服务 nginx - 牧青日志">
-  <meta itemprop="description" content="CentOS 7继承了RHEL 7的新的特性，例如强大的systemd，而systemd的使用也使得以往系统服务的/etc/init.d的启动脚本的方式就">
+  <meta itemprop="name" content="git忽略文件.gitignore - 牧青日志">
+  <meta itemprop="description" content="有时候代码中会有一些不能提交的文件，我们可以通过.gitignore文件使git将之忽略 模板 github为我们准备了各种配置文件gitign">
   <meta itemprop="image" content="http://blog.hanmq.com/img/author.jpg">
   
   
@@ -53,7 +53,7 @@
 	<article itemprop="articleBody">
     <header class="article-info clearfix">
   <h1 itemprop="name">
-      <a href="http://blog.hanmq.com/post/centos7-systemd-nginx/" title="CentOS 7 systemd 添加系统服务 nginx" itemprop="url">CentOS 7 systemd 添加系统服务 nginx</a>
+      <a href="http://blog.hanmq.com/post/gitignore/" title="git忽略文件.gitignore" itemprop="url">git忽略文件.gitignore</a>
   </h1>
   <p class="article-author">By
     
@@ -61,7 +61,7 @@
     
   </p>
   <p class="article-time">
-    <time datetime="2016-06-13 10:16:09 &#43;0800 CST" itemprop="datePublished">2016年06月13日</time>
+    <time datetime="2016-12-19 11:38:00 &#43;0800 CST" itemprop="datePublished">2016年12月19日</time>
   </p>
 </header>
 
@@ -73,12 +73,18 @@
 <ul>
 <li>
 <ul>
-<li><a href="#systemd:1f81d4506716a68c23227f65602dc467">systemd:</a></li>
-<li><a href="#创建service:1f81d4506716a68c23227f65602dc467">创建service:</a></li>
-<li><a href="#unit:1f81d4506716a68c23227f65602dc467">[Unit]</a></li>
-<li><a href="#service:1f81d4506716a68c23227f65602dc467">[Service]</a></li>
-<li><a href="#install:1f81d4506716a68c23227f65602dc467">[Install]</a></li>
-<li><a href="#操作service:1f81d4506716a68c23227f65602dc467">操作Service:</a></li>
+<li>
+<ul>
+<li><a href="#模板:bfb8846b5554036b9efab49a7686de70">模板</a></li>
+<li><a href="#忽略原则:bfb8846b5554036b9efab49a7686de70">忽略原则</a></li>
+<li><a href="#匹配规则:bfb8846b5554036b9efab49a7686de70">匹配规则</a></li>
+<li><a href="#强制添加:bfb8846b5554036b9efab49a7686de70">强制添加</a></li>
+<li><a href="#配置检查:bfb8846b5554036b9efab49a7686de70">配置检查</a></li>
+<li><a href="#忽略已被跟踪的文件:bfb8846b5554036b9efab49a7686de70">忽略已被跟踪的文件</a>
+<ul>
+<li><a href="#参考文献:bfb8846b5554036b9efab49a7686de70">参考文献</a></li>
+</ul></li>
+</ul></li>
 </ul></li>
 </ul>
 </nav>
@@ -86,112 +92,60 @@
     
     
 
-<p>CentOS 7继承了RHEL 7的新的特性，例如强大的systemd，而systemd的使用也使得以往系统服务的/etc/init.d的启动脚本的方式就此改变，大幅提高了系统服务的运行效率。</p>
+<p>有时候代码中会有一些不能提交的文件，我们可以通过<strong>.gitignore</strong>文件使<strong>git</strong>将之忽略</p>
 
-<h2 id="systemd:1f81d4506716a68c23227f65602dc467">systemd:</h2>
+<h3 id="模板:bfb8846b5554036b9efab49a7686de70">模板</h3>
 
-<p>CentOS 7的服务systemctl脚本存放在：/usr/lib/systemd/。
-有系统（system）和用户（user）之分，
-即：</p>
+<p>github为我们准备了各种配置文件<a href="https://github.com/github/gitignore" target="_blank">gitignore</a></p>
 
-<blockquote>
-<p>/usr/lib/systemd/system</p>
+<h3 id="忽略原则:bfb8846b5554036b9efab49a7686de70">忽略原则</h3>
 
-<p>/usr/lib/systemd/user</p>
-</blockquote>
+<ol>
+<li>系统自动生成的文件</li>
+<li>编译生成的中间文件、可执行文件</li>
+<li>自身的敏感配置</li>
+</ol>
 
-<p>每一个服务以.service结尾，一般会分为3部分：[Unit]、[Service]和[Install]，就以nginx为例吧，具体内容如下：</p>
+<h3 id="匹配规则:bfb8846b5554036b9efab49a7686de70">匹配规则</h3>
 
-<h2 id="创建service:1f81d4506716a68c23227f65602dc467">创建service:</h2>
-
-<p>在 /usr/lib/systemd/system 下创建nginx.service文件内容如下（看应用需求也可以在 /usr/lib/systemd/usr 下创建）：</p>
-
-<pre><code>[Unit]
-Description=nginx - high performance web server
-Documentation=http://nginx.org/en/docs/
-After=network.target remote-fs.target nss-lookup.target
+<pre><code># 此为注释 – 将被 Git 忽略
  
-[Service]
-Type=forking
-PIDFile=/run/nginx.pid
-ExecStartPre=/usr/sbin/nginx -t -c /etc/nginx/nginx.conf
-ExecStart=/usr/sbin/nginx -c /etc/nginx/nginx.conf
-ExecReload=/bin/kill -s HUP $MAINPID
-ExecStop=/bin/kill -s QUIT $MAINPID
-PrivateTmp=true
- 
-[Install]
-WantedBy=multi-user.target
+*.a       # 忽略所有 .a 结尾的文件
+!lib.a    # 但 lib.a 除外
+/TODO     # 仅仅忽略项目根目录下的 TODO 文件，不包括 subdir/TODO
+build/    # 忽略 build/ 目录下的所有文件
+doc/*.txt # 会忽略 doc/notes.txt 但不包括 doc/server/arch.txt
 </code></pre>
 
-<h2 id="unit:1f81d4506716a68c23227f65602dc467">[Unit]</h2>
+<p><strong>.gitignore</strong>文件本身需要纳入版本控制，将之提交到<strong>git</strong>中即可。校验的标准是&rdquo;git status&rdquo;命令是不是&rdquo;working directory clean&rdquo;</p>
 
-<blockquote>
-<p>Description : 服务的简单描述</p>
+<h3 id="强制添加:bfb8846b5554036b9efab49a7686de70">强制添加</h3>
 
-<p>Documentation ： 服务文档</p>
+<p>如果想要强制提交，请用-f</p>
 
-<p>After : 依赖，仅当依赖的服务启动之后再启动自定义的服务单元</p>
-</blockquote>
-
-<h2 id="service:1f81d4506716a68c23227f65602dc467">[Service]</h2>
-
-<p>这个段是 .service 文件独有的，也是对于服务配置最重要的部分。这部分的配置选项非常多，主要分为服务生命周期控制和服务上下文配置两个方面</p>
-
-<blockquote>
-<p>Type : 启动类型simple、forking、oneshot、notify、dbus</p>
-
-<p>PIDFile ： pid文件路径</p>
-
-<p>ExecStartPre ：指定在启动执行 ExecStart 的命令前的准备工作，可以有多个，所有命令会按照文件中书写的顺序依次被执行</p>
-
-<p>ExecStart：这个参数是几乎每个 .service 文件都会有的，指定服务启动的主要命令，在每个配置文件中只能使用一次</p>
-
-<p>ExecReload：重新加载服务所需执行的主要命令</p>
-
-<p>ExecStop：指定在 ExecStop 命令执行后的收尾工作，也可以有多个</p>
-
-<p>PrivateTmp：True表示给服务分配独立的临时空间≈</p>
-</blockquote>
-
-<h2 id="install:1f81d4506716a68c23227f65602dc467">[Install]</h2>
-
-<p>这个段中的配置与 Unit 有几分相似，但是这部分配置需要通过 systemctl enable 命令来激活，并且可以通过 systemctl disable 命令禁用。另外这部分配置的目标模块通常是特定启动级别的 .target 文件，用来使得服务在系统启动时自动运行。</p>
-
-<blockquote>
-<p>WantedBy：上例中使用的是 “WantedBy=multi-user.target”， 表明当系统以多用户方式（默认的运行级别）启动时，这个服务需要被自动运行。当然还需要 systemctl enable 激活这个服务以后自动运行才会生效。</p>
-</blockquote>
-
-<h2 id="操作service:1f81d4506716a68c23227f65602dc467">操作Service:</h2>
-
-<pre><code>#修改权限
-$ sudo chmod +x /usr/lib/systemd/system/nginx.service
-
-$ sudo systemctl enable nginx.service
+<pre><code>git add -f force.xxx
 </code></pre>
 
-<p>就会在/etc/systemd/system/multi-user.target.wants/目录下新建一个/usr/lib/systemd/system/nginx.service 文件的链接。</p>
+<h3 id="配置检查:bfb8846b5554036b9efab49a7686de70">配置检查</h3>
 
-<pre><code>#启动服务
-$ sudo systemctl start nginx.service
+<p>可以使用 git check-ignore 来检查<strong>.gitignore</strong>配置文件的问题</p>
 
-#查看日志
-$ sudo journalctl -f -u nginx.service
--- Logs begin at 四 2015-06-25 17:32:20 CST. --
-6月 25 10:28:24 Leco.lan systemd[1]: Starting nginx - high performance web server...
-6月 25 10:28:24 Leco.lan nginx[7976]: nginx: the configuration file /etc/nginx/nginx.conf syntax is ok
-6月 25 10:28:24 Leco.lan nginx[7976]: nginx: configuration file /etc/nginx/nginx.conf test is successful
-6月 25 10:28:24 Leco.lan systemd[1]: Started nginx - high performance web server.
+<h3 id="忽略已被跟踪的文件:bfb8846b5554036b9efab49a7686de70">忽略已被跟踪的文件</h3>
 
-#重启
-$ sudo systemctl restart nginx.service
+<p>如果某些文件已经被纳入了版本管理中，直接修改<strong>.gitignore</strong>是无效的。解决方法就是先把本地缓存删除（改变成未track状态），然后再提交：</p>
 
-#重载
-$ sudo systemctl reload nginx.service
-
-#停止
-$ sudo systemctl stop nginx.service
+<pre><code>git rm -r --cached .
+git add .
+git commit -m 'update .gitignore'
 </code></pre>
+
+<p>但是这种方法需要重新添加所有文件，另一种方案是先将在该文件从<strong>git</strong>中删除，再添加<strong>.gitignore</strong>，再添加文件即不会被<strong>git</strong>追踪</p>
+
+<h4 id="参考文献:bfb8846b5554036b9efab49a7686de70">参考文献</h4>
+
+<p><a href="http://www.liaoxuefeng.com/wiki/0013739516305929606dd18361248578c67b8067c8c017b000/0013758404317281e54b6f5375640abbb11e67be4cd49e0000" target="_blank">忽略特殊文件</a></p>
+
+<p><a href="http://www.pfeng.org/archives/840" target="_blank">Git忽略规则及.gitignore规则不生效的解决办法</a></p>
 
 	</div>
   <footer class="article-footer clearfix">
@@ -200,11 +154,9 @@ $ sudo systemctl stop nginx.service
 <div class="article-tags">
   <span></span>
   
-  <a href="http://blog.hanmq.com/tags/linux">linux</a>
+  <a href="http://blog.hanmq.com/tags/git">git</a>
   
-  <a href="http://blog.hanmq.com/tags/nginx">nginx</a>
-  
-  <a href="http://blog.hanmq.com/tags/systemd">systemd</a>
+  <a href="http://blog.hanmq.com/tags/gitignore">gitignore</a>
   
 </div>
 
@@ -215,14 +167,14 @@ $ sudo systemctl stop nginx.service
 <div class="article-categories">
   <span></span>
   
-  <a class="article-category-link" href="http://blog.hanmq.com/categories/%E6%8A%80%E6%9C%AF%E6%96%87%E7%AB%A0">技术文章</a>
+  <a class="article-category-link" href="http://blog.hanmq.com/categories/git">git</a>
   
 </div>
 
 
 
   <div class="article-share" id="share">
-    <div data-url="http://blog.hanmq.com/post/centos7-systemd-nginx/" data-title="CentOS 7 systemd 添加系统服务 nginx" data-tsina="" class="share clearfix">
+    <div data-url="http://blog.hanmq.com/post/gitignore/" data-title="git忽略文件.gitignore" data-tsina="" class="share clearfix">
     </div>
   </div>
 </footer>
@@ -238,8 +190,8 @@ $ sudo systemctl stop nginx.service
 
 
 var disqus_config = function () {
-this.page.url = "http://blog.hanmq.com/post/centos7-systemd-nginx/";
-this.page.identifier = "http://blog.hanmq.com/post/centos7-systemd-nginx/";
+this.page.url = "http://blog.hanmq.com/post/gitignore/";
+this.page.identifier = "http://blog.hanmq.com/post/gitignore/";
 };
 (function() { 
 var d = document, s = d.createElement('script');

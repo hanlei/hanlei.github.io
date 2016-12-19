@@ -2,18 +2,18 @@
 <html lang="zh-CN">
 <head>
   <meta charset="UTF-8">
-  <title>CentOS 7 systemd 添加系统服务 nginx - 牧青日志</title>
+  <title>Gitignore - 牧青日志</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=3, minimum-scale=1">
   
-  <meta name="description" content="CentOS 7继承了RHEL 7的新的特性，例如强大的systemd，而systemd的使用也使得以往系统服务的/etc/init.d的启动脚本的方式就">
+  <meta name="description" content="Gitignore">
   <meta name="author" content="amao">
-  <meta itemprop="name" content="CentOS 7 systemd 添加系统服务 nginx - 牧青日志">
-  <meta itemprop="description" content="CentOS 7继承了RHEL 7的新的特性，例如强大的systemd，而systemd的使用也使得以往系统服务的/etc/init.d的启动脚本的方式就">
+  <meta itemprop="name" content="Gitignore - 牧青日志">
+  <meta itemprop="description" content="Gitignore">
   <meta itemprop="image" content="http://blog.hanmq.com/img/author.jpg">
   
   
   <meta name="twitter:description" content="">
-  
+  <link rel="alternate" href="http://blog.hanmq.com/feed.xml" title="牧青日志" type="application/rss+xml"/>
   <link rel="shortcut icon" href="http://blog.hanmq.com/img/favicon.ico"/>
   <link rel="apple-touch-icon" href="http://blog.hanmq.com/apple-touch-icon.png" />
   <link rel="apple-touch-icon-precomposed" href="http://blog.hanmq.com/apple-touch-icon.png" />
@@ -49,212 +49,21 @@
 
   </header>
   <div id="container">
-    <div id="main" class="post" itemscope itemprop="blogPost">
-	<article itemprop="articleBody">
-    <header class="article-info clearfix">
-  <h1 itemprop="name">
-      <a href="http://blog.hanmq.com/post/centos7-systemd-nginx/" title="CentOS 7 systemd 添加系统服务 nginx" itemprop="url">CentOS 7 systemd 添加系统服务 nginx</a>
-  </h1>
-  <p class="article-author">By
-    
-      <a href="http://blog.hanmq.com" title="amao">amao</a>
-    
-  </p>
-  <p class="article-time">
-    <time datetime="2016-06-13 10:16:09 &#43;0800 CST" itemprop="datePublished">2016年06月13日</time>
-  </p>
-</header>
-
-	<div class="article-content">
-    
-		<div class="toc-article">
-			<strong class="toc-title">文章目录</strong>
-      <nav id="TableOfContents">
-<ul>
-<li>
-<ul>
-<li><a href="#systemd:1f81d4506716a68c23227f65602dc467">systemd:</a></li>
-<li><a href="#创建service:1f81d4506716a68c23227f65602dc467">创建service:</a></li>
-<li><a href="#unit:1f81d4506716a68c23227f65602dc467">[Unit]</a></li>
-<li><a href="#service:1f81d4506716a68c23227f65602dc467">[Service]</a></li>
-<li><a href="#install:1f81d4506716a68c23227f65602dc467">[Install]</a></li>
-<li><a href="#操作service:1f81d4506716a68c23227f65602dc467">操作Service:</a></li>
-</ul></li>
-</ul>
-</nav>
-		</div>
-    
-    
-
-<p>CentOS 7继承了RHEL 7的新的特性，例如强大的systemd，而systemd的使用也使得以往系统服务的/etc/init.d的启动脚本的方式就此改变，大幅提高了系统服务的运行效率。</p>
-
-<h2 id="systemd:1f81d4506716a68c23227f65602dc467">systemd:</h2>
-
-<p>CentOS 7的服务systemctl脚本存放在：/usr/lib/systemd/。
-有系统（system）和用户（user）之分，
-即：</p>
-
-<blockquote>
-<p>/usr/lib/systemd/system</p>
-
-<p>/usr/lib/systemd/user</p>
-</blockquote>
-
-<p>每一个服务以.service结尾，一般会分为3部分：[Unit]、[Service]和[Install]，就以nginx为例吧，具体内容如下：</p>
-
-<h2 id="创建service:1f81d4506716a68c23227f65602dc467">创建service:</h2>
-
-<p>在 /usr/lib/systemd/system 下创建nginx.service文件内容如下（看应用需求也可以在 /usr/lib/systemd/usr 下创建）：</p>
-
-<pre><code>[Unit]
-Description=nginx - high performance web server
-Documentation=http://nginx.org/en/docs/
-After=network.target remote-fs.target nss-lookup.target
- 
-[Service]
-Type=forking
-PIDFile=/run/nginx.pid
-ExecStartPre=/usr/sbin/nginx -t -c /etc/nginx/nginx.conf
-ExecStart=/usr/sbin/nginx -c /etc/nginx/nginx.conf
-ExecReload=/bin/kill -s HUP $MAINPID
-ExecStop=/bin/kill -s QUIT $MAINPID
-PrivateTmp=true
- 
-[Install]
-WantedBy=multi-user.target
-</code></pre>
-
-<h2 id="unit:1f81d4506716a68c23227f65602dc467">[Unit]</h2>
-
-<blockquote>
-<p>Description : 服务的简单描述</p>
-
-<p>Documentation ： 服务文档</p>
-
-<p>After : 依赖，仅当依赖的服务启动之后再启动自定义的服务单元</p>
-</blockquote>
-
-<h2 id="service:1f81d4506716a68c23227f65602dc467">[Service]</h2>
-
-<p>这个段是 .service 文件独有的，也是对于服务配置最重要的部分。这部分的配置选项非常多，主要分为服务生命周期控制和服务上下文配置两个方面</p>
-
-<blockquote>
-<p>Type : 启动类型simple、forking、oneshot、notify、dbus</p>
-
-<p>PIDFile ： pid文件路径</p>
-
-<p>ExecStartPre ：指定在启动执行 ExecStart 的命令前的准备工作，可以有多个，所有命令会按照文件中书写的顺序依次被执行</p>
-
-<p>ExecStart：这个参数是几乎每个 .service 文件都会有的，指定服务启动的主要命令，在每个配置文件中只能使用一次</p>
-
-<p>ExecReload：重新加载服务所需执行的主要命令</p>
-
-<p>ExecStop：指定在 ExecStop 命令执行后的收尾工作，也可以有多个</p>
-
-<p>PrivateTmp：True表示给服务分配独立的临时空间≈</p>
-</blockquote>
-
-<h2 id="install:1f81d4506716a68c23227f65602dc467">[Install]</h2>
-
-<p>这个段中的配置与 Unit 有几分相似，但是这部分配置需要通过 systemctl enable 命令来激活，并且可以通过 systemctl disable 命令禁用。另外这部分配置的目标模块通常是特定启动级别的 .target 文件，用来使得服务在系统启动时自动运行。</p>
-
-<blockquote>
-<p>WantedBy：上例中使用的是 “WantedBy=multi-user.target”， 表明当系统以多用户方式（默认的运行级别）启动时，这个服务需要被自动运行。当然还需要 systemctl enable 激活这个服务以后自动运行才会生效。</p>
-</blockquote>
-
-<h2 id="操作service:1f81d4506716a68c23227f65602dc467">操作Service:</h2>
-
-<pre><code>#修改权限
-$ sudo chmod +x /usr/lib/systemd/system/nginx.service
-
-$ sudo systemctl enable nginx.service
-</code></pre>
-
-<p>就会在/etc/systemd/system/multi-user.target.wants/目录下新建一个/usr/lib/systemd/system/nginx.service 文件的链接。</p>
-
-<pre><code>#启动服务
-$ sudo systemctl start nginx.service
-
-#查看日志
-$ sudo journalctl -f -u nginx.service
--- Logs begin at 四 2015-06-25 17:32:20 CST. --
-6月 25 10:28:24 Leco.lan systemd[1]: Starting nginx - high performance web server...
-6月 25 10:28:24 Leco.lan nginx[7976]: nginx: the configuration file /etc/nginx/nginx.conf syntax is ok
-6月 25 10:28:24 Leco.lan nginx[7976]: nginx: configuration file /etc/nginx/nginx.conf test is successful
-6月 25 10:28:24 Leco.lan systemd[1]: Started nginx - high performance web server.
-
-#重启
-$ sudo systemctl restart nginx.service
-
-#重载
-$ sudo systemctl reload nginx.service
-
-#停止
-$ sudo systemctl stop nginx.service
-</code></pre>
-
-	</div>
-  <footer class="article-footer clearfix">
-  
-
-<div class="article-tags">
-  <span></span>
-  
-  <a href="http://blog.hanmq.com/tags/linux">linux</a>
-  
-  <a href="http://blog.hanmq.com/tags/nginx">nginx</a>
-  
-  <a href="http://blog.hanmq.com/tags/systemd">systemd</a>
-  
-</div>
-
-
-
-
-
-<div class="article-categories">
-  <span></span>
-  
-  <a class="article-category-link" href="http://blog.hanmq.com/categories/%E6%8A%80%E6%9C%AF%E6%96%87%E7%AB%A0">技术文章</a>
-  
-</div>
-
-
-
-  <div class="article-share" id="share">
-    <div data-url="http://blog.hanmq.com/post/centos7-systemd-nginx/" data-title="CentOS 7 systemd 添加系统服务 nginx" data-tsina="" class="share clearfix">
-    </div>
-  </div>
-</footer>
-
-	</article>
-  
-
-
-<section class="comment">
-<div id="disqus_thread"></div>
+    <div id="main">
+      
+      <h2 id="2016-12">2016-12</h2>
+      
+      <section class="post" itemscope itemprop="blogPost">
+    <a href="http://blog.hanmq.com/post/gitignore/" title="git忽略文件.gitignore" itemprop="url">
+    <h1 itemprop="name">git忽略文件.gitignore</h1>
+    <p itemprop="description">有时候代码中会有一些不能提交的文件，我们可以通过.gitignore文件使git将之忽略 模板 github为我们准备了各种配置文件gitign</p>
+    <time datetime="2016-12-19 11:38:00 &#43;0800 CST" itemprop="datePublished">2016年12月19日</time>
+  </a>
 </section>
-<script>
 
-
-var disqus_config = function () {
-this.page.url = "http://blog.hanmq.com/post/centos7-systemd-nginx/";
-this.page.identifier = "http://blog.hanmq.com/post/centos7-systemd-nginx/";
-};
-(function() { 
-var d = document, s = d.createElement('script');
-
-s.src = '//bloghanmq.disqus.com/embed.js';
-
-s.setAttribute('data-timestamp', +new Date());
-(d.head || d.body).appendChild(s);
-})();
-</script>
-<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a></noscript>
-
-
-</div>
-
+      
+      
+    </div>
     <div class="openaside"><a class="navbutton" href="#" title="显示侧边栏"></a></div>
 <div id="asidepart">
 <div class="closeaside"><a class="closebutton" href="#" title="隐藏侧边栏"></a></div>
@@ -370,6 +179,10 @@ s.setAttribute('data-timestamp', +new Date());
 
 
   
+<div class="rsspart">
+  <a rel="nofollow" href="http://blog.hanmq.com/feed.xml" type="application/rss+xml" target="_blank">RSS 订阅</a>
+</div>
+
 
 </aside>
 </div>
@@ -458,38 +271,6 @@ $(document).ready(function(){
 
 <script type="text/javascript">
 $(document).ready(function(){
-  var ai = $('.article-content>iframe'),
-      ae = $('.article-content>embed'),
-      t  = $('#toc'),
-      h  = $('article h2')
-      ah = $('article h2'),
-      ta = $('#toc.toc-aside'),
-      o  = $('.openaside'),
-      c  = $('.closeaside');
-  if(ai.length>0){
-    ai.wrap('<div class="video-container" />');
-  };
-  if(ae.length>0){
-   ae.wrap('<div class="video-container" />');
-  };
-  if(ah.length==0){
-    t.css('display','none');
-  }else{
-    c.click(function(){
-      ta.css('display', 'block').addClass('fadeIn');
-    });
-    o.click(function(){
-      ta.css('display', 'none');
-    });
-    $(window).scroll(function(){
-      ta.css("top",Math.max(140,320-$(this).scrollTop()));
-    });
-  };
-});
-</script>
-
-<script type="text/javascript">
-$(document).ready(function(){
   var $this = $('.share'),
       url = $this.attr('data-url'),
       encodedUrl = encodeURIComponent(url),
@@ -516,27 +297,6 @@ $(document).ready(function(){
 });
 </script>
 
-
-<link rel="stylesheet" href="http://blog.hanmq.com/fancybox/jquery.fancybox.css" media="screen" type="text/css">
-<script src="http://blog.hanmq.com/fancybox/jquery.fancybox.pack.js"></script>
-<script type="text/javascript">
-$(document).ready(function(){
-  $('.article-content').each(function(i){
-    $(this).find('img').each(function(){
-      if ($(this).parent().hasClass('fancybox')) return;
-      var alt = this.alt;
-      if (alt) $(this).after('<span class="caption">' + alt + '</span>');
-      $(this).wrap('<a href="' + this.src + '" title="' + alt + '" class="fancybox"></a>');
-    });
-    $(this).find('.fancybox').each(function(){
-      $(this).attr('rel', 'article' + i);
-    });
-  });
-  if($.fancybox){
-    $('.fancybox').fancybox();
-  }
-});
-</script>
 
 
 
