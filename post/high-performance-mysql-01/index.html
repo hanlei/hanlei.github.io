@@ -2,18 +2,18 @@
 <html lang="zh-CN">
 <head>
   <meta charset="UTF-8">
-  <title>404 Page not found - 牧青日志</title>
+  <title>高性能MySQL - 牧青日志</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=3, minimum-scale=1">
   
-  <meta name="description" content="404 Page not found">
+  <meta name="description" content="MySQL逻辑构架 最上层：连接处理、授权认证、安全等。 中间层：大多数MySQL核心服务，查询解析、分析、优化、缓存及内置函数（日期时间、数学">
   <meta name="author" content="amao">
-  <meta itemprop="name" content="404 Page not found - 牧青日志">
-  <meta itemprop="description" content="404 Page not found">
+  <meta itemprop="name" content="高性能MySQL - 牧青日志">
+  <meta itemprop="description" content="MySQL逻辑构架 最上层：连接处理、授权认证、安全等。 中间层：大多数MySQL核心服务，查询解析、分析、优化、缓存及内置函数（日期时间、数学">
   <meta itemprop="image" content="http://blog.hanmq.com/img/author.jpg">
   
   
   <meta name="twitter:description" content="">
-  <link rel="alternate" href="http://blog.hanmq.com/feed.xml" title="牧青日志" type="application/rss+xml"/>
+  
   <link rel="shortcut icon" href="http://blog.hanmq.com/img/favicon.ico"/>
   <link rel="apple-touch-icon" href="http://blog.hanmq.com/apple-touch-icon.png" />
   <link rel="apple-touch-icon-precomposed" href="http://blog.hanmq.com/apple-touch-icon.png" />
@@ -49,11 +49,206 @@
 
   </header>
   <div id="container">
-    <div id="main">
-      
-      你访问的页面不存在
-      
+    <div id="main" class="post" itemscope itemprop="blogPost">
+	<article itemprop="articleBody">
+    <header class="article-info clearfix">
+  <h1 itemprop="name">
+      <a href="http://blog.hanmq.com/post/high-performance-mysql-01/" title="高性能MySQL" itemprop="url">高性能MySQL</a>
+  </h1>
+  <p class="article-author">By
+    
+      <a href="http://blog.hanmq.com" title="amao">amao</a>
+    
+  </p>
+  <p class="article-time">
+    <time datetime="2017-02-04 15:38:00 &#43;0800 CST" itemprop="datePublished">2017年02月04日</time>
+  </p>
+</header>
+
+	<div class="article-content">
+    
+		<div class="toc-article">
+			<strong class="toc-title">文章目录</strong>
+      <nav id="TableOfContents">
+<ul>
+<li>
+<ul>
+<li><a href="#mysql逻辑构架:51879d4aec6f5c72f71a4a60a0197de3">MySQL逻辑构架</a></li>
+<li><a href="#并发控制:51879d4aec6f5c72f71a4a60a0197de3">并发控制</a>
+<ul>
+<li><a href="#锁:51879d4aec6f5c72f71a4a60a0197de3">锁</a></li>
+<li><a href="#锁粒度:51879d4aec6f5c72f71a4a60a0197de3">锁粒度</a>
+<ul>
+<li><a href="#表锁:51879d4aec6f5c72f71a4a60a0197de3">表锁</a></li>
+<li><a href="#行级锁:51879d4aec6f5c72f71a4a60a0197de3">行级锁</a></li>
+</ul></li>
+</ul></li>
+<li><a href="#事务:51879d4aec6f5c72f71a4a60a0197de3">事务</a>
+<ul>
+<li><a href="#隔离级别:51879d4aec6f5c72f71a4a60a0197de3">隔离级别</a></li>
+</ul></li>
+<li><a href="#多版本并发控制:51879d4aec6f5c72f71a4a60a0197de3">多版本并发控制</a></li>
+<li><a href="#存储引擎:51879d4aec6f5c72f71a4a60a0197de3">存储引擎</a>
+<ul>
+<li><a href="#innodb:51879d4aec6f5c72f71a4a60a0197de3">InnoDB</a></li>
+<li><a href="#myisam:51879d4aec6f5c72f71a4a60a0197de3">MyISAM</a></li>
+</ul></li>
+</ul></li>
+</ul>
+</nav>
+		</div>
+    
+    
+
+<h2 id="mysql逻辑构架:51879d4aec6f5c72f71a4a60a0197de3">MySQL逻辑构架</h2>
+
+<p><img src="/img/mysql01.png" width = "300" alt="MySQL服务器构架逻辑图" /></p>
+
+<p>最上层：连接处理、授权认证、安全等。</p>
+
+<p>中间层：大多数MySQL核心服务，查询解析、分析、优化、缓存及内置函数（日期时间、数学和加密等）。</p>
+
+<p>第三层：存储引擎，负责MqlSQL数据的存储和提取，服务器通过API与存储引擎通信，屏蔽了不同存储引擎之间的差异。</p>
+
+<h2 id="并发控制:51879d4aec6f5c72f71a4a60a0197de3">并发控制</h2>
+
+<h3 id="锁:51879d4aec6f5c72f71a4a60a0197de3">锁</h3>
+
+<p>共享锁和排它锁，也就是读锁和写锁。</p>
+
+<h3 id="锁粒度:51879d4aec6f5c72f71a4a60a0197de3">锁粒度</h3>
+
+<p>锁的开销和安全之间寻求平衡。</p>
+
+<h4 id="表锁:51879d4aec6f5c72f71a4a60a0197de3">表锁</h4>
+
+<p>MySQL中最基础的锁策略，开销最小。</p>
+
+<p>尽管存储引擎可以管理自己的锁，MySQL本身会使用各种有效的锁来实现不同的目的，例如在 ALTER TABLE 会使用表锁，而忽略存储引擎的锁机制。</p>
+
+<h4 id="行级锁:51879d4aec6f5c72f71a4a60a0197de3">行级锁</h4>
+
+<p>最大程度的支持并发处理（同时带来最大的锁开销），由存储引擎实现。</p>
+
+<h2 id="事务:51879d4aec6f5c72f71a4a60a0197de3">事务</h2>
+
+<ul>
+<li>原子性(atomicity)</li>
+<li>一致性(consistency)</li>
+<li>隔离型(isolation)</li>
+<li>持久性(durablility)</li>
+</ul>
+
+<p>有存储引擎实现，所以在同一个事务中，使用多种存储引擎是不可靠的。</p>
+
+<h3 id="隔离级别:51879d4aec6f5c72f71a4a60a0197de3">隔离级别</h3>
+
+<ul>
+<li>READ UNCOMMITTED（未提交读）
+
+<ul>
+<li>事务中的修改，即使没有提交，对其他事务也是可见的。</li>
+<li>事务读到未提交数据，这称为脏读。</li>
+</ul></li>
+<li>READ COMMITTED（提交读），也叫不可重复读(nonrepeatable read)
+
+<ul>
+<li>满足事务的隔离性的简单定义。</li>
+<li>一个事务开始知道提交之前，所做的修改对其他事务是不可见的。</li>
+</ul></li>
+<li>REPEATABLE READ（可重复读）
+
+<ul>
+<li>可产生幻读</li>
+<li>MySQL默认隔离级别</li>
+<li>InnoDB通过版本并发控制解决了幻读</li>
+</ul></li>
+<li>SERIALIZABLE（可串行化）
+
+<ul>
+<li>解决了幻读</li>
+<li>读取每一行数据加锁，可能会导致大量的超时和锁争用问题<br /></li>
+</ul></li>
+</ul>
+
+<h2 id="多版本并发控制:51879d4aec6f5c72f71a4a60a0197de3">多版本并发控制</h2>
+
+<p>和行级锁一样，实现了非阻塞读操作，可以说是行级锁的一个变种，但并不需要加锁操作，因此开销更低。</p>
+
+<p>mvcc的实现，是通过保存数据在某个时间点的快照实现的。</p>
+
+<p>通过两个隐藏列，创建时间和过期时间实现。</p>
+
+<p>mvcc只再READ COMMITTED和REPEATABLE READ两个隔离级别生效，READ UNCOMMITTED总是读最新的数据行，SERIALIZABLE会怼所有读取的行加锁。</p>
+
+<h2 id="存储引擎:51879d4aec6f5c72f71a4a60a0197de3">存储引擎</h2>
+
+<h3 id="innodb:51879d4aec6f5c72f71a4a60a0197de3">InnoDB</h3>
+
+<p>基于聚簇索引，对主键查询有很高的性能，耳机索引中必须包含主键列。</p>
+
+<h3 id="myisam:51879d4aec6f5c72f71a4a60a0197de3">MyISAM</h3>
+
+<p>不支持事务和行级锁。</p>
+
+	</div>
+  <footer class="article-footer clearfix">
+  
+
+<div class="article-tags">
+  <span></span>
+  
+  <a href="http://blog.hanmq.com/tags/mysql">mysql</a>
+  
+</div>
+
+
+
+
+
+<div class="article-categories">
+  <span></span>
+  
+  <a class="article-category-link" href="http://blog.hanmq.com/categories/mysql">mysql</a>
+  
+</div>
+
+
+
+  <div class="article-share" id="share">
+    <div data-url="http://blog.hanmq.com/post/high-performance-mysql-01/" data-title="高性能MySQL" data-tsina="" class="share clearfix">
     </div>
+  </div>
+</footer>
+
+	</article>
+  
+
+
+<section class="comment">
+<div id="disqus_thread"></div>
+</section>
+<script>
+
+
+var disqus_config = function () {
+this.page.url = "http://blog.hanmq.com/post/high-performance-mysql-01/";
+this.page.identifier = "http://blog.hanmq.com/post/high-performance-mysql-01/";
+};
+(function() { 
+var d = document, s = d.createElement('script');
+
+s.src = '//bloghanmq.disqus.com/embed.js';
+
+s.setAttribute('data-timestamp', +new Date());
+(d.head || d.body).appendChild(s);
+})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a></noscript>
+
+
+</div>
+
     <div class="openaside"><a class="navbutton" href="#" title="显示侧边栏"></a></div>
 <div id="asidepart">
 <div class="closeaside"><a class="closebutton" href="#" title="隐藏侧边栏"></a></div>
@@ -180,10 +375,6 @@
 
 
   
-<div class="rsspart">
-  <a rel="nofollow" href="http://blog.hanmq.com/feed.xml" type="application/rss+xml" target="_blank">RSS 订阅</a>
-</div>
-
 
 </aside>
 </div>
@@ -272,6 +463,38 @@ $(document).ready(function(){
 
 <script type="text/javascript">
 $(document).ready(function(){
+  var ai = $('.article-content>iframe'),
+      ae = $('.article-content>embed'),
+      t  = $('#toc'),
+      h  = $('article h2')
+      ah = $('article h2'),
+      ta = $('#toc.toc-aside'),
+      o  = $('.openaside'),
+      c  = $('.closeaside');
+  if(ai.length>0){
+    ai.wrap('<div class="video-container" />');
+  };
+  if(ae.length>0){
+   ae.wrap('<div class="video-container" />');
+  };
+  if(ah.length==0){
+    t.css('display','none');
+  }else{
+    c.click(function(){
+      ta.css('display', 'block').addClass('fadeIn');
+    });
+    o.click(function(){
+      ta.css('display', 'none');
+    });
+    $(window).scroll(function(){
+      ta.css("top",Math.max(140,320-$(this).scrollTop()));
+    });
+  };
+});
+</script>
+
+<script type="text/javascript">
+$(document).ready(function(){
   var $this = $('.share'),
       url = $this.attr('data-url'),
       encodedUrl = encodeURIComponent(url),
@@ -298,6 +521,27 @@ $(document).ready(function(){
 });
 </script>
 
+
+<link rel="stylesheet" href="http://blog.hanmq.com/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="http://blog.hanmq.com/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){
+  $('.article-content').each(function(i){
+    $(this).find('img').each(function(){
+      if ($(this).parent().hasClass('fancybox')) return;
+      var alt = this.alt;
+      if (alt) $(this).after('<span class="caption">' + alt + '</span>');
+      $(this).wrap('<a href="' + this.src + '" title="' + alt + '" class="fancybox"></a>');
+    });
+    $(this).find('.fancybox').each(function(){
+      $(this).attr('rel', 'article' + i);
+    });
+  });
+  if($.fancybox){
+    $('.fancybox').fancybox();
+  }
+});
+</script>
 
 
 

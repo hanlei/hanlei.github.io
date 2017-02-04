@@ -3,8 +3,13 @@
   
   <url>
     <loc>http://blog.hanmq.com/</loc>
-    <lastmod>2016-12-19T11:38:00+08:00</lastmod>
+    <lastmod>2017-02-04T15:38:00+08:00</lastmod>
     <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>http://blog.hanmq.com/post/high-performance-mysql-01/</loc>
+    <lastmod>2017-02-04T15:38:00+08:00</lastmod>
   </url>
   
   <url>
