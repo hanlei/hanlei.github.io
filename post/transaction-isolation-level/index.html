@@ -2,13 +2,13 @@
 <html lang="zh-CN">
 <head>
   <meta charset="UTF-8">
-  <title>vagrant挂载本地folder出错的解决方案 - 牧青日志</title>
+  <title>MySQL事务隔离级别详解 - 牧青日志</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=3, minimum-scale=1">
   
-  <meta name="description" content="问题 vagrant CentOS7 基础镜像，Vagrantfile 配置文件通过config.vm.synced_folder挂载本地目录报错 #Vagrantfile config.vm.synced_folder &quot;./Download&quot;, &quot;/Download&quot; vagrant up 启动时报错 Failed to">
+  <meta name="description" content="概述 MySQL事务一共有4个隔离级别，分别是 Read Uncommitted Read Committed Repeatable Read Serializable 隔离级别 脏读 不可重复读 幻读 加锁读 Read Uncommitted √ √ √ x Read Committed x √ √ x Repeatable Read x x √ x Serializable x x x √ My">
   <meta name="author" content="amao">
-  <meta itemprop="name" content="vagrant挂载本地folder出错的解决方案 - 牧青日志">
-  <meta itemprop="description" content="问题 vagrant CentOS7 基础镜像，Vagrantfile 配置文件通过config.vm.synced_folder挂载本地目录报错 #Vagrantfile config.vm.synced_folder &quot;./Download&quot;, &quot;/Download&quot; vagrant up 启动时报错 Failed to">
+  <meta itemprop="name" content="MySQL事务隔离级别详解 - 牧青日志">
+  <meta itemprop="description" content="概述 MySQL事务一共有4个隔离级别，分别是 Read Uncommitted Read Committed Repeatable Read Serializable 隔离级别 脏读 不可重复读 幻读 加锁读 Read Uncommitted √ √ √ x Read Committed x √ √ x Repeatable Read x x √ x Serializable x x x √ My">
   <meta itemprop="image" content="http://blog.hanmq.com/img/author.jpg">
   
   
@@ -53,7 +53,7 @@
 	<article itemprop="articleBody">
     <header class="article-info clearfix">
   <h1 itemprop="name">
-      <a href="http://blog.hanmq.com/post/vagrant-mount-folder/" title="vagrant挂载本地folder出错的解决方案" itemprop="url">vagrant挂载本地folder出错的解决方案</a>
+      <a href="http://blog.hanmq.com/post/transaction-isolation-level/" title="MySQL事务隔离级别详解" itemprop="url">MySQL事务隔离级别详解</a>
   </h1>
   <p class="article-author">By
     
@@ -61,7 +61,7 @@
     
   </p>
   <p class="article-time">
-    <time datetime="2016-06-16 17:31:08 &#43;0800 CST" itemprop="datePublished">2016年06月16日</time>
+    <time datetime="2017-02-05 20:48:00 &#43;0800 CST" itemprop="datePublished">2017年02月05日</time>
   </p>
 </header>
 
@@ -71,11 +71,12 @@
 			<strong class="toc-title">文章目录</strong>
       <nav id="TableOfContents">
 <ul>
-<li>
+<li><a href="#概述:50330dfe917dc5c6c4acf65f81f6cd47">概述</a>
 <ul>
-<li><a href="#问题:d10914a0617ca272838ce1ef356d7052">问题</a></li>
-<li><a href="#原因:d10914a0617ca272838ce1ef356d7052">原因</a></li>
-<li><a href="#解决方案:d10914a0617ca272838ce1ef356d7052">解决方案</a></li>
+<li><a href="#read-uncommitted-读取未提交内容:50330dfe917dc5c6c4acf65f81f6cd47">Read Uncommitted（读取未提交内容）</a></li>
+<li><a href="#read-committed-读取提交内容:50330dfe917dc5c6c4acf65f81f6cd47">Read Committed（读取提交内容）</a></li>
+<li><a href="#repeatable-read-可重读:50330dfe917dc5c6c4acf65f81f6cd47">Repeatable Read（可重读）</a></li>
+<li><a href="#serializable-可串行化:50330dfe917dc5c6c4acf65f81f6cd47">Serializable（可串行化）</a></li>
 </ul></li>
 </ul>
 </nav>
@@ -83,43 +84,315 @@
     
     
 
-<h2 id="问题:d10914a0617ca272838ce1ef356d7052">问题</h2>
+<h1 id="概述:50330dfe917dc5c6c4acf65f81f6cd47">概述</h1>
 
-<p>vagrant CentOS7 基础镜像，Vagrantfile 配置文件通过config.vm.synced_folder挂载本地目录报错</p>
+<p>MySQL事务一共有4个隔离级别，分别是</p>
 
-<pre><code>#Vagrantfile
+<ul>
+<li>Read Uncommitted</li>
+<li>Read Committed</li>
+<li>Repeatable Read</li>
+<li>Serializable</li>
+</ul>
 
-config.vm.synced_folder &quot;./Download&quot;, &quot;/Download&quot;
+<table>
+<thead>
+<tr>
+<th align="left">隔离级别</th>
+<th align="left">脏读</th>
+<th align="left">不可重复读</th>
+<th align="left">幻读</th>
+<th align="left">加锁读</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td align="left">Read Uncommitted</td>
+<td align="left">√</td>
+<td align="left">√</td>
+<td align="left">√</td>
+<td align="left">x</td>
+</tr>
+
+<tr>
+<td align="left">Read Committed</td>
+<td align="left">x</td>
+<td align="left">√</td>
+<td align="left">√</td>
+<td align="left">x</td>
+</tr>
+
+<tr>
+<td align="left">Repeatable Read</td>
+<td align="left">x</td>
+<td align="left">x</td>
+<td align="left">√</td>
+<td align="left">x</td>
+</tr>
+
+<tr>
+<td align="left">Serializable</td>
+<td align="left">x</td>
+<td align="left">x</td>
+<td align="left">x</td>
+<td align="left">√</td>
+</tr>
+</tbody>
+</table>
+
+<p>MySQL默认隔离级别是Repeatable Read。</p>
+
+<h2 id="read-uncommitted-读取未提交内容:50330dfe917dc5c6c4acf65f81f6cd47">Read Uncommitted（读取未提交内容）</h2>
+
+<p>所有事务可以看到其他事务未提交的数据，读取未提交的数据，称作脏读（Dirty Read）</p>
+
+<p><strong>session 1</strong></p>
+
+<pre><code>MariaDB [test]&gt; set session transaction isolation level read uncommitted;
+Query OK, 0 rows affected (0.00 sec)
+
+MariaDB [test]&gt; select @@tx_isolation;
++------------------+
+| @@tx_isolation   |
++------------------+
+| READ-UNCOMMITTED |
++------------------+
+1 row in set (0.00 sec)
+
+MariaDB [test]&gt; select * from test;
++----+-----+
+| id | num |
++----+-----+
+|  1 |   1 |
+|  2 |   2 |
++----+-----+
+2 rows in set (0.00 sec)
 </code></pre>
 
-<p>vagrant up 启动时报错</p>
+<p><strong>session 2</strong></p>
 
-<pre><code>Failed to mount folders in Linux guest. This is usually because
-the &quot;vboxsf&quot; file system is not available. Please verify that
-the guest additions are properly installed in the guest and
-can work properly. The command attempted was:
+<pre><code>MariaDB [test]&gt; start transaction;
+Query OK, 0 rows affected (0.00 sec)
 
-mount -t vboxsf -o uid=`id -u vagrant`,gid=`getent group vagrant | cut -d: -f3` vagrant /vagrant
-mount -t vboxsf -o uid=`id -u vagrant`,gid=`id -g vagrant` vagrant /vagrant
-
-The error output from the last command was:
-
-/sbin/mount.vboxsf: mounting failed with the error: No such device
+MariaDB [test]&gt; update test set num = 20 where id = 2;
+Query OK, 1 row affected (0.00 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
 </code></pre>
 
-<h2 id="原因:d10914a0617ca272838ce1ef356d7052">原因</h2>
+<p><strong>session 1</strong></p>
 
-<p>查了一些网上的文章，最终查到，是因为执行了 yum update 导致 kernel-devel 的版本和系统当前版本不一样导致。</p>
-
-<h2 id="解决方案:d10914a0617ca272838ce1ef356d7052">解决方案</h2>
-
-<pre><code>yum install kernel-devel-$(uname -r)
-yum install kernel-headers-$(uname -r)
-yum install dkms
-
-cd /opt/VBoxGuestAdditions-*/init  
-sudo ./vboxadd setup
+<pre><code>MariaDB [test]&gt; select * from test;
++----+-----+
+| id | num |
++----+-----+
+|  1 |   1 |
+|  2 |  20 |
++----+-----+
+2 rows in set (0.00 sec)
 </code></pre>
+
+<p>session 2 并没有commit，session 1 可以读到其他事务未提交的数据。</p>
+
+<h2 id="read-committed-读取提交内容:50330dfe917dc5c6c4acf65f81f6cd47">Read Committed（读取提交内容）</h2>
+
+<p>它满足了隔离的简单定义：一个事务只能看见已经提交事务所做的改变。这种隔离级别也叫做不可重复读（Nonrepeatable Read），因为两次查询可能返回不同结果。</p>
+
+<p><strong>session 1</strong></p>
+
+<pre><code>MariaDB [test]&gt; set session transaction isolation level read committed;
+Query OK, 0 rows affected (0.00 sec)
+
+MariaDB [test]&gt; select @@tx_isolation;
++----------------+
+| @@tx_isolation |
++----------------+
+| READ-COMMITTED |
++----------------+
+1 row in set (0.00 sec)
+
+MariaDB [test]&gt; start transaction;
+Query OK, 0 rows affected (0.00 sec)
+
+MariaDB [test]&gt; select * from test;
++----+-----+
+| id | num |
++----+-----+
+|  1 |   1 |
+|  2 |  20 |
++----+-----+
+2 rows in set (0.00 sec)
+</code></pre>
+
+<p><strong>session 2</strong></p>
+
+<pre><code>MariaDB [test]&gt; start transaction;
+Query OK, 0 rows affected (0.00 sec)
+
+MariaDB [test]&gt; update test set num = 200 where id = 2;
+Query OK, 1 row affected (0.00 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+MariaDB [test]&gt; select * from test;
++----+-----+
+| id | num |
++----+-----+
+|  1 |   1 |
+|  2 | 200 |
++----+-----+
+2 rows in set (0.00 sec)
+</code></pre>
+
+<p><strong>session 1</strong></p>
+
+<pre><code>MariaDB [test]&gt; select * from test;
++----+-----+
+| id | num |
++----+-----+
+|  1 |   1 |
+|  2 |  20 |
++----+-----+
+2 rows in set (0.00 sec)
+</code></pre>
+
+<p>session 2 并没有commit，并没有读到事务中未提交的数据。</p>
+
+<p><strong>session 2</strong></p>
+
+<pre><code>MariaDB [test]&gt; commit;
+Query OK, 0 rows affected (0.00 sec)
+</code></pre>
+
+<p><strong>session 1</strong></p>
+
+<pre><code>MariaDB [test]&gt; select * from test;
++----+-----+
+| id | num |
++----+-----+
+|  1 |   1 |
+|  2 | 200 |
++----+-----+
+2 rows in set (0.00 sec)
+</code></pre>
+
+<p>session 1 读取到提交数据，但是session 1在一个事务中，两次查询结果不一致。</p>
+
+<h2 id="repeatable-read-可重读:50330dfe917dc5c6c4acf65f81f6cd47">Repeatable Read（可重读）</h2>
+
+<p>这是MySQL的默认事务隔离级别，它确保同一事务的多个实例在并发读取数据时，会看到同样的数据行。不过理论上，这会导致另一个棘手的问题：幻读 （Phantom Read）。简单的说，幻读指当用户读取某一范围的数据行时，另一个事务又在该范围内插入了新行，当用户再读取该范围的数据行时，会发现有新的“幻影” 行。InnoDB和Falcon存储引擎通过多版本并发控制（MVCC，Multiversion Concurrency Control）机制解决了该问题。</p>
+
+<p><strong>session 1</strong></p>
+
+<pre><code>MariaDB [test]&gt; set session transaction isolation level repeatable read;
+Query OK, 0 rows affected (0.00 sec)
+
+MariaDB [test]&gt; select @@tx_isolation;
++-----------------+
+| @@tx_isolation  |
++-----------------+
+| REPEATABLE-READ |
++-----------------+
+1 row in set (0.00 sec)
+
+MariaDB [test]&gt; start transaction;
+Query OK, 0 rows affected (0.00 sec)
+
+MariaDB [test]&gt; select * from test;
++----+-----+
+| id | num |
++----+-----+
+|  1 |   1 |
+|  2 | 200 |
++----+-----+
+2 rows in set (0.00 sec)
+</code></pre>
+
+<p><strong>session 2</strong></p>
+
+<pre><code>MariaDB [test]&gt; start transaction;
+Query OK, 0 rows affected (0.01 sec)
+
+MariaDB [test]&gt; update test set num = 2000 where id = 2;
+Query OK, 1 row affected (0.00 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+MariaDB [test]&gt; insert into test (id,num) value(3,3);
+Query OK, 1 row affected (0.00 sec)
+
+MariaDB [test]&gt; commit;
+Query OK, 0 rows affected (0.00 sec)
+
+MariaDB [test]&gt; select * from test;
++----+------+
+| id | num  |
++----+------+
+|  1 |    1 |
+|  2 | 2000 |
+|  3 |    3 |
++----+------+
+2 rows in set (0.00 sec)
+</code></pre>
+
+<p><strong>session 1</strong></p>
+
+<pre><code>MariaDB [test]&gt; select * from test;
++----+-----+
+| id | num |
++----+-----+
+|  1 |   1 |
+|  2 | 200 |
++----+-----+
+2 rows in set (0.00 sec)
+</code></pre>
+
+<p>session 1 在同一个事务中，读取同一条数据保持一致，但并没有读取到session 2添加的新数据。</p>
+
+<p><strong>session 1</strong></p>
+
+<pre><code>MariaDB [test]&gt; commit;
+Query OK, 0 rows affected (0.00 sec)
+
+MariaDB [test]&gt; select * from test;
++----+------+
+| id | num  |
++----+------+
+|  1 |    1 |
+|  2 | 2000 |
+|  3 |    3 |
++----+------+
+3 rows in set (0.00 sec)
+</code></pre>
+
+<p>session 1 commit后，可看到新添加的数据（幻影行）。</p>
+
+<h2 id="serializable-可串行化:50330dfe917dc5c6c4acf65f81f6cd47">Serializable（可串行化）</h2>
+
+<p>这是最高的隔离级别，它通过强制事务排序，使之不可能相互冲突，从而解决幻读问题。简言之，它是在每个读的数据行上加上共享锁。在这个级别，可能导致大量的超时现象和锁竞争。</p>
+
+<p><strong>session 1</strong></p>
+
+<pre><code>MariaDB [test]&gt; set session transaction isolation level serializable;
+Query OK, 0 rows affected (0.00 sec)
+
+MariaDB [test]&gt; select @@tx_isolation;
++----------------+
+| @@tx_isolation |
++----------------+
+| SERIALIZABLE   |
++----------------+
+1 row in set (0.00 sec)
+</code></pre>
+
+<p><strong>session 2</strong></p>
+
+<pre><code>MariaDB [test]&gt; start transaction;
+Query OK, 0 rows affected (0.00 sec)
+
+MariaDB [test]&gt; insert into test (id,num) value(4,4);
+ERROR 1205 (HY000): Lock wait timeout exceeded; try restarting transaction
+</code></pre>
+
+<p>session 1 读锁，session 2 并不能插入数据。</p>
 
 	</div>
   <footer class="article-footer clearfix">
@@ -128,11 +401,9 @@ sudo ./vboxadd setup
 <div class="article-tags">
   <span></span>
   
-  <a href="http://blog.hanmq.com/tags/linux">linux</a>
+  <a href="http://blog.hanmq.com/tags/mysql">mysql</a>
   
-  <a href="http://blog.hanmq.com/tags/centos">centos</a>
-  
-  <a href="http://blog.hanmq.com/tags/vagrant">vagrant</a>
+  <a href="http://blog.hanmq.com/tags/transaction">transaction</a>
   
 </div>
 
@@ -143,14 +414,14 @@ sudo ./vboxadd setup
 <div class="article-categories">
   <span></span>
   
-  <a class="article-category-link" href="http://blog.hanmq.com/categories/%E7%B3%BB%E7%BB%9F%E9%85%8D%E7%BD%AE">系统配置</a>
+  <a class="article-category-link" href="http://blog.hanmq.com/categories/mysql">mysql</a>
   
 </div>
 
 
 
   <div class="article-share" id="share">
-    <div data-url="http://blog.hanmq.com/post/vagrant-mount-folder/" data-title="vagrant挂载本地folder出错的解决方案" data-tsina="" class="share clearfix">
+    <div data-url="http://blog.hanmq.com/post/transaction-isolation-level/" data-title="MySQL事务隔离级别详解" data-tsina="" class="share clearfix">
     </div>
   </div>
 </footer>
@@ -166,8 +437,8 @@ sudo ./vboxadd setup
 
 
 var disqus_config = function () {
-this.page.url = "http://blog.hanmq.com/post/vagrant-mount-folder/";
-this.page.identifier = "http://blog.hanmq.com/post/vagrant-mount-folder/";
+this.page.url = "http://blog.hanmq.com/post/transaction-isolation-level/";
+this.page.identifier = "http://blog.hanmq.com/post/transaction-isolation-level/";
 };
 (function() { 
 var d = document, s = d.createElement('script');

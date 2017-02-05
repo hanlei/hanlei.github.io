@@ -3,8 +3,13 @@
   
   <url>
     <loc>http://blog.hanmq.com/</loc>
-    <lastmod>2017-02-04T15:38:00+08:00</lastmod>
+    <lastmod>2017-02-05T20:48:00+08:00</lastmod>
     <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>http://blog.hanmq.com/post/transaction-isolation-level/</loc>
+    <lastmod>2017-02-05T20:48:00+08:00</lastmod>
   </url>
   
   <url>

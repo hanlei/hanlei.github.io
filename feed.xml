@@ -6,8 +6,328 @@
     <description>Recent content on 牧青日志</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-CN</language>
-    <lastBuildDate>Sat, 04 Feb 2017 15:38:00 +0800</lastBuildDate>
+    <lastBuildDate>Sun, 05 Feb 2017 20:48:00 +0800</lastBuildDate>
     <atom:link href="http://blog.hanmq.com/feed/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>MySQL事务隔离级别详解</title>
+      <link>http://blog.hanmq.com/post/transaction-isolation-level/</link>
+      <pubDate>Sun, 05 Feb 2017 20:48:00 +0800</pubDate>
+      
+      <guid>http://blog.hanmq.com/post/transaction-isolation-level/</guid>
+      <description>
+
+&lt;h1 id=&#34;概述:50330dfe917dc5c6c4acf65f81f6cd47&#34;&gt;概述&lt;/h1&gt;
+
+&lt;p&gt;MySQL事务一共有4个隔离级别，分别是&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;Read Uncommitted&lt;/li&gt;
+&lt;li&gt;Read Committed&lt;/li&gt;
+&lt;li&gt;Repeatable Read&lt;/li&gt;
+&lt;li&gt;Serializable&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th align=&#34;left&#34;&gt;隔离级别&lt;/th&gt;
+&lt;th align=&#34;left&#34;&gt;脏读&lt;/th&gt;
+&lt;th align=&#34;left&#34;&gt;不可重复读&lt;/th&gt;
+&lt;th align=&#34;left&#34;&gt;幻读&lt;/th&gt;
+&lt;th align=&#34;left&#34;&gt;加锁读&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td align=&#34;left&#34;&gt;Read Uncommitted&lt;/td&gt;
+&lt;td align=&#34;left&#34;&gt;√&lt;/td&gt;
+&lt;td align=&#34;left&#34;&gt;√&lt;/td&gt;
+&lt;td align=&#34;left&#34;&gt;√&lt;/td&gt;
+&lt;td align=&#34;left&#34;&gt;x&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td align=&#34;left&#34;&gt;Read Committed&lt;/td&gt;
+&lt;td align=&#34;left&#34;&gt;x&lt;/td&gt;
+&lt;td align=&#34;left&#34;&gt;√&lt;/td&gt;
+&lt;td align=&#34;left&#34;&gt;√&lt;/td&gt;
+&lt;td align=&#34;left&#34;&gt;x&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td align=&#34;left&#34;&gt;Repeatable Read&lt;/td&gt;
+&lt;td align=&#34;left&#34;&gt;x&lt;/td&gt;
+&lt;td align=&#34;left&#34;&gt;x&lt;/td&gt;
+&lt;td align=&#34;left&#34;&gt;√&lt;/td&gt;
+&lt;td align=&#34;left&#34;&gt;x&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td align=&#34;left&#34;&gt;Serializable&lt;/td&gt;
+&lt;td align=&#34;left&#34;&gt;x&lt;/td&gt;
+&lt;td align=&#34;left&#34;&gt;x&lt;/td&gt;
+&lt;td align=&#34;left&#34;&gt;x&lt;/td&gt;
+&lt;td align=&#34;left&#34;&gt;√&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+
+&lt;p&gt;MySQL默认隔离级别是Repeatable Read。&lt;/p&gt;
+
+&lt;h2 id=&#34;read-uncommitted-读取未提交内容:50330dfe917dc5c6c4acf65f81f6cd47&#34;&gt;Read Uncommitted（读取未提交内容）&lt;/h2&gt;
+
+&lt;p&gt;所有事务可以看到其他事务未提交的数据，读取未提交的数据，称作脏读（Dirty Read）&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;session 1&lt;/strong&gt;&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;MariaDB [test]&amp;gt; set session transaction isolation level read uncommitted;
+Query OK, 0 rows affected (0.00 sec)
+
+MariaDB [test]&amp;gt; select @@tx_isolation;
++------------------+
+| @@tx_isolation   |
++------------------+
+| READ-UNCOMMITTED |
++------------------+
+1 row in set (0.00 sec)
+
+MariaDB [test]&amp;gt; select * from test;
++----+-----+
+| id | num |
++----+-----+
+|  1 |   1 |
+|  2 |   2 |
++----+-----+
+2 rows in set (0.00 sec)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;strong&gt;session 2&lt;/strong&gt;&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;MariaDB [test]&amp;gt; start transaction;
+Query OK, 0 rows affected (0.00 sec)
+
+MariaDB [test]&amp;gt; update test set num = 20 where id = 2;
+Query OK, 1 row affected (0.00 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;strong&gt;session 1&lt;/strong&gt;&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;MariaDB [test]&amp;gt; select * from test;
++----+-----+
+| id | num |
++----+-----+
+|  1 |   1 |
+|  2 |  20 |
++----+-----+
+2 rows in set (0.00 sec)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;session 2 并没有commit，session 1 可以读到其他事务未提交的数据。&lt;/p&gt;
+
+&lt;h2 id=&#34;read-committed-读取提交内容:50330dfe917dc5c6c4acf65f81f6cd47&#34;&gt;Read Committed（读取提交内容）&lt;/h2&gt;
+
+&lt;p&gt;它满足了隔离的简单定义：一个事务只能看见已经提交事务所做的改变。这种隔离级别也叫做不可重复读（Nonrepeatable Read），因为两次查询可能返回不同结果。&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;session 1&lt;/strong&gt;&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;MariaDB [test]&amp;gt; set session transaction isolation level read committed;
+Query OK, 0 rows affected (0.00 sec)
+
+MariaDB [test]&amp;gt; select @@tx_isolation;
++----------------+
+| @@tx_isolation |
++----------------+
+| READ-COMMITTED |
++----------------+
+1 row in set (0.00 sec)
+
+MariaDB [test]&amp;gt; start transaction;
+Query OK, 0 rows affected (0.00 sec)
+
+MariaDB [test]&amp;gt; select * from test;
++----+-----+
+| id | num |
++----+-----+
+|  1 |   1 |
+|  2 |  20 |
++----+-----+
+2 rows in set (0.00 sec)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;strong&gt;session 2&lt;/strong&gt;&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;MariaDB [test]&amp;gt; start transaction;
+Query OK, 0 rows affected (0.00 sec)
+
+MariaDB [test]&amp;gt; update test set num = 200 where id = 2;
+Query OK, 1 row affected (0.00 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+MariaDB [test]&amp;gt; select * from test;
++----+-----+
+| id | num |
++----+-----+
+|  1 |   1 |
+|  2 | 200 |
++----+-----+
+2 rows in set (0.00 sec)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;strong&gt;session 1&lt;/strong&gt;&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;MariaDB [test]&amp;gt; select * from test;
++----+-----+
+| id | num |
++----+-----+
+|  1 |   1 |
+|  2 |  20 |
++----+-----+
+2 rows in set (0.00 sec)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;session 2 并没有commit，并没有读到事务中未提交的数据。&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;session 2&lt;/strong&gt;&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;MariaDB [test]&amp;gt; commit;
+Query OK, 0 rows affected (0.00 sec)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;strong&gt;session 1&lt;/strong&gt;&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;MariaDB [test]&amp;gt; select * from test;
++----+-----+
+| id | num |
++----+-----+
+|  1 |   1 |
+|  2 | 200 |
++----+-----+
+2 rows in set (0.00 sec)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;session 1 读取到提交数据，但是session 1在一个事务中，两次查询结果不一致。&lt;/p&gt;
+
+&lt;h2 id=&#34;repeatable-read-可重读:50330dfe917dc5c6c4acf65f81f6cd47&#34;&gt;Repeatable Read（可重读）&lt;/h2&gt;
+
+&lt;p&gt;这是MySQL的默认事务隔离级别，它确保同一事务的多个实例在并发读取数据时，会看到同样的数据行。不过理论上，这会导致另一个棘手的问题：幻读 （Phantom Read）。简单的说，幻读指当用户读取某一范围的数据行时，另一个事务又在该范围内插入了新行，当用户再读取该范围的数据行时，会发现有新的“幻影” 行。InnoDB和Falcon存储引擎通过多版本并发控制（MVCC，Multiversion Concurrency Control）机制解决了该问题。&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;session 1&lt;/strong&gt;&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;MariaDB [test]&amp;gt; set session transaction isolation level repeatable read;
+Query OK, 0 rows affected (0.00 sec)
+
+MariaDB [test]&amp;gt; select @@tx_isolation;
++-----------------+
+| @@tx_isolation  |
++-----------------+
+| REPEATABLE-READ |
++-----------------+
+1 row in set (0.00 sec)
+
+MariaDB [test]&amp;gt; start transaction;
+Query OK, 0 rows affected (0.00 sec)
+
+MariaDB [test]&amp;gt; select * from test;
++----+-----+
+| id | num |
++----+-----+
+|  1 |   1 |
+|  2 | 200 |
++----+-----+
+2 rows in set (0.00 sec)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;strong&gt;session 2&lt;/strong&gt;&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;MariaDB [test]&amp;gt; start transaction;
+Query OK, 0 rows affected (0.01 sec)
+
+MariaDB [test]&amp;gt; update test set num = 2000 where id = 2;
+Query OK, 1 row affected (0.00 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+MariaDB [test]&amp;gt; insert into test (id,num) value(3,3);
+Query OK, 1 row affected (0.00 sec)
+
+MariaDB [test]&amp;gt; commit;
+Query OK, 0 rows affected (0.00 sec)
+
+MariaDB [test]&amp;gt; select * from test;
++----+------+
+| id | num  |
++----+------+
+|  1 |    1 |
+|  2 | 2000 |
+|  3 |    3 |
++----+------+
+2 rows in set (0.00 sec)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;strong&gt;session 1&lt;/strong&gt;&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;MariaDB [test]&amp;gt; select * from test;
++----+-----+
+| id | num |
++----+-----+
+|  1 |   1 |
+|  2 | 200 |
++----+-----+
+2 rows in set (0.00 sec)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;session 1 在同一个事务中，读取同一条数据保持一致，但并没有读取到session 2添加的新数据。&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;session 1&lt;/strong&gt;&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;MariaDB [test]&amp;gt; commit;
+Query OK, 0 rows affected (0.00 sec)
+
+MariaDB [test]&amp;gt; select * from test;
++----+------+
+| id | num  |
++----+------+
+|  1 |    1 |
+|  2 | 2000 |
+|  3 |    3 |
++----+------+
+3 rows in set (0.00 sec)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;session 1 commit后，可看到新添加的数据（幻影行）。&lt;/p&gt;
+
+&lt;h2 id=&#34;serializable-可串行化:50330dfe917dc5c6c4acf65f81f6cd47&#34;&gt;Serializable（可串行化）&lt;/h2&gt;
+
+&lt;p&gt;这是最高的隔离级别，它通过强制事务排序，使之不可能相互冲突，从而解决幻读问题。简言之，它是在每个读的数据行上加上共享锁。在这个级别，可能导致大量的超时现象和锁竞争。&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;session 1&lt;/strong&gt;&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;MariaDB [test]&amp;gt; set session transaction isolation level serializable;
+Query OK, 0 rows affected (0.00 sec)
+
+MariaDB [test]&amp;gt; select @@tx_isolation;
++----------------+
+| @@tx_isolation |
++----------------+
+| SERIALIZABLE   |
++----------------+
+1 row in set (0.00 sec)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;strong&gt;session 2&lt;/strong&gt;&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;MariaDB [test]&amp;gt; start transaction;
+Query OK, 0 rows affected (0.00 sec)
+
+MariaDB [test]&amp;gt; insert into test (id,num) value(4,4);
+ERROR 1205 (HY000): Lock wait timeout exceeded; try restarting transaction
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;session 1 读锁，session 2 并不能插入数据。&lt;/p&gt;
+</description>
+    </item>
     
     <item>
       <title>高性能MySQL</title>
