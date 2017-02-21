@@ -75,14 +75,14 @@
 <ul>
 <li>
 <ul>
-<li><a href="#模板:bfb8846b5554036b9efab49a7686de70">模板</a></li>
-<li><a href="#忽略原则:bfb8846b5554036b9efab49a7686de70">忽略原则</a></li>
-<li><a href="#匹配规则:bfb8846b5554036b9efab49a7686de70">匹配规则</a></li>
-<li><a href="#强制添加:bfb8846b5554036b9efab49a7686de70">强制添加</a></li>
-<li><a href="#配置检查:bfb8846b5554036b9efab49a7686de70">配置检查</a></li>
-<li><a href="#忽略已被跟踪的文件:bfb8846b5554036b9efab49a7686de70">忽略已被跟踪的文件</a>
+<li><a href="#模板">模板</a></li>
+<li><a href="#忽略原则">忽略原则</a></li>
+<li><a href="#匹配规则">匹配规则</a></li>
+<li><a href="#强制添加">强制添加</a></li>
+<li><a href="#配置检查">配置检查</a></li>
+<li><a href="#忽略已被跟踪的文件">忽略已被跟踪的文件</a>
 <ul>
-<li><a href="#参考文献:bfb8846b5554036b9efab49a7686de70">参考文献</a></li>
+<li><a href="#参考文献">参考文献</a></li>
 </ul></li>
 </ul></li>
 </ul></li>
@@ -94,11 +94,11 @@
 
 <p>有时候代码中会有一些不能提交的文件，我们可以通过<strong>.gitignore</strong>文件使<strong>git</strong>将之忽略</p>
 
-<h3 id="模板:bfb8846b5554036b9efab49a7686de70">模板</h3>
+<h3 id="模板">模板</h3>
 
 <p>github为我们准备了各种配置文件<a href="https://github.com/github/gitignore" target="_blank">gitignore</a></p>
 
-<h3 id="忽略原则:bfb8846b5554036b9efab49a7686de70">忽略原则</h3>
+<h3 id="忽略原则">忽略原则</h3>
 
 <ol>
 <li>系统自动生成的文件</li>
@@ -106,7 +106,7 @@
 <li>自身的敏感配置</li>
 </ol>
 
-<h3 id="匹配规则:bfb8846b5554036b9efab49a7686de70">匹配规则</h3>
+<h3 id="匹配规则">匹配规则</h3>
 
 <pre><code># 此为注释 – 将被 Git 忽略
  
@@ -119,18 +119,18 @@ doc/*.txt # 会忽略 doc/notes.txt 但不包括 doc/server/arch.txt
 
 <p><strong>.gitignore</strong>文件本身需要纳入版本控制，将之提交到<strong>git</strong>中即可。校验的标准是&rdquo;git status&rdquo;命令是不是&rdquo;working directory clean&rdquo;</p>
 
-<h3 id="强制添加:bfb8846b5554036b9efab49a7686de70">强制添加</h3>
+<h3 id="强制添加">强制添加</h3>
 
 <p>如果想要强制提交，请用-f</p>
 
 <pre><code>git add -f force.xxx
 </code></pre>
 
-<h3 id="配置检查:bfb8846b5554036b9efab49a7686de70">配置检查</h3>
+<h3 id="配置检查">配置检查</h3>
 
 <p>可以使用 git check-ignore 来检查<strong>.gitignore</strong>配置文件的问题</p>
 
-<h3 id="忽略已被跟踪的文件:bfb8846b5554036b9efab49a7686de70">忽略已被跟踪的文件</h3>
+<h3 id="忽略已被跟踪的文件">忽略已被跟踪的文件</h3>
 
 <p>如果某些文件已经被纳入了版本管理中，直接修改<strong>.gitignore</strong>是无效的。解决方法就是先把本地缓存删除（改变成未track状态），然后再提交：</p>
 
@@ -141,7 +141,7 @@ git commit -m 'update .gitignore'
 
 <p>但是这种方法需要重新添加所有文件，另一种方案是先将在该文件从<strong>git</strong>中删除，再添加<strong>.gitignore</strong>，再添加文件即不会被<strong>git</strong>追踪</p>
 
-<h4 id="参考文献:bfb8846b5554036b9efab49a7686de70">参考文献</h4>
+<h4 id="参考文献">参考文献</h4>
 
 <p><a href="http://www.liaoxuefeng.com/wiki/0013739516305929606dd18361248578c67b8067c8c017b000/0013758404317281e54b6f5375640abbb11e67be4cd49e0000" target="_blank">忽略特殊文件</a></p>
 
@@ -219,7 +219,7 @@ s.setAttribute('data-timestamp', +new Date());
     
     <li><a href="http://blog.hanmq.com/categories/git" title="git">git<sup>1</sup></a></li>
     
-    <li><a href="http://blog.hanmq.com/categories/mysql" title="mysql">mysql<sup>2</sup></a></li>
+    <li><a href="http://blog.hanmq.com/categories/mysql" title="mysql">mysql<sup>3</sup></a></li>
     
     <li><a href="http://blog.hanmq.com/categories/%e6%8a%80%e6%9c%af%e6%96%87%e7%ab%a0" title="技术文章">技术文章<sup>2</sup></a></li>
     
@@ -246,13 +246,15 @@ s.setAttribute('data-timestamp', +new Date());
       
 			<li><a href="http://blog.hanmq.com/tags/linux" title="linux">linux<sup>2</sup></a></li>
       
-			<li><a href="http://blog.hanmq.com/tags/mysql" title="mysql">mysql<sup>2</sup></a></li>
+			<li><a href="http://blog.hanmq.com/tags/mysql" title="mysql">mysql<sup>3</sup></a></li>
       
 			<li><a href="http://blog.hanmq.com/tags/nginx" title="nginx">nginx<sup>1</sup></a></li>
       
 			<li><a href="http://blog.hanmq.com/tags/noodles" title="noodles">noodles<sup>1</sup></a></li>
       
 			<li><a href="http://blog.hanmq.com/tags/php" title="php">php<sup>1</sup></a></li>
+      
+			<li><a href="http://blog.hanmq.com/tags/pt-tools" title="pt-tools">pt-tools<sup>1</sup></a></li>
       
 			<li><a href="http://blog.hanmq.com/tags/solarized" title="solarized">solarized<sup>1</sup></a></li>
       
@@ -276,7 +278,7 @@ s.setAttribute('data-timestamp', +new Date());
       
       
       <li class="archive-list-item">
-        <a class="archive-list-link" href="http://blog.hanmq.com/post/#2017-02">2017年02月</a><span class="archive-list-count">2</span>
+        <a class="archive-list-link" href="http://blog.hanmq.com/post/#2017-02">2017年02月</a><span class="archive-list-count">3</span>
       </li>
       
       
@@ -320,6 +322,8 @@ s.setAttribute('data-timestamp', +new Date());
     <a href="http://blog.hanmq.com/tags/noodles" style="font-size: 12px;">noodles</a>
     
     <a href="http://blog.hanmq.com/tags/php" style="font-size: 12px;">php</a>
+    
+    <a href="http://blog.hanmq.com/tags/pt-tools" style="font-size: 12px;">pt-tools</a>
     
     <a href="http://blog.hanmq.com/tags/solarized" style="font-size: 12px;">solarized</a>
     

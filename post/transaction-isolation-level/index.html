@@ -71,12 +71,12 @@
 			<strong class="toc-title">文章目录</strong>
       <nav id="TableOfContents">
 <ul>
-<li><a href="#概述:50330dfe917dc5c6c4acf65f81f6cd47">概述</a>
+<li><a href="#概述">概述</a>
 <ul>
-<li><a href="#read-uncommitted-读取未提交内容:50330dfe917dc5c6c4acf65f81f6cd47">Read Uncommitted（读取未提交内容）</a></li>
-<li><a href="#read-committed-读取提交内容:50330dfe917dc5c6c4acf65f81f6cd47">Read Committed（读取提交内容）</a></li>
-<li><a href="#repeatable-read-可重读:50330dfe917dc5c6c4acf65f81f6cd47">Repeatable Read（可重读）</a></li>
-<li><a href="#serializable-可串行化:50330dfe917dc5c6c4acf65f81f6cd47">Serializable（可串行化）</a></li>
+<li><a href="#read-uncommitted-读取未提交内容">Read Uncommitted（读取未提交内容）</a></li>
+<li><a href="#read-committed-读取提交内容">Read Committed（读取提交内容）</a></li>
+<li><a href="#repeatable-read-可重读">Repeatable Read（可重读）</a></li>
+<li><a href="#serializable-可串行化">Serializable（可串行化）</a></li>
 </ul></li>
 </ul>
 </nav>
@@ -84,7 +84,7 @@
     
     
 
-<h1 id="概述:50330dfe917dc5c6c4acf65f81f6cd47">概述</h1>
+<h1 id="概述">概述</h1>
 
 <p>MySQL事务一共有4个隔离级别，分别是</p>
 
@@ -143,7 +143,7 @@
 
 <p>MySQL默认隔离级别是Repeatable Read。</p>
 
-<h2 id="read-uncommitted-读取未提交内容:50330dfe917dc5c6c4acf65f81f6cd47">Read Uncommitted（读取未提交内容）</h2>
+<h2 id="read-uncommitted-读取未提交内容">Read Uncommitted（读取未提交内容）</h2>
 
 <p>所有事务可以看到其他事务未提交的数据，读取未提交的数据，称作脏读（Dirty Read）</p>
 
@@ -194,7 +194,7 @@ Rows matched: 1  Changed: 1  Warnings: 0
 
 <p>session 2 并没有commit，session 1 可以读到其他事务未提交的数据。</p>
 
-<h2 id="read-committed-读取提交内容:50330dfe917dc5c6c4acf65f81f6cd47">Read Committed（读取提交内容）</h2>
+<h2 id="read-committed-读取提交内容">Read Committed（读取提交内容）</h2>
 
 <p>它满足了隔离的简单定义：一个事务只能看见已经提交事务所做的改变。这种隔离级别也叫做不可重复读（Nonrepeatable Read），因为两次查询可能返回不同结果。</p>
 
@@ -277,7 +277,7 @@ Query OK, 0 rows affected (0.00 sec)
 
 <p>session 1 读取到提交数据，但是session 1在一个事务中，两次查询结果不一致。</p>
 
-<h2 id="repeatable-read-可重读:50330dfe917dc5c6c4acf65f81f6cd47">Repeatable Read（可重读）</h2>
+<h2 id="repeatable-read-可重读">Repeatable Read（可重读）</h2>
 
 <p>这是MySQL的默认事务隔离级别，它确保同一事务的多个实例在并发读取数据时，会看到同样的数据行。不过理论上，这会导致另一个棘手的问题：幻读 （Phantom Read）。简单的说，幻读指当用户读取某一范围的数据行时，另一个事务又在该范围内插入了新行，当用户再读取该范围的数据行时，会发现有新的“幻影” 行。InnoDB和Falcon存储引擎通过多版本并发控制（MVCC，Multiversion Concurrency Control）机制解决了该问题。</p>
 
@@ -365,7 +365,7 @@ MariaDB [test]&gt; select * from test;
 
 <p>session 1 commit后，可看到新添加的数据（幻影行）。</p>
 
-<h2 id="serializable-可串行化:50330dfe917dc5c6c4acf65f81f6cd47">Serializable（可串行化）</h2>
+<h2 id="serializable-可串行化">Serializable（可串行化）</h2>
 
 <p>这是最高的隔离级别，它通过强制事务排序，使之不可能相互冲突，从而解决幻读问题。简言之，它是在每个读的数据行上加上共享锁。在这个级别，可能导致大量的超时现象和锁竞争。</p>
 
@@ -466,7 +466,7 @@ s.setAttribute('data-timestamp', +new Date());
     
     <li><a href="http://blog.hanmq.com/categories/git" title="git">git<sup>1</sup></a></li>
     
-    <li><a href="http://blog.hanmq.com/categories/mysql" title="mysql">mysql<sup>2</sup></a></li>
+    <li><a href="http://blog.hanmq.com/categories/mysql" title="mysql">mysql<sup>3</sup></a></li>
     
     <li><a href="http://blog.hanmq.com/categories/%e6%8a%80%e6%9c%af%e6%96%87%e7%ab%a0" title="技术文章">技术文章<sup>2</sup></a></li>
     
@@ -493,13 +493,15 @@ s.setAttribute('data-timestamp', +new Date());
       
 			<li><a href="http://blog.hanmq.com/tags/linux" title="linux">linux<sup>2</sup></a></li>
       
-			<li><a href="http://blog.hanmq.com/tags/mysql" title="mysql">mysql<sup>2</sup></a></li>
+			<li><a href="http://blog.hanmq.com/tags/mysql" title="mysql">mysql<sup>3</sup></a></li>
       
 			<li><a href="http://blog.hanmq.com/tags/nginx" title="nginx">nginx<sup>1</sup></a></li>
       
 			<li><a href="http://blog.hanmq.com/tags/noodles" title="noodles">noodles<sup>1</sup></a></li>
       
 			<li><a href="http://blog.hanmq.com/tags/php" title="php">php<sup>1</sup></a></li>
+      
+			<li><a href="http://blog.hanmq.com/tags/pt-tools" title="pt-tools">pt-tools<sup>1</sup></a></li>
       
 			<li><a href="http://blog.hanmq.com/tags/solarized" title="solarized">solarized<sup>1</sup></a></li>
       
@@ -523,7 +525,7 @@ s.setAttribute('data-timestamp', +new Date());
       
       
       <li class="archive-list-item">
-        <a class="archive-list-link" href="http://blog.hanmq.com/post/#2017-02">2017年02月</a><span class="archive-list-count">2</span>
+        <a class="archive-list-link" href="http://blog.hanmq.com/post/#2017-02">2017年02月</a><span class="archive-list-count">3</span>
       </li>
       
       
@@ -567,6 +569,8 @@ s.setAttribute('data-timestamp', +new Date());
     <a href="http://blog.hanmq.com/tags/noodles" style="font-size: 12px;">noodles</a>
     
     <a href="http://blog.hanmq.com/tags/php" style="font-size: 12px;">php</a>
+    
+    <a href="http://blog.hanmq.com/tags/pt-tools" style="font-size: 12px;">pt-tools</a>
     
     <a href="http://blog.hanmq.com/tags/solarized" style="font-size: 12px;">solarized</a>
     

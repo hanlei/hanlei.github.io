@@ -17,7 +17,7 @@
       <guid>http://blog.hanmq.com/post/transaction-isolation-level/</guid>
       <description>
 
-&lt;h1 id=&#34;概述:50330dfe917dc5c6c4acf65f81f6cd47&#34;&gt;概述&lt;/h1&gt;
+&lt;h1 id=&#34;概述&#34;&gt;概述&lt;/h1&gt;
 
 &lt;p&gt;MySQL事务一共有4个隔离级别，分别是&lt;/p&gt;
 
@@ -76,7 +76,7 @@
 
 &lt;p&gt;MySQL默认隔离级别是Repeatable Read。&lt;/p&gt;
 
-&lt;h2 id=&#34;read-uncommitted-读取未提交内容:50330dfe917dc5c6c4acf65f81f6cd47&#34;&gt;Read Uncommitted（读取未提交内容）&lt;/h2&gt;
+&lt;h2 id=&#34;read-uncommitted-读取未提交内容&#34;&gt;Read Uncommitted（读取未提交内容）&lt;/h2&gt;
 
 &lt;p&gt;所有事务可以看到其他事务未提交的数据，读取未提交的数据，称作脏读（Dirty Read）&lt;/p&gt;
 
@@ -127,7 +127,7 @@ Rows matched: 1  Changed: 1  Warnings: 0
 
 &lt;p&gt;session 2 并没有commit，session 1 可以读到其他事务未提交的数据。&lt;/p&gt;
 
-&lt;h2 id=&#34;read-committed-读取提交内容:50330dfe917dc5c6c4acf65f81f6cd47&#34;&gt;Read Committed（读取提交内容）&lt;/h2&gt;
+&lt;h2 id=&#34;read-committed-读取提交内容&#34;&gt;Read Committed（读取提交内容）&lt;/h2&gt;
 
 &lt;p&gt;它满足了隔离的简单定义：一个事务只能看见已经提交事务所做的改变。这种隔离级别也叫做不可重复读（Nonrepeatable Read），因为两次查询可能返回不同结果。&lt;/p&gt;
 
@@ -210,7 +210,7 @@ Query OK, 0 rows affected (0.00 sec)
 
 &lt;p&gt;session 1 读取到提交数据，但是session 1在一个事务中，两次查询结果不一致。&lt;/p&gt;
 
-&lt;h2 id=&#34;repeatable-read-可重读:50330dfe917dc5c6c4acf65f81f6cd47&#34;&gt;Repeatable Read（可重读）&lt;/h2&gt;
+&lt;h2 id=&#34;repeatable-read-可重读&#34;&gt;Repeatable Read（可重读）&lt;/h2&gt;
 
 &lt;p&gt;这是MySQL的默认事务隔离级别，它确保同一事务的多个实例在并发读取数据时，会看到同样的数据行。不过理论上，这会导致另一个棘手的问题：幻读 （Phantom Read）。简单的说，幻读指当用户读取某一范围的数据行时，另一个事务又在该范围内插入了新行，当用户再读取该范围的数据行时，会发现有新的“幻影” 行。InnoDB和Falcon存储引擎通过多版本并发控制（MVCC，Multiversion Concurrency Control）机制解决了该问题。&lt;/p&gt;
 
@@ -298,7 +298,7 @@ MariaDB [test]&amp;gt; select * from test;
 
 &lt;p&gt;session 1 commit后，可看到新添加的数据（幻影行）。&lt;/p&gt;
 
-&lt;h2 id=&#34;serializable-可串行化:50330dfe917dc5c6c4acf65f81f6cd47&#34;&gt;Serializable（可串行化）&lt;/h2&gt;
+&lt;h2 id=&#34;serializable-可串行化&#34;&gt;Serializable（可串行化）&lt;/h2&gt;
 
 &lt;p&gt;这是最高的隔离级别，它通过强制事务排序，使之不可能相互冲突，从而解决幻读问题。简言之，它是在每个读的数据行上加上共享锁。在这个级别，可能导致大量的超时现象和锁竞争。&lt;/p&gt;
 

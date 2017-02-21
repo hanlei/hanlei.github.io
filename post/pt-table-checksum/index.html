@@ -2,18 +2,18 @@
 <html lang="zh-CN">
 <head>
   <meta charset="UTF-8">
-  <title>Noodles - 牧青日志</title>
+  <title>pt-table-checksum 概述 - 牧青日志</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=3, minimum-scale=1">
   
-  <meta name="description" content="Noodles">
+  <meta name="description" content="概述 pt-table-checksum 主要用来检测mysql主从数据库同步一致性 安装 wget percona.com/get/percona-toolkit.rpm yum install perl-IO-Socket-SSL perl-DBD-MySQL perl-Time-HiRes perl-Digest-MD5 rpm -ivh percona-toolkit.rpm 配置用户 主库ip:10.171.15.148 从库ip:10.172">
   <meta name="author" content="amao">
-  <meta itemprop="name" content="Noodles - 牧青日志">
-  <meta itemprop="description" content="Noodles">
+  <meta itemprop="name" content="pt-table-checksum 概述 - 牧青日志">
+  <meta itemprop="description" content="概述 pt-table-checksum 主要用来检测mysql主从数据库同步一致性 安装 wget percona.com/get/percona-toolkit.rpm yum install perl-IO-Socket-SSL perl-DBD-MySQL perl-Time-HiRes perl-Digest-MD5 rpm -ivh percona-toolkit.rpm 配置用户 主库ip:10.171.15.148 从库ip:10.172">
   <meta itemprop="image" content="http://blog.hanmq.com/img/author.jpg">
   
   
   <meta name="twitter:description" content="">
-  <link rel="alternate" href="http://blog.hanmq.com/feed.xml" title="牧青日志" type="application/rss+xml"/>
+  
   <link rel="shortcut icon" href="http://blog.hanmq.com/img/favicon.ico"/>
   <link rel="apple-touch-icon" href="http://blog.hanmq.com/apple-touch-icon.png" />
   <link rel="apple-touch-icon-precomposed" href="http://blog.hanmq.com/apple-touch-icon.png" />
@@ -49,21 +49,128 @@
 
   </header>
   <div id="container">
-    <div id="main">
-      
-      <h2 id="2016-06">2016-06</h2>
-      
-      <section class="post" itemscope itemprop="blogPost">
-    <a href="http://blog.hanmq.com/post/noodles/" title="家常面" itemprop="url">
-    <h1 itemprop="name">家常面</h1>
-    <p itemprop="description">川味素面 希望你的人生如这碗面，朴素简单，却令人回味无穷。</p>
-    <time datetime="2016-06-15 13:43:24 &#43;0800 CST" itemprop="datePublished">2016年06月15日</time>
-  </a>
-</section>
+    <div id="main" class="post" itemscope itemprop="blogPost">
+	<article itemprop="articleBody">
+    <header class="article-info clearfix">
+  <h1 itemprop="name">
+      <a href="http://blog.hanmq.com/post/pt-table-checksum/" title="pt-table-checksum 概述" itemprop="url">pt-table-checksum 概述</a>
+  </h1>
+  <p class="article-author">By
+    
+      <a href="http://blog.hanmq.com" title="amao">amao</a>
+    
+  </p>
+  <p class="article-time">
+    <time datetime="2017-02-21 17:53:00 &#43;0800 CST" itemprop="datePublished">2017年02月21日</time>
+  </p>
+</header>
 
-      
-      
+	<div class="article-content">
+    
+		<div class="toc-article">
+			<strong class="toc-title">文章目录</strong>
+      <nav id="TableOfContents">
+<ul>
+<li><a href="#概述">概述</a></li>
+<li><a href="#安装">安装</a></li>
+<li><a href="#配置用户">配置用户</a></li>
+<li><a href="#使用">使用</a></li>
+</ul>
+</nav>
+		</div>
+    
+    
+
+<h1 id="概述">概述</h1>
+
+<p>pt-table-checksum 主要用来检测mysql主从数据库同步一致性</p>
+
+<h1 id="安装">安装</h1>
+
+<pre><code>wget percona.com/get/percona-toolkit.rpm
+yum install perl-IO-Socket-SSL perl-DBD-MySQL perl-Time-HiRes perl-Digest-MD5
+rpm -ivh percona-toolkit.rpm 
+</code></pre>
+
+<h1 id="配置用户">配置用户</h1>
+
+<p>主库ip:10.171.15.148
+从库ip:10.172.2.252</p>
+
+<p>配置对一个ip有请求权限的percona_tk用户</p>
+
+<pre><code>GRANT ALL PRIVILEGES on *.* to 'percona_tk'@'10.171.15.148' IDENTIFIED BY 'password';
+GRANT SELECT,LOCK TABLES,PROCESS,SUPER on *.* to percona_tk@'10.171.15.148';
+FLUSH PRIVILEGES;
+</code></pre>
+
+<h1 id="使用">使用</h1>
+
+<pre><code>pt-table-checksum h=10.171.15.148,u=percona_tk,p='password',P=3306 --databases=hanlei --tables=user
+            TS ERRORS  DIFFS     ROWS  CHUNKS SKIPPED    TIME TABLE
+02-21T17:21:42      0      1        1       1       0   0.022 hanlei.user
+</code></pre>
+
+	</div>
+  <footer class="article-footer clearfix">
+  
+
+<div class="article-tags">
+  <span></span>
+  
+  <a href="http://blog.hanmq.com/tags/mysql">mysql</a>
+  
+  <a href="http://blog.hanmq.com/tags/pt-tools">pt-tools</a>
+  
+</div>
+
+
+
+
+
+<div class="article-categories">
+  <span></span>
+  
+  <a class="article-category-link" href="http://blog.hanmq.com/categories/mysql">mysql</a>
+  
+</div>
+
+
+
+  <div class="article-share" id="share">
+    <div data-url="http://blog.hanmq.com/post/pt-table-checksum/" data-title="pt-table-checksum 概述" data-tsina="" class="share clearfix">
     </div>
+  </div>
+</footer>
+
+	</article>
+  
+
+
+<section class="comment">
+<div id="disqus_thread"></div>
+</section>
+<script>
+
+
+var disqus_config = function () {
+this.page.url = "http://blog.hanmq.com/post/pt-table-checksum/";
+this.page.identifier = "http://blog.hanmq.com/post/pt-table-checksum/";
+};
+(function() { 
+var d = document, s = d.createElement('script');
+
+s.src = '//bloghanmq.disqus.com/embed.js';
+
+s.setAttribute('data-timestamp', +new Date());
+(d.head || d.body).appendChild(s);
+})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a></noscript>
+
+
+</div>
+
     <div class="openaside"><a class="navbutton" href="#" title="显示侧边栏"></a></div>
 <div id="asidepart">
 <div class="closeaside"><a class="closebutton" href="#" title="隐藏侧边栏"></a></div>
@@ -198,10 +305,6 @@
 
 
   
-<div class="rsspart">
-  <a rel="nofollow" href="http://blog.hanmq.com/feed.xml" type="application/rss+xml" target="_blank">RSS 订阅</a>
-</div>
-
 
 </aside>
 </div>
@@ -290,6 +393,38 @@ $(document).ready(function(){
 
 <script type="text/javascript">
 $(document).ready(function(){
+  var ai = $('.article-content>iframe'),
+      ae = $('.article-content>embed'),
+      t  = $('#toc'),
+      h  = $('article h2')
+      ah = $('article h2'),
+      ta = $('#toc.toc-aside'),
+      o  = $('.openaside'),
+      c  = $('.closeaside');
+  if(ai.length>0){
+    ai.wrap('<div class="video-container" />');
+  };
+  if(ae.length>0){
+   ae.wrap('<div class="video-container" />');
+  };
+  if(ah.length==0){
+    t.css('display','none');
+  }else{
+    c.click(function(){
+      ta.css('display', 'block').addClass('fadeIn');
+    });
+    o.click(function(){
+      ta.css('display', 'none');
+    });
+    $(window).scroll(function(){
+      ta.css("top",Math.max(140,320-$(this).scrollTop()));
+    });
+  };
+});
+</script>
+
+<script type="text/javascript">
+$(document).ready(function(){
   var $this = $('.share'),
       url = $this.attr('data-url'),
       encodedUrl = encodeURIComponent(url),
@@ -316,6 +451,27 @@ $(document).ready(function(){
 });
 </script>
 
+
+<link rel="stylesheet" href="http://blog.hanmq.com/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="http://blog.hanmq.com/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){
+  $('.article-content').each(function(i){
+    $(this).find('img').each(function(){
+      if ($(this).parent().hasClass('fancybox')) return;
+      var alt = this.alt;
+      if (alt) $(this).after('<span class="caption">' + alt + '</span>');
+      $(this).wrap('<a href="' + this.src + '" title="' + alt + '" class="fancybox"></a>');
+    });
+    $(this).find('.fancybox').each(function(){
+      $(this).attr('rel', 'article' + i);
+    });
+  });
+  if($.fancybox){
+    $('.fancybox').fancybox();
+  }
+});
+</script>
 
 
 

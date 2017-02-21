@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Pt Tools on 牧青日志</title>
+    <link>http://blog.hanmq.com/tags/pt-tools/</link>
+    <description>Recent content in Pt Tools on 牧青日志</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh-CN</language>
+    <lastBuildDate>Tue, 21 Feb 2017 17:53:00 +0800</lastBuildDate>
+    <atom:link href="http://blog.hanmq.com/tags/pt-tools/feed/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>pt-table-checksum 概述</title>
+      <link>http://blog.hanmq.com/post/pt-table-checksum/</link>
+      <pubDate>Tue, 21 Feb 2017 17:53:00 +0800</pubDate>
+      
+      <guid>http://blog.hanmq.com/post/pt-table-checksum/</guid>
+      <description>
+
+&lt;h1 id=&#34;概述&#34;&gt;概述&lt;/h1&gt;
+
+&lt;p&gt;pt-table-checksum 主要用来检测mysql主从数据库同步一致性&lt;/p&gt;
+
+&lt;h1 id=&#34;安装&#34;&gt;安装&lt;/h1&gt;
+
+&lt;pre&gt;&lt;code&gt;wget percona.com/get/percona-toolkit.rpm
+yum install perl-IO-Socket-SSL perl-DBD-MySQL perl-Time-HiRes perl-Digest-MD5
+rpm -ivh percona-toolkit.rpm 
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h1 id=&#34;配置用户&#34;&gt;配置用户&lt;/h1&gt;
+
+&lt;p&gt;主库ip:10.171.15.148
+从库ip:10.172.2.252&lt;/p&gt;
+
+&lt;p&gt;配置对一个ip有请求权限的percona_tk用户&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;GRANT ALL PRIVILEGES on *.* to &#39;percona_tk&#39;@&#39;10.171.15.148&#39; IDENTIFIED BY &#39;password&#39;;
+GRANT SELECT,LOCK TABLES,PROCESS,SUPER on *.* to percona_tk@&#39;10.171.15.148&#39;;
+FLUSH PRIVILEGES;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h1 id=&#34;使用&#34;&gt;使用&lt;/h1&gt;
+
+&lt;pre&gt;&lt;code&gt;pt-table-checksum h=10.171.15.148,u=percona_tk,p=&#39;password&#39;,P=3306 --databases=hanlei --tables=user
+            TS ERRORS  DIFFS     ROWS  CHUNKS SKIPPED    TIME TABLE
+02-21T17:21:42      0      1        1       1       0   0.022 hanlei.user
+&lt;/code&gt;&lt;/pre&gt;
+</description>
+    </item>
+    
+  </channel>
+</rss>

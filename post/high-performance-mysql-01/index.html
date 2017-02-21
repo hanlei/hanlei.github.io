@@ -73,25 +73,25 @@
 <ul>
 <li>
 <ul>
-<li><a href="#mysql逻辑构架:51879d4aec6f5c72f71a4a60a0197de3">MySQL逻辑构架</a></li>
-<li><a href="#并发控制:51879d4aec6f5c72f71a4a60a0197de3">并发控制</a>
+<li><a href="#mysql逻辑构架">MySQL逻辑构架</a></li>
+<li><a href="#并发控制">并发控制</a>
 <ul>
-<li><a href="#锁:51879d4aec6f5c72f71a4a60a0197de3">锁</a></li>
-<li><a href="#锁粒度:51879d4aec6f5c72f71a4a60a0197de3">锁粒度</a>
+<li><a href="#锁">锁</a></li>
+<li><a href="#锁粒度">锁粒度</a>
 <ul>
-<li><a href="#表锁:51879d4aec6f5c72f71a4a60a0197de3">表锁</a></li>
-<li><a href="#行级锁:51879d4aec6f5c72f71a4a60a0197de3">行级锁</a></li>
+<li><a href="#表锁">表锁</a></li>
+<li><a href="#行级锁">行级锁</a></li>
 </ul></li>
 </ul></li>
-<li><a href="#事务:51879d4aec6f5c72f71a4a60a0197de3">事务</a>
+<li><a href="#事务">事务</a>
 <ul>
-<li><a href="#隔离级别:51879d4aec6f5c72f71a4a60a0197de3">隔离级别</a></li>
+<li><a href="#隔离级别">隔离级别</a></li>
 </ul></li>
-<li><a href="#多版本并发控制:51879d4aec6f5c72f71a4a60a0197de3">多版本并发控制</a></li>
-<li><a href="#存储引擎:51879d4aec6f5c72f71a4a60a0197de3">存储引擎</a>
+<li><a href="#多版本并发控制">多版本并发控制</a></li>
+<li><a href="#存储引擎">存储引擎</a>
 <ul>
-<li><a href="#innodb:51879d4aec6f5c72f71a4a60a0197de3">InnoDB</a></li>
-<li><a href="#myisam:51879d4aec6f5c72f71a4a60a0197de3">MyISAM</a></li>
+<li><a href="#innodb">InnoDB</a></li>
+<li><a href="#myisam">MyISAM</a></li>
 </ul></li>
 </ul></li>
 </ul>
@@ -100,7 +100,7 @@
     
     
 
-<h2 id="mysql逻辑构架:51879d4aec6f5c72f71a4a60a0197de3">MySQL逻辑构架</h2>
+<h2 id="mysql逻辑构架">MySQL逻辑构架</h2>
 
 <p><img src="/img/mysql01.png" width = "300" alt="MySQL服务器构架逻辑图" /></p>
 
@@ -110,27 +110,27 @@
 
 <p>第三层：存储引擎，负责MqlSQL数据的存储和提取，服务器通过API与存储引擎通信，屏蔽了不同存储引擎之间的差异。</p>
 
-<h2 id="并发控制:51879d4aec6f5c72f71a4a60a0197de3">并发控制</h2>
+<h2 id="并发控制">并发控制</h2>
 
-<h3 id="锁:51879d4aec6f5c72f71a4a60a0197de3">锁</h3>
+<h3 id="锁">锁</h3>
 
 <p>共享锁和排它锁，也就是读锁和写锁。</p>
 
-<h3 id="锁粒度:51879d4aec6f5c72f71a4a60a0197de3">锁粒度</h3>
+<h3 id="锁粒度">锁粒度</h3>
 
 <p>锁的开销和安全之间寻求平衡。</p>
 
-<h4 id="表锁:51879d4aec6f5c72f71a4a60a0197de3">表锁</h4>
+<h4 id="表锁">表锁</h4>
 
 <p>MySQL中最基础的锁策略，开销最小。</p>
 
 <p>尽管存储引擎可以管理自己的锁，MySQL本身会使用各种有效的锁来实现不同的目的，例如在 ALTER TABLE 会使用表锁，而忽略存储引擎的锁机制。</p>
 
-<h4 id="行级锁:51879d4aec6f5c72f71a4a60a0197de3">行级锁</h4>
+<h4 id="行级锁">行级锁</h4>
 
 <p>最大程度的支持并发处理（同时带来最大的锁开销），由存储引擎实现。</p>
 
-<h2 id="事务:51879d4aec6f5c72f71a4a60a0197de3">事务</h2>
+<h2 id="事务">事务</h2>
 
 <ul>
 <li>原子性(atomicity)</li>
@@ -141,7 +141,7 @@
 
 <p>有存储引擎实现，所以在同一个事务中，使用多种存储引擎是不可靠的。</p>
 
-<h3 id="隔离级别:51879d4aec6f5c72f71a4a60a0197de3">隔离级别</h3>
+<h3 id="隔离级别">隔离级别</h3>
 
 <ul>
 <li>READ UNCOMMITTED（未提交读）
@@ -171,7 +171,7 @@
 </ul></li>
 </ul>
 
-<h2 id="多版本并发控制:51879d4aec6f5c72f71a4a60a0197de3">多版本并发控制</h2>
+<h2 id="多版本并发控制">多版本并发控制</h2>
 
 <p>和行级锁一样，实现了非阻塞读操作，可以说是行级锁的一个变种，但并不需要加锁操作，因此开销更低。</p>
 
@@ -181,13 +181,13 @@
 
 <p>mvcc只再READ COMMITTED和REPEATABLE READ两个隔离级别生效，READ UNCOMMITTED总是读最新的数据行，SERIALIZABLE会怼所有读取的行加锁。</p>
 
-<h2 id="存储引擎:51879d4aec6f5c72f71a4a60a0197de3">存储引擎</h2>
+<h2 id="存储引擎">存储引擎</h2>
 
-<h3 id="innodb:51879d4aec6f5c72f71a4a60a0197de3">InnoDB</h3>
+<h3 id="innodb">InnoDB</h3>
 
 <p>基于聚簇索引，对主键查询有很高的性能，耳机索引中必须包含主键列。</p>
 
-<h3 id="myisam:51879d4aec6f5c72f71a4a60a0197de3">MyISAM</h3>
+<h3 id="myisam">MyISAM</h3>
 
 <p>不支持事务和行级锁。</p>
 
@@ -261,7 +261,7 @@ s.setAttribute('data-timestamp', +new Date());
     
     <li><a href="http://blog.hanmq.com/categories/git" title="git">git<sup>1</sup></a></li>
     
-    <li><a href="http://blog.hanmq.com/categories/mysql" title="mysql">mysql<sup>2</sup></a></li>
+    <li><a href="http://blog.hanmq.com/categories/mysql" title="mysql">mysql<sup>3</sup></a></li>
     
     <li><a href="http://blog.hanmq.com/categories/%e6%8a%80%e6%9c%af%e6%96%87%e7%ab%a0" title="技术文章">技术文章<sup>2</sup></a></li>
     
@@ -288,13 +288,15 @@ s.setAttribute('data-timestamp', +new Date());
       
 			<li><a href="http://blog.hanmq.com/tags/linux" title="linux">linux<sup>2</sup></a></li>
       
-			<li><a href="http://blog.hanmq.com/tags/mysql" title="mysql">mysql<sup>2</sup></a></li>
+			<li><a href="http://blog.hanmq.com/tags/mysql" title="mysql">mysql<sup>3</sup></a></li>
       
 			<li><a href="http://blog.hanmq.com/tags/nginx" title="nginx">nginx<sup>1</sup></a></li>
       
 			<li><a href="http://blog.hanmq.com/tags/noodles" title="noodles">noodles<sup>1</sup></a></li>
       
 			<li><a href="http://blog.hanmq.com/tags/php" title="php">php<sup>1</sup></a></li>
+      
+			<li><a href="http://blog.hanmq.com/tags/pt-tools" title="pt-tools">pt-tools<sup>1</sup></a></li>
       
 			<li><a href="http://blog.hanmq.com/tags/solarized" title="solarized">solarized<sup>1</sup></a></li>
       
@@ -318,7 +320,7 @@ s.setAttribute('data-timestamp', +new Date());
       
       
       <li class="archive-list-item">
-        <a class="archive-list-link" href="http://blog.hanmq.com/post/#2017-02">2017年02月</a><span class="archive-list-count">2</span>
+        <a class="archive-list-link" href="http://blog.hanmq.com/post/#2017-02">2017年02月</a><span class="archive-list-count">3</span>
       </li>
       
       
@@ -362,6 +364,8 @@ s.setAttribute('data-timestamp', +new Date());
     <a href="http://blog.hanmq.com/tags/noodles" style="font-size: 12px;">noodles</a>
     
     <a href="http://blog.hanmq.com/tags/php" style="font-size: 12px;">php</a>
+    
+    <a href="http://blog.hanmq.com/tags/pt-tools" style="font-size: 12px;">pt-tools</a>
     
     <a href="http://blog.hanmq.com/tags/solarized" style="font-size: 12px;">solarized</a>
     

@@ -17,7 +17,7 @@
       <guid>http://blog.hanmq.com/post/vagrant-mount-folder/</guid>
       <description>
 
-&lt;h2 id=&#34;问题:d10914a0617ca272838ce1ef356d7052&#34;&gt;问题&lt;/h2&gt;
+&lt;h2 id=&#34;问题&#34;&gt;问题&lt;/h2&gt;
 
 &lt;p&gt;vagrant CentOS7 基础镜像，Vagrantfile 配置文件通过config.vm.synced_folder挂载本地目录报错&lt;/p&gt;
 
@@ -41,11 +41,11 @@ The error output from the last command was:
 /sbin/mount.vboxsf: mounting failed with the error: No such device
 &lt;/code&gt;&lt;/pre&gt;
 
-&lt;h2 id=&#34;原因:d10914a0617ca272838ce1ef356d7052&#34;&gt;原因&lt;/h2&gt;
+&lt;h2 id=&#34;原因&#34;&gt;原因&lt;/h2&gt;
 
 &lt;p&gt;查了一些网上的文章，最终查到，是因为执行了 yum update 导致 kernel-devel 的版本和系统当前版本不一样导致。&lt;/p&gt;
 
-&lt;h2 id=&#34;解决方案:d10914a0617ca272838ce1ef356d7052&#34;&gt;解决方案&lt;/h2&gt;
+&lt;h2 id=&#34;解决方案&#34;&gt;解决方案&lt;/h2&gt;
 
 &lt;pre&gt;&lt;code&gt;yum install kernel-devel-$(uname -r)
 yum install kernel-headers-$(uname -r)
@@ -71,15 +71,15 @@ sudo ./vboxadd setup
 
 &lt;p&gt;Solarized 支持大部分编辑器及IDE,&lt;a href=&#34;http://ethanschoonover.com/solarized&#34; target=&#34;_blank&#34;&gt;官方网站&lt;/a&gt;在这里。&lt;/p&gt;
 
-&lt;h2 id=&#34;vim-配置-solarized:ea903bc52c5adaba264c2d005a5fef95&#34;&gt;vim 配置 Solarized&lt;/h2&gt;
+&lt;h2 id=&#34;vim-配置-solarized&#34;&gt;vim 配置 Solarized&lt;/h2&gt;
 
-&lt;h3 id=&#34;download:ea903bc52c5adaba264c2d005a5fef95&#34;&gt;download&lt;/h3&gt;
+&lt;h3 id=&#34;download&#34;&gt;download&lt;/h3&gt;
 
 &lt;p&gt;从github &lt;a href=&#34;https://github.com/altercation/vim-colors-solarized&#34;&gt;https://github.com/altercation/vim-colors-solarized&lt;/a&gt; 下载Vim-only 的仓库,即可完成vim的配置。&lt;/p&gt;
 
 &lt;p&gt;主仓库在 &lt;a href=&#34;https://github.com/altercation/solarized&#34;&gt;https://github.com/altercation/solarized&lt;/a&gt; ,只配置vim的话可以忽略。&lt;/p&gt;
 
-&lt;h3 id=&#34;install:ea903bc52c5adaba264c2d005a5fef95&#34;&gt;install&lt;/h3&gt;
+&lt;h3 id=&#34;install&#34;&gt;install&lt;/h3&gt;
 
 &lt;pre&gt;&lt;code&gt;$ cd vim-colors-solarized/colors
 $ mv solarized.vim ~/.vim/colors/
@@ -94,7 +94,7 @@ colorscheme solarized
 
 &lt;p&gt;background 支持 dark 和 light 两种配色方案&lt;/p&gt;
 
-&lt;h3 id=&#34;mac-terminal-支持:ea903bc52c5adaba264c2d005a5fef95&#34;&gt;mac terminal 支持&lt;/h3&gt;
+&lt;h3 id=&#34;mac-terminal-支持&#34;&gt;mac terminal 支持&lt;/h3&gt;
 
 &lt;p&gt;mac terminal 需要在 colorschem solarized 前添加一行配置&lt;/p&gt;
 
@@ -107,7 +107,7 @@ colorscheme solarized
 &lt;p&gt;If you do use the custom terminal colors, solarized.vim should work out of the box for you. If you are using a terminal emulator that supports 256 colors and don&amp;rsquo;t want to use the custom Solarized terminal colors, you will need to use the degraded 256 colorscheme.&lt;/p&gt;
 &lt;/blockquote&gt;
 
-&lt;h2 id=&#34;vimrc-基础设置:ea903bc52c5adaba264c2d005a5fef95&#34;&gt;vimrc 基础设置&lt;/h2&gt;
+&lt;h2 id=&#34;vimrc-基础设置&#34;&gt;vimrc 基础设置&lt;/h2&gt;
 
 &lt;p&gt;分享一下vimrc的基础设置&lt;/p&gt;
 

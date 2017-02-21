@@ -17,7 +17,7 @@
       <guid>http://blog.hanmq.com/post/vagrant-mount-folder/</guid>
       <description>
 
-&lt;h2 id=&#34;问题:d10914a0617ca272838ce1ef356d7052&#34;&gt;问题&lt;/h2&gt;
+&lt;h2 id=&#34;问题&#34;&gt;问题&lt;/h2&gt;
 
 &lt;p&gt;vagrant CentOS7 基础镜像，Vagrantfile 配置文件通过config.vm.synced_folder挂载本地目录报错&lt;/p&gt;
 
@@ -41,11 +41,11 @@ The error output from the last command was:
 /sbin/mount.vboxsf: mounting failed with the error: No such device
 &lt;/code&gt;&lt;/pre&gt;
 
-&lt;h2 id=&#34;原因:d10914a0617ca272838ce1ef356d7052&#34;&gt;原因&lt;/h2&gt;
+&lt;h2 id=&#34;原因&#34;&gt;原因&lt;/h2&gt;
 
 &lt;p&gt;查了一些网上的文章，最终查到，是因为执行了 yum update 导致 kernel-devel 的版本和系统当前版本不一样导致。&lt;/p&gt;
 
-&lt;h2 id=&#34;解决方案:d10914a0617ca272838ce1ef356d7052&#34;&gt;解决方案&lt;/h2&gt;
+&lt;h2 id=&#34;解决方案&#34;&gt;解决方案&lt;/h2&gt;
 
 &lt;pre&gt;&lt;code&gt;yum install kernel-devel-$(uname -r)
 yum install kernel-headers-$(uname -r)
@@ -67,7 +67,7 @@ sudo ./vboxadd setup
 
 &lt;p&gt;CentOS 7继承了RHEL 7的新的特性，例如强大的systemd，而systemd的使用也使得以往系统服务的/etc/init.d的启动脚本的方式就此改变，大幅提高了系统服务的运行效率。&lt;/p&gt;
 
-&lt;h2 id=&#34;systemd:1f81d4506716a68c23227f65602dc467&#34;&gt;systemd:&lt;/h2&gt;
+&lt;h2 id=&#34;systemd&#34;&gt;systemd:&lt;/h2&gt;
 
 &lt;p&gt;CentOS 7的服务systemctl脚本存放在：/usr/lib/systemd/。
 有系统（system）和用户（user）之分，
@@ -81,7 +81,7 @@ sudo ./vboxadd setup
 
 &lt;p&gt;每一个服务以.service结尾，一般会分为3部分：[Unit]、[Service]和[Install]，就以nginx为例吧，具体内容如下：&lt;/p&gt;
 
-&lt;h2 id=&#34;创建service:1f81d4506716a68c23227f65602dc467&#34;&gt;创建service:&lt;/h2&gt;
+&lt;h2 id=&#34;创建service&#34;&gt;创建service:&lt;/h2&gt;
 
 &lt;p&gt;在 /usr/lib/systemd/system 下创建nginx.service文件内容如下（看应用需求也可以在 /usr/lib/systemd/usr 下创建）：&lt;/p&gt;
 
@@ -103,7 +103,7 @@ PrivateTmp=true
 WantedBy=multi-user.target
 &lt;/code&gt;&lt;/pre&gt;
 
-&lt;h2 id=&#34;unit:1f81d4506716a68c23227f65602dc467&#34;&gt;[Unit]&lt;/h2&gt;
+&lt;h2 id=&#34;unit&#34;&gt;[Unit]&lt;/h2&gt;
 
 &lt;blockquote&gt;
 &lt;p&gt;Description : 服务的简单描述&lt;/p&gt;
@@ -113,7 +113,7 @@ WantedBy=multi-user.target
 &lt;p&gt;After : 依赖，仅当依赖的服务启动之后再启动自定义的服务单元&lt;/p&gt;
 &lt;/blockquote&gt;
 
-&lt;h2 id=&#34;service:1f81d4506716a68c23227f65602dc467&#34;&gt;[Service]&lt;/h2&gt;
+&lt;h2 id=&#34;service&#34;&gt;[Service]&lt;/h2&gt;
 
 &lt;p&gt;这个段是 .service 文件独有的，也是对于服务配置最重要的部分。这部分的配置选项非常多，主要分为服务生命周期控制和服务上下文配置两个方面&lt;/p&gt;
 
@@ -133,7 +133,7 @@ WantedBy=multi-user.target
 &lt;p&gt;PrivateTmp：True表示给服务分配独立的临时空间≈&lt;/p&gt;
 &lt;/blockquote&gt;
 
-&lt;h2 id=&#34;install:1f81d4506716a68c23227f65602dc467&#34;&gt;[Install]&lt;/h2&gt;
+&lt;h2 id=&#34;install&#34;&gt;[Install]&lt;/h2&gt;
 
 &lt;p&gt;这个段中的配置与 Unit 有几分相似，但是这部分配置需要通过 systemctl enable 命令来激活，并且可以通过 systemctl disable 命令禁用。另外这部分配置的目标模块通常是特定启动级别的 .target 文件，用来使得服务在系统启动时自动运行。&lt;/p&gt;
 
@@ -141,7 +141,7 @@ WantedBy=multi-user.target
 &lt;p&gt;WantedBy：上例中使用的是 “WantedBy=multi-user.target”， 表明当系统以多用户方式（默认的运行级别）启动时，这个服务需要被自动运行。当然还需要 systemctl enable 激活这个服务以后自动运行才会生效。&lt;/p&gt;
 &lt;/blockquote&gt;
 
-&lt;h2 id=&#34;操作service:1f81d4506716a68c23227f65602dc467&#34;&gt;操作Service:&lt;/h2&gt;
+&lt;h2 id=&#34;操作service&#34;&gt;操作Service:&lt;/h2&gt;
 
 &lt;pre&gt;&lt;code&gt;#修改权限
 $ sudo chmod +x /usr/lib/systemd/system/nginx.service

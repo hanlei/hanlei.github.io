@@ -73,9 +73,9 @@
 <ul>
 <li>
 <ul>
-<li><a href="#问题:d10914a0617ca272838ce1ef356d7052">问题</a></li>
-<li><a href="#原因:d10914a0617ca272838ce1ef356d7052">原因</a></li>
-<li><a href="#解决方案:d10914a0617ca272838ce1ef356d7052">解决方案</a></li>
+<li><a href="#问题">问题</a></li>
+<li><a href="#原因">原因</a></li>
+<li><a href="#解决方案">解决方案</a></li>
 </ul></li>
 </ul>
 </nav>
@@ -83,7 +83,7 @@
     
     
 
-<h2 id="问题:d10914a0617ca272838ce1ef356d7052">问题</h2>
+<h2 id="问题">问题</h2>
 
 <p>vagrant CentOS7 基础镜像，Vagrantfile 配置文件通过config.vm.synced_folder挂载本地目录报错</p>
 
@@ -107,11 +107,11 @@ The error output from the last command was:
 /sbin/mount.vboxsf: mounting failed with the error: No such device
 </code></pre>
 
-<h2 id="原因:d10914a0617ca272838ce1ef356d7052">原因</h2>
+<h2 id="原因">原因</h2>
 
 <p>查了一些网上的文章，最终查到，是因为执行了 yum update 导致 kernel-devel 的版本和系统当前版本不一样导致。</p>
 
-<h2 id="解决方案:d10914a0617ca272838ce1ef356d7052">解决方案</h2>
+<h2 id="解决方案">解决方案</h2>
 
 <pre><code>yum install kernel-devel-$(uname -r)
 yum install kernel-headers-$(uname -r)
@@ -195,7 +195,7 @@ s.setAttribute('data-timestamp', +new Date());
     
     <li><a href="http://blog.hanmq.com/categories/git" title="git">git<sup>1</sup></a></li>
     
-    <li><a href="http://blog.hanmq.com/categories/mysql" title="mysql">mysql<sup>2</sup></a></li>
+    <li><a href="http://blog.hanmq.com/categories/mysql" title="mysql">mysql<sup>3</sup></a></li>
     
     <li><a href="http://blog.hanmq.com/categories/%e6%8a%80%e6%9c%af%e6%96%87%e7%ab%a0" title="技术文章">技术文章<sup>2</sup></a></li>
     
@@ -222,13 +222,15 @@ s.setAttribute('data-timestamp', +new Date());
       
 			<li><a href="http://blog.hanmq.com/tags/linux" title="linux">linux<sup>2</sup></a></li>
       
-			<li><a href="http://blog.hanmq.com/tags/mysql" title="mysql">mysql<sup>2</sup></a></li>
+			<li><a href="http://blog.hanmq.com/tags/mysql" title="mysql">mysql<sup>3</sup></a></li>
       
 			<li><a href="http://blog.hanmq.com/tags/nginx" title="nginx">nginx<sup>1</sup></a></li>
       
 			<li><a href="http://blog.hanmq.com/tags/noodles" title="noodles">noodles<sup>1</sup></a></li>
       
 			<li><a href="http://blog.hanmq.com/tags/php" title="php">php<sup>1</sup></a></li>
+      
+			<li><a href="http://blog.hanmq.com/tags/pt-tools" title="pt-tools">pt-tools<sup>1</sup></a></li>
       
 			<li><a href="http://blog.hanmq.com/tags/solarized" title="solarized">solarized<sup>1</sup></a></li>
       
@@ -252,7 +254,7 @@ s.setAttribute('data-timestamp', +new Date());
       
       
       <li class="archive-list-item">
-        <a class="archive-list-link" href="http://blog.hanmq.com/post/#2017-02">2017年02月</a><span class="archive-list-count">2</span>
+        <a class="archive-list-link" href="http://blog.hanmq.com/post/#2017-02">2017年02月</a><span class="archive-list-count">3</span>
       </li>
       
       
@@ -296,6 +298,8 @@ s.setAttribute('data-timestamp', +new Date());
     <a href="http://blog.hanmq.com/tags/noodles" style="font-size: 12px;">noodles</a>
     
     <a href="http://blog.hanmq.com/tags/php" style="font-size: 12px;">php</a>
+    
+    <a href="http://blog.hanmq.com/tags/pt-tools" style="font-size: 12px;">pt-tools</a>
     
     <a href="http://blog.hanmq.com/tags/solarized" style="font-size: 12px;">solarized</a>
     

@@ -6,8 +6,48 @@
     <description>Recent content in Mysql on 牧青日志</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-CN</language>
-    <lastBuildDate>Sun, 05 Feb 2017 20:48:00 +0800</lastBuildDate>
+    <lastBuildDate>Tue, 21 Feb 2017 17:53:00 +0800</lastBuildDate>
     <atom:link href="http://blog.hanmq.com/tags/mysql/feed/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>pt-table-checksum 概述</title>
+      <link>http://blog.hanmq.com/post/pt-table-checksum/</link>
+      <pubDate>Tue, 21 Feb 2017 17:53:00 +0800</pubDate>
+      
+      <guid>http://blog.hanmq.com/post/pt-table-checksum/</guid>
+      <description>
+
+&lt;h1 id=&#34;概述&#34;&gt;概述&lt;/h1&gt;
+
+&lt;p&gt;pt-table-checksum 主要用来检测mysql主从数据库同步一致性&lt;/p&gt;
+
+&lt;h1 id=&#34;安装&#34;&gt;安装&lt;/h1&gt;
+
+&lt;pre&gt;&lt;code&gt;wget percona.com/get/percona-toolkit.rpm
+yum install perl-IO-Socket-SSL perl-DBD-MySQL perl-Time-HiRes perl-Digest-MD5
+rpm -ivh percona-toolkit.rpm 
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h1 id=&#34;配置用户&#34;&gt;配置用户&lt;/h1&gt;
+
+&lt;p&gt;主库ip:10.171.15.148
+从库ip:10.172.2.252&lt;/p&gt;
+
+&lt;p&gt;配置对一个ip有请求权限的percona_tk用户&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;GRANT ALL PRIVILEGES on *.* to &#39;percona_tk&#39;@&#39;10.171.15.148&#39; IDENTIFIED BY &#39;password&#39;;
+GRANT SELECT,LOCK TABLES,PROCESS,SUPER on *.* to percona_tk@&#39;10.171.15.148&#39;;
+FLUSH PRIVILEGES;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h1 id=&#34;使用&#34;&gt;使用&lt;/h1&gt;
+
+&lt;pre&gt;&lt;code&gt;pt-table-checksum h=10.171.15.148,u=percona_tk,p=&#39;password&#39;,P=3306 --databases=hanlei --tables=user
+            TS ERRORS  DIFFS     ROWS  CHUNKS SKIPPED    TIME TABLE
+02-21T17:21:42      0      1        1       1       0   0.022 hanlei.user
+&lt;/code&gt;&lt;/pre&gt;
+</description>
+    </item>
     
     <item>
       <title>MySQL事务隔离级别详解</title>
@@ -17,7 +57,7 @@
       <guid>http://blog.hanmq.com/post/transaction-isolation-level/</guid>
       <description>
 
-&lt;h1 id=&#34;概述:50330dfe917dc5c6c4acf65f81f6cd47&#34;&gt;概述&lt;/h1&gt;
+&lt;h1 id=&#34;概述&#34;&gt;概述&lt;/h1&gt;
 
 &lt;p&gt;MySQL事务一共有4个隔离级别，分别是&lt;/p&gt;
 
@@ -76,7 +116,7 @@
 
 &lt;p&gt;MySQL默认隔离级别是Repeatable Read。&lt;/p&gt;
 
-&lt;h2 id=&#34;read-uncommitted-读取未提交内容:50330dfe917dc5c6c4acf65f81f6cd47&#34;&gt;Read Uncommitted（读取未提交内容）&lt;/h2&gt;
+&lt;h2 id=&#34;read-uncommitted-读取未提交内容&#34;&gt;Read Uncommitted（读取未提交内容）&lt;/h2&gt;
 
 &lt;p&gt;所有事务可以看到其他事务未提交的数据，读取未提交的数据，称作脏读（Dirty Read）&lt;/p&gt;
 
@@ -127,7 +167,7 @@ Rows matched: 1  Changed: 1  Warnings: 0
 
 &lt;p&gt;session 2 并没有commit，session 1 可以读到其他事务未提交的数据。&lt;/p&gt;
 
-&lt;h2 id=&#34;read-committed-读取提交内容:50330dfe917dc5c6c4acf65f81f6cd47&#34;&gt;Read Committed（读取提交内容）&lt;/h2&gt;
+&lt;h2 id=&#34;read-committed-读取提交内容&#34;&gt;Read Committed（读取提交内容）&lt;/h2&gt;
 
 &lt;p&gt;它满足了隔离的简单定义：一个事务只能看见已经提交事务所做的改变。这种隔离级别也叫做不可重复读（Nonrepeatable Read），因为两次查询可能返回不同结果。&lt;/p&gt;
 
@@ -210,7 +250,7 @@ Query OK, 0 rows affected (0.00 sec)
 
 &lt;p&gt;session 1 读取到提交数据，但是session 1在一个事务中，两次查询结果不一致。&lt;/p&gt;
 
-&lt;h2 id=&#34;repeatable-read-可重读:50330dfe917dc5c6c4acf65f81f6cd47&#34;&gt;Repeatable Read（可重读）&lt;/h2&gt;
+&lt;h2 id=&#34;repeatable-read-可重读&#34;&gt;Repeatable Read（可重读）&lt;/h2&gt;
 
 &lt;p&gt;这是MySQL的默认事务隔离级别，它确保同一事务的多个实例在并发读取数据时，会看到同样的数据行。不过理论上，这会导致另一个棘手的问题：幻读 （Phantom Read）。简单的说，幻读指当用户读取某一范围的数据行时，另一个事务又在该范围内插入了新行，当用户再读取该范围的数据行时，会发现有新的“幻影” 行。InnoDB和Falcon存储引擎通过多版本并发控制（MVCC，Multiversion Concurrency Control）机制解决了该问题。&lt;/p&gt;
 
@@ -298,7 +338,7 @@ MariaDB [test]&amp;gt; select * from test;
 
 &lt;p&gt;session 1 commit后，可看到新添加的数据（幻影行）。&lt;/p&gt;
 
-&lt;h2 id=&#34;serializable-可串行化:50330dfe917dc5c6c4acf65f81f6cd47&#34;&gt;Serializable（可串行化）&lt;/h2&gt;
+&lt;h2 id=&#34;serializable-可串行化&#34;&gt;Serializable（可串行化）&lt;/h2&gt;
 
 &lt;p&gt;这是最高的隔离级别，它通过强制事务排序，使之不可能相互冲突，从而解决幻读问题。简言之，它是在每个读的数据行上加上共享锁。在这个级别，可能导致大量的超时现象和锁竞争。&lt;/p&gt;
 
@@ -337,7 +377,7 @@ ERROR 1205 (HY000): Lock wait timeout exceeded; try restarting transaction
       <guid>http://blog.hanmq.com/post/high-performance-mysql-01/</guid>
       <description>
 
-&lt;h2 id=&#34;mysql逻辑构架:51879d4aec6f5c72f71a4a60a0197de3&#34;&gt;MySQL逻辑构架&lt;/h2&gt;
+&lt;h2 id=&#34;mysql逻辑构架&#34;&gt;MySQL逻辑构架&lt;/h2&gt;
 
 &lt;p&gt;&lt;img src=&#34;http://blog.hanmq.com/img/mysql01.png&#34; width = &#34;300&#34; alt=&#34;MySQL服务器构架逻辑图&#34; /&gt;&lt;/p&gt;
 
@@ -347,27 +387,27 @@ ERROR 1205 (HY000): Lock wait timeout exceeded; try restarting transaction
 
 &lt;p&gt;第三层：存储引擎，负责MqlSQL数据的存储和提取，服务器通过API与存储引擎通信，屏蔽了不同存储引擎之间的差异。&lt;/p&gt;
 
-&lt;h2 id=&#34;并发控制:51879d4aec6f5c72f71a4a60a0197de3&#34;&gt;并发控制&lt;/h2&gt;
+&lt;h2 id=&#34;并发控制&#34;&gt;并发控制&lt;/h2&gt;
 
-&lt;h3 id=&#34;锁:51879d4aec6f5c72f71a4a60a0197de3&#34;&gt;锁&lt;/h3&gt;
+&lt;h3 id=&#34;锁&#34;&gt;锁&lt;/h3&gt;
 
 &lt;p&gt;共享锁和排它锁，也就是读锁和写锁。&lt;/p&gt;
 
-&lt;h3 id=&#34;锁粒度:51879d4aec6f5c72f71a4a60a0197de3&#34;&gt;锁粒度&lt;/h3&gt;
+&lt;h3 id=&#34;锁粒度&#34;&gt;锁粒度&lt;/h3&gt;
 
 &lt;p&gt;锁的开销和安全之间寻求平衡。&lt;/p&gt;
 
-&lt;h4 id=&#34;表锁:51879d4aec6f5c72f71a4a60a0197de3&#34;&gt;表锁&lt;/h4&gt;
+&lt;h4 id=&#34;表锁&#34;&gt;表锁&lt;/h4&gt;
 
 &lt;p&gt;MySQL中最基础的锁策略，开销最小。&lt;/p&gt;
 
 &lt;p&gt;尽管存储引擎可以管理自己的锁，MySQL本身会使用各种有效的锁来实现不同的目的，例如在 ALTER TABLE 会使用表锁，而忽略存储引擎的锁机制。&lt;/p&gt;
 
-&lt;h4 id=&#34;行级锁:51879d4aec6f5c72f71a4a60a0197de3&#34;&gt;行级锁&lt;/h4&gt;
+&lt;h4 id=&#34;行级锁&#34;&gt;行级锁&lt;/h4&gt;
 
 &lt;p&gt;最大程度的支持并发处理（同时带来最大的锁开销），由存储引擎实现。&lt;/p&gt;
 
-&lt;h2 id=&#34;事务:51879d4aec6f5c72f71a4a60a0197de3&#34;&gt;事务&lt;/h2&gt;
+&lt;h2 id=&#34;事务&#34;&gt;事务&lt;/h2&gt;
 
 &lt;ul&gt;
 &lt;li&gt;原子性(atomicity)&lt;/li&gt;
@@ -378,7 +418,7 @@ ERROR 1205 (HY000): Lock wait timeout exceeded; try restarting transaction
 
 &lt;p&gt;有存储引擎实现，所以在同一个事务中，使用多种存储引擎是不可靠的。&lt;/p&gt;
 
-&lt;h3 id=&#34;隔离级别:51879d4aec6f5c72f71a4a60a0197de3&#34;&gt;隔离级别&lt;/h3&gt;
+&lt;h3 id=&#34;隔离级别&#34;&gt;隔离级别&lt;/h3&gt;
 
 &lt;ul&gt;
 &lt;li&gt;READ UNCOMMITTED（未提交读）
@@ -408,7 +448,7 @@ ERROR 1205 (HY000): Lock wait timeout exceeded; try restarting transaction
 &lt;/ul&gt;&lt;/li&gt;
 &lt;/ul&gt;
 
-&lt;h2 id=&#34;多版本并发控制:51879d4aec6f5c72f71a4a60a0197de3&#34;&gt;多版本并发控制&lt;/h2&gt;
+&lt;h2 id=&#34;多版本并发控制&#34;&gt;多版本并发控制&lt;/h2&gt;
 
 &lt;p&gt;和行级锁一样，实现了非阻塞读操作，可以说是行级锁的一个变种，但并不需要加锁操作，因此开销更低。&lt;/p&gt;
 
@@ -418,13 +458,13 @@ ERROR 1205 (HY000): Lock wait timeout exceeded; try restarting transaction
 
 &lt;p&gt;mvcc只再READ COMMITTED和REPEATABLE READ两个隔离级别生效，READ UNCOMMITTED总是读最新的数据行，SERIALIZABLE会怼所有读取的行加锁。&lt;/p&gt;
 
-&lt;h2 id=&#34;存储引擎:51879d4aec6f5c72f71a4a60a0197de3&#34;&gt;存储引擎&lt;/h2&gt;
+&lt;h2 id=&#34;存储引擎&#34;&gt;存储引擎&lt;/h2&gt;
 
-&lt;h3 id=&#34;innodb:51879d4aec6f5c72f71a4a60a0197de3&#34;&gt;InnoDB&lt;/h3&gt;
+&lt;h3 id=&#34;innodb&#34;&gt;InnoDB&lt;/h3&gt;
 
 &lt;p&gt;基于聚簇索引，对主键查询有很高的性能，耳机索引中必须包含主键列。&lt;/p&gt;
 
-&lt;h3 id=&#34;myisam:51879d4aec6f5c72f71a4a60a0197de3&#34;&gt;MyISAM&lt;/h3&gt;
+&lt;h3 id=&#34;myisam&#34;&gt;MyISAM&lt;/h3&gt;
 
 &lt;p&gt;不支持事务和行级锁。&lt;/p&gt;
 </description>
